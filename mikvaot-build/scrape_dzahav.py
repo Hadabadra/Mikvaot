@@ -2,7 +2,10 @@
 """דפי זהב (d.co.il) — קטגוריית מקוואות (8120): שם, כתובת, טלפון, נקודת ציון ושעות מדף העסק.
 בשימוש באישור דפי זהב. פלט: mikvaot-build/raw/dzahav.json
 שימוש: python3 mikvaot-build/scrape_dzahav.py"""
-import json, os, re, time, html, urllib.request
+import json, os, re, sys, time, html, urllib.request
+CAT = sys.argv[1] if len(sys.argv) > 1 else "8120"          # 8120 = מקוואות, 270 = מוסדות דת
+OUT = sys.argv[2] if len(sys.argv) > 2 else "dzahav.json"
+KEEP = re.compile(sys.argv[3]) if len(sys.argv) > 3 else None  # סינון שם (למשל מועצה דתית)
 
 here = os.path.dirname(os.path.abspath(__file__))
 os.makedirs(os.path.join(here, "raw"), exist_ok=True)
@@ -21,14 +24,14 @@ def get(url):
 clean = lambda s: re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", s))).strip()
 out, seen = [], set()
 # סריקת כל דפי הקטגוריה (כל האזורים וכל עמודי העימוד) לפי הקישורים שבדפים עצמם
-todo, done = ["/h-c8120-e0-p0-l0/"], set()
+todo, done = [f"/h-c{CAT}-e0-p0-l0/"], set()
 while todo:
     path = todo.pop(0)
     if path in done:
         continue
     done.add(path)
     s = get("https://www.d.co.il" + path)
-    for l in re.findall(r'href="(/h-c8120-e\d+-p\d+-l0/)"', s):
+    for l in re.findall(rf'href="(/h-c{CAT}-e\d+-p\d+-l0/)"', s):
         if l not in done:
             todo.append(l)
     cards = re.split(r'<li data-card ', s)[1:]
@@ -45,11 +48,14 @@ while todo:
         out.append({"id": cid.group(1), "name": clean(name.group(1)) if name else "",
                     "address": clean(addr.group(1)) if addr else "", "phone": tel.group(1) if tel else "",
                     "lat": float(co.group(1)) if co else None, "lon": float(co.group(2)) if co else None,
-                    "url": f"https://www.d.co.il/{cid.group(1)}/8120/"})
+                    "url": f"https://www.d.co.il/{cid.group(1)}/{CAT}/"})
     print(path, "new", new, "total", len(out), "queue", len(todo))
     time.sleep(1)
 
-# שעות פעילות מדף העסק
+if KEEP:
+    out = [i for i in out if KEEP.search(i["name"])]
+    print("kept", len(out))
+# שעות פעילות ואתר מדף העסק
 for n, it in enumerate(out, 1):
     try:
         s = get(it["url"])
@@ -58,8 +64,10 @@ for n, it in enumerate(out, 1):
     m = re.search(r'data-clossing-hours="([^"]*)"', s)
     if m and m.group(1).strip(","):
         it["hoursRaw"] = m.group(1)  # ראשון..שבת, "730-1930" לכל יום, ריק = סגור/לא ידוע
+    w = re.search(r'<a href="(https?://[^"]+)"[^>]*data-statistics-label=click-infoblock-businesswebsitelink', s)
+    if w: it["website"] = w.group(1)
     time.sleep(0.7)
     if n % 20 == 0:
         print("details", n, len(out))
-json.dump(out, open(os.path.join(here, "raw", "dzahav.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+json.dump(out, open(os.path.join(here, "raw", OUT), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print(len(out), "saved", sum(1 for i in out if i.get("hoursRaw")), "with hours")

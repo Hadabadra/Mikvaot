@@ -184,3 +184,16 @@ mark { background: var(--color-primary-container); color: inherit; border-radius
 .lang { font-size: 0.75em; color: var(--color-on-surface-variant); }
 @media (max-width: 46em) { .rail { display: none; } .shell.rail-open .rail { display: flex; position: fixed; inset-block: 3.5em 0; inset-inline-start: 0; z-index: 5; } }
 @media print { .rail { display: none !important; } .hero, .section-title, .city-grid { display: none; } }
+
+.seg { display: flex; border: 0.06em solid var(--color-outline-variant); border-radius: var(--radius-pill); overflow: hidden; }
+.seg-b { flex: 1; border: 0; background: transparent; cursor: pointer; padding: 0.35em 0; }
+.seg-b[aria-selected="true"] { background: var(--color-secondary-container); color: var(--color-on-secondary-container); font-weight: 600; }
+.org { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35em 0.8em; padding: 0.55em 0; border-bottom: 0.06em solid var(--color-outline-variant); }
+.org .nm { flex: 1 1 14em; font-weight: 600; }
+.org .nm small { display: block; font-weight: 400; color: var(--color-on-surface-variant); }
+.dialog-body textarea { width: 100%; min-height: 22em; font: inherit; font-size: 0.9em; padding: 0.6em; border-radius: var(--radius-sm);
+  border: 0.06em solid var(--color-outline-variant); background: var(--color-surface); color: var(--color-on-surface); }
+.field { display: flex; flex-direction: column; gap: 0.2em; margin: 0.5em 0; }
+.field input { padding: 0.4em 0.6em; border-radius: var(--radius-sm); border: 0.06em solid var(--color-outline-variant); background: var(--color-surface); }
+.cl h4 { margin: 0.8em 0 0.2em; }
+.cl ul { margin: 0; }

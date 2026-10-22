@@ -236,8 +236,49 @@ def merge(rec):
 raw_dir = os.path.join(here0, "raw")
 added = {"dz": 0, "mo": 0}
 mo_path, dz_path = os.path.join(raw_dir, "mikvah_org.json"), os.path.join(raw_dir, "dzahav.json")
+COUNTRY_HE = {
+    "usa": "ארצות הברית", "united states": "ארצות הברית", "us": "ארצות הברית", "canada": "קנדה", "mexico": "מקסיקו",
+    "france": "צרפת", "england": "בריטניה", "united kingdom": "בריטניה", "uk": "בריטניה", "scotland": "בריטניה", "wales": "בריטניה",
+    "ireland": "אירלנד", "brazil": "ברזיל", "ukraine": "אוקראינה", "argentina": "ארגנטינה", "russia": "רוסיה", "germany": "גרמניה",
+    "south africa": "דרום אפריקה", "australia": "אוסטרליה", "italy": "איטליה", "switzerland": "שווייץ", "morocco": "מרוקו",
+    "spain": "ספרד", "colombia": "קולומביה", "netherlands": "הולנד", "holland": "הולנד", "india": "הודו", "belgium": "בלגיה",
+    "austria": "אוסטריה", "hungary": "הונגריה", "poland": "פולין", "czech republic": "צ'כיה", "chile": "צ'ילה", "uruguay": "אורוגוואי",
+    "venezuela": "ונצואלה", "peru": "פרו", "panama": "פנמה", "costa rica": "קוסטה ריקה", "thailand": "תאילנד", "china": "סין",
+    "japan": "יפן", "hong kong": "הונג קונג", "singapore": "סינגפור", "turkey": "טורקיה", "greece": "יוון", "cyprus": "קפריסין",
+    "georgia": "גאורגיה", "kazakhstan": "קזחסטן", "uzbekistan": "אוזבקיסטן", "moldova": "מולדובה", "belarus": "בלארוס",
+    "latvia": "לטביה", "lithuania": "ליטא", "romania": "רומניה", "bulgaria": "בולגריה", "portugal": "פורטוגל", "sweden": "שוודיה",
+    "denmark": "דנמרק", "norway": "נורווגיה", "finland": "פינלנד", "new zealand": "ניו זילנד", "nepal": "נפאל", "vietnam": "וייטנאם",
+    "dominican republic": "הרפובליקה הדומיניקנית", "puerto rico": "פוארטו ריקו", "bahamas": "בהאמה", "guatemala": "גואטמלה",
+    "ecuador": "אקוודור", "bolivia": "בוליביה", "paraguay": "פרגוואי", "azerbaijan": "אזרבייג'ן", "armenia": "ארמניה",
+    "croatia": "קרואטיה", "serbia": "סרביה", "slovakia": "סלובקיה", "estonia": "אסטוניה", "monaco": "מונקו", "luxembourg": "לוקסמבורג",
+    "tunisia": "תוניסיה", "kenya": "קניה", "nigeria": "ניגריה", "congo": "קונגו", "cambodia": "קמבודיה", "laos": "לאוס",
+    "philippines": "הפיליפינים", "south korea": "דרום קוריאה", "korea": "דרום קוריאה", "taiwan": "טאיוואן", "indonesia": "אינדונזיה",
+    "malaysia": "מלזיה", "sri lanka": "סרי לנקה", "united arab emirates": "איחוד האמירויות", "uae": "איחוד האמירויות",
+}
+US_STATES = set("al ak az ar ca co ct de fl ga hi id il in ia ks ky la me md ma mi mn ms mo mt ne nv nh nj nm ny nc nd oh ok or pa ri sc sd tn tx ut vt va wa wv wi wy dc new-york new-jersey california florida".split())
+CA_PROV = set("on qc bc ab mb ns nb sk ontario quebec".split())
+def country_he(r):
+    seg, c = r.get("seg", "").lower(), (r.get("country") or "").strip().lower()
+    if seg == "israel" or c in ("israel", "il"): return None
+    if seg in US_STATES: return "ארצות הברית"
+    if seg in CA_PROV: return "קנדה"
+    for k in (c, seg.replace("-", " ")):
+        if k in COUNTRY_HE: return COUNTRY_HE[k]
+    return (r.get("country") or seg).strip().title() or "חו\"ל"
+ABROAD_CITY = {}
 if os.path.exists(mo_path):
     for r in json.load(open(mo_path, encoding="utf-8")):
+        co = country_he(r)
+        if co:
+            cty = re.sub(r"\s+", " ", r["city"]).strip().title() or "—"
+            reg = (r.get("region") or "").strip()
+            key = f"{cty}, {reg.upper() if co == 'ארצות הברית' and len(reg) <= 3 else co}" if reg and co == "ארצות הברית" else f"{cty}, {co}"
+            ABROAD_CITY[key] = co
+            rec = dict(type=kind(r["name"]) if kind(r["name"]) != "unknown" else "women", name=r["name"], city=key,
+                       address=r["street"] or r["name"], phone=r["phone"].strip(), hours=r["schedule"], lat=r["lat"], lon=r["lon"],
+                       src=r["url"], srcName=SRC_NAMES["mo"], lang="en", checked=CHECKED)
+            items.append({k: v for k, v in rec.items() if v not in ("", None)}); added["mo"] += 1
+            continue
         city = CITY_HE.get(r["city"].strip().lower(), r["city"].strip())
         rec = dict(type=kind(r["name"]) if kind(r["name"]) != "unknown" else "women", name=r["name"], city=city,
                    address=r["street"], phone=fmt_phone(r["phone"]), hours=r["schedule"], lat=r["lat"], lon=r["lon"],
@@ -273,17 +314,51 @@ for it in items:
     seen[base] = seen.get(base, 0) + 1
     it["id"] = re.sub(r"\s+", "-", base) + ("" if seen[base] == 1 else f"#{seen[base]}")
 
+# ── ארגונים ומועצות דתיות: טלפון ואתר ──────────────────────────────
+ORGS = [
+    {"kind": "org", "name": "המשרד לשירותי דת", "address": "כנפי נשרים 7, ירושלים", "url": "https://www.gov.il/he/departments/ministry_of_religious_services"},
+    {"kind": "org", "name": "המשרד לשירותי דת — הנגשת מקוואות", "url": "https://www.gov.il/he/departments/general/mikve_accessibility"},
+    {"kind": "org", "name": "ארגון טהרת המשפחה (mikvah.org)", "phone": "+1-718-756-5700", "email": "info@mikvah.org", "url": "https://mikvah.org/directory/israel", "note": "מאגר מקוואות בארץ ובעולם"},
+    {"kind": "org", "name": "מרכז מקוואות חב\"ד", "phone": "077-230-3444", "email": "Office@mikvaot.co.il", "url": "https://www.mikvaot.co.il/search/", "note": "ת.ד. 15017 רחובות"},
+    {"kind": "org", "name": "דפי זהב — מקוואות", "url": "https://www.d.co.il/h-c8120-e0-p0-l0/"},
+    {"kind": "org", "name": "עמותת עתים", "phone": "1-700-500-507", "email": "itim@itim.org.il", "url": "https://www.itim.org.il/", "note": "מידע על נגישות מקוואות"},
+]
+for c, v in COUNCILS.items():
+    if v: ORGS.append({"kind": "council", "name": v["name"], "phone": v.get("phone", ""), "address": (v.get("address", "") + ", " + c).strip(", "), "url": v.get("url", ""), "note": v.get("extra", "")})
+cc_path = os.path.join(raw_dir, "councils.json")
+if os.path.exists(cc_path):
+    have = {digits(o.get("phone")) for o in ORGS}
+    for r in json.load(open(cc_path, encoding="utf-8")):
+        if digits(r.get("phone")) in have: continue
+        have.add(digits(r.get("phone")))
+        ORGS.append({"kind": "council", "name": r["name"], "phone": fmt_phone(r.get("phone", "")), "address": r.get("address", ""),
+                     "url": r.get("website") or r["url"]})
+        cty = he_city(r.get("address", "").rpartition(",")[2].strip())
+        if cty in CITIES and not COUNCILS.get(cty) and re.search(r"מועצה (ה)?דתית", r["name"]):
+            COUNCILS[cty] = {"name": r["name"], "phone": fmt_phone(r.get("phone", "")), "url": r.get("website") or r["url"]}
+ORGS = [{k: v for k, v in o.items() if v} for o in ORGS]
+ORGS.sort(key=lambda o: (o["kind"] != "org", o["name"]))
 cities_out = {}
 for c in sorted({i["city"] for i in items}):
     a, b = CITIES.get(c, (None, None))
-    cities_out[c] = {k: v for k, v in {"lat": a, "lon": b, "council": COUNCILS.get(c)}.items() if v is not None}
-data = {"version": CHECKED, "sources": [v["name"] for v in COUNCILS.values() if v] + list(SRC_NAMES.values()),
+    cities_out[c] = {k: v for k, v in {"lat": a, "lon": b, "council": COUNCILS.get(c), "country": ABROAD_CITY.get(c)}.items() if v is not None}
+data = {"version": CHECKED, "orgs": ORGS, "sources": [v["name"] for v in COUNCILS.values() if v] + list(SRC_NAMES.values()),
         "cities": cities_out, "items": items}
+
+# ── יומן שינויים ותכנון להצגה בתוסף ──────────────────────────────
 here = os.path.dirname(os.path.abspath(__file__))
+CL = []
+for blk in re.split(r"^## ", open(os.path.join(here, "..", "mikvaot-docs", "CHANGELOG.md"), encoding="utf-8").read(), flags=re.M)[1:]:
+    head, *lines = blk.strip().splitlines()
+    v, _, date = head.partition("—")
+    CL.append({"v": v.strip(), "date": date.strip(), "items": [l.lstrip("- ").strip() for l in lines if l.strip().startswith("-")]})
+PLAN = json.load(open(os.path.join(here, "plan.json"), encoding="utf-8"))
 out = os.path.join(here, "..", "mikvaot", "data.js")
 with open(out, "w", encoding="utf-8") as f:
     f.write("/* נוצר אוטומטית מ-mikvaot-build/build_data.py — לא לערוך ידנית */\n")
     f.write("window.MIKVAOT_DATA = " + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + ";\n")
+    f.write("window.MIKVAOT_CHANGELOG = " + json.dumps(CL, ensure_ascii=False) + ";\n")
+    f.write("window.MIKVAOT_PLAN = " + json.dumps(PLAN, ensure_ascii=False) + ";\n")
 with open(os.path.join(here, "..", "mikvaot-data.json"), "w", encoding="utf-8") as f:
     json.dump(data, f, ensure_ascii=False, indent=1)
 from collections import Counter

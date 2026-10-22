@@ -17,8 +17,9 @@ def get(url):
             err = e; time.sleep(3)
     raise err
 
-idx = get(BASE + "/directory/israel")
-links = sorted(set(re.findall(r'href="(/mikvaos/\d+/israel/[^"]+)"', idx)))
+# כל המקוואות בעולם — מתוך מפת האתר (ישראל + חו"ל)
+sm = get(BASE + "/sitemap-mikvahs.xml")
+links = sorted(set(u.replace(BASE, "") for u in re.findall(r"<loc>([^<]+/mikvaos/\d+/[^<]+)</loc>", sm)))
 out = []
 for n, u in enumerate(links, 1):
     try:
@@ -42,12 +43,13 @@ for n, u in enumerate(links, 1):
     low = (biz.get("name", "") + " " + re.sub(r"<[^>]+>", " ", s[:200000])).lower()
     out.append({
         "url": BASE + u, "name": html.unescape(biz.get("name", "")), "street": a.get("streetAddress", ""),
-        "city": a.get("addressLocality", ""), "lat": g.get("latitude"), "lon": g.get("longitude"),
+        "city": a.get("addressLocality", ""), "region": a.get("addressRegion", ""),
+        "country": a.get("addressCountry", "") or u.split("/")[3], "seg": u.split("/")[3], "postal": a.get("postalCode", ""), "lat": g.get("latitude"), "lon": g.get("longitude"),
         "phone": biz.get("telephone", ""), "schedule": sched.rstrip(" ."),
         "hint_men": bool(re.search(r"\bmen'?s mikvah\b|\bmens\b|\bmen only\b", low)),
         "hint_keilim": "keilim" in low or "kelim" in low,
     })
     print(n, len(links), out[-1]["city"], out[-1]["name"])
-    time.sleep(0.6)
+    time.sleep(0.4)
 json.dump(out, open(os.path.join(here, "raw", "mikvah_org.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print(len(out), "saved")
