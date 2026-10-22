@@ -1,36 +1,138 @@
 {
  "version": "2026-10-22",
+ "sources": [
+  "המועצה הדתית תל אביב-יפו",
+  "המועצה הדתית פתח תקווה",
+  "המועצה הדתית נוף הגליל",
+  "עיריית מודיעין עילית — מקוואות",
+  "עיריית בני ברק — מחלקת מקוואות",
+  "עיריית מודיעין-מכבים-רעות — מקוואות",
+  "דפי זהב",
+  "ארגון טהרת המשפחה (mikvah.org)"
+ ],
  "cities": {
-  "תל אביב-יפו": {
-   "lat": 32.0853,
-   "lon": 34.7818,
+  "אביטל": {
+   "lat": 32.557675,
+   "lon": 35.306414
+  },
+  "אופקים": {
+   "lat": 31.311337,
+   "lon": 34.622824
+  },
+  "אזור": {
+   "lat": 32.027926,
+   "lon": 34.803855
+  },
+  "אילת": {
+   "lat": 29.559397785,
+   "lon": 34.958023445
+  },
+  "אשדוד": {
+   "lat": 31.791102659999996,
+   "lon": 34.643838726666665
+  },
+  "אשקלון": {
+   "lat": 31.665944,
+   "lon": 34.559467
+  },
+  "באר שבע": {
+   "lat": 31.262289875,
+   "lon": 34.79012194625
+  },
+  "ביריה": {
+   "lat": 32.978122,
+   "lon": 35.500663
+  },
+  "בית אל": {
+   "lat": 31.9414425,
+   "lon": 35.222065
+  },
+  "בית שמש": {
+   "lat": 31.738235479999997,
+   "lon": 34.99121915
+  },
+  "בני ברק": {
+   "lat": 32.084,
+   "lon": 34.8338,
    "council": {
-    "name": "המועצה הדתית תל אביב-יפו",
-    "phone": "03-6938989",
-    "extra": "מחלקת מקוואות: 03-6938972",
-    "address": "אורי לסר 1 (פינת דוד המלך 33)",
-    "url": "https://rabanut.co.il/"
+    "name": "עיריית בני ברק — מחלקת מקוואות",
+    "phone": "03-6365473",
+    "extra": "מנהל המחלקה: 050-4132825 · פיקוח: 050-4129878",
+    "address": "ירושלים 58",
+    "url": "https://www.bnei-brak.muni.il/mikvahs/"
    }
   },
-  "פתח תקווה": {
-   "lat": 32.0871,
-   "lon": 34.8875,
-   "council": {
-    "name": "המועצה הדתית פתח תקווה",
-    "phone": "03-9051555",
-    "address": "חובבי ציון 37",
-    "url": "https://mpt.org.il/directory-mikvah/"
-   }
+  "בת ים": {
+   "lat": 32.0160205,
+   "lon": 34.75691125
   },
-  "נוף הגליל": {
-   "lat": 32.7019,
-   "lon": 35.3233,
-   "council": {
-    "name": "המועצה הדתית נוף הגליל",
-    "phone": "04-6554354",
-    "address": "לבנה 8",
-    "url": "https://mdnh.org.il/directory-mikvah/"
-   }
+  "גבעת שמואל": {
+   "lat": 32.077299,
+   "lon": 34.849206
+  },
+  "גבעתיים": {
+   "lat": 32.0741595,
+   "lon": 34.805209
+  },
+  "גליל תחתון": {
+   "lat": 32.7333333,
+   "lon": 35.45
+  },
+  "גן יבנה": {
+   "lat": 31.7809342,
+   "lon": 34.7059373
+  },
+  "זכרון יעקב": {
+   "lat": 32.57509533333333,
+   "lon": 34.952546000000005
+  },
+  "חולון": {
+   "lat": 32.016675400000004,
+   "lon": 34.77384
+  },
+  "חיפה": {
+   "lat": 32.806026772222225,
+   "lon": 35.00962302666667
+  },
+  "טבריה": {
+   "lat": 32.795859,
+   "lon": 35.530973
+  },
+  "טירת כרמל": {
+   "lat": 32.759401,
+   "lon": 34.966839
+  },
+  "יהוד-מונוסון": {
+   "lat": 32.0285487,
+   "lon": 34.870315
+  },
+  "ייט\"ב": {
+   "lat": 31.94689,
+   "lon": 35.422137
+  },
+  "יצהר": {
+   "lat": 32.312282,
+   "lon": 34.887864
+  },
+  "ירושלים": {
+   "lat": 31.787265576470592,
+   "lon": 35.214744538235294
+  },
+  "כפר חב\"ד": {
+   "lat": 31.9887,
+   "lon": 34.8519972
+  },
+  "לוד": {
+   "lat": 31.9484972,
+   "lon": 34.889
+  },
+  "מגדל": {
+   "lat": 32.8391667,
+   "lon": 35.5075
+  },
+  "מגדל העמק": {
+   "lat": 32.6759986,
+   "lon": 35.2439216
   },
   "מודיעין עילית": {
    "lat": 31.931,
@@ -50,6 +152,125 @@
     "extra": "רכזת בלניות: 053-4831585",
     "url": "https://www.modiin.muni.il/modiinwebsite/ArticlePage.aspx?PageID=145_374"
    }
+  },
+  "מטולה": {
+   "lat": 33.2788889,
+   "lon": 35.5744444
+  },
+  "מעלה אדומים": {
+   "lat": 31.776389,
+   "lon": 35.297196
+  },
+  "מעלה אפרים": {
+   "lat": 32.069091,
+   "lon": 35.402243
+  },
+  "מעלות-תרשיחא": {
+   "lat": 33.02147,
+   "lon": 35.287638
+  },
+  "נהריה": {
+   "lat": 33.01054166666666,
+   "lon": 35.100289333333336
+  },
+  "נוף הגליל": {
+   "lat": 32.7019,
+   "lon": 35.3233,
+   "council": {
+    "name": "המועצה הדתית נוף הגליל",
+    "phone": "04-6554354",
+    "address": "לבנה 8",
+    "url": "https://mdnh.org.il/directory-mikvah/"
+   }
+  },
+  "נופית": {
+   "lat": 32.7567741,
+   "lon": 35.146095
+  },
+  "נתניה": {
+   "lat": 32.3462,
+   "lon": 34.8615
+  },
+  "עלי": {
+   "lat": 32.071176,
+   "lon": 35.266851
+  },
+  "עפולה": {
+   "lat": 32.608541,
+   "lon": 35.2948035
+  },
+  "עפולה עילית": {
+   "lat": 32.627035,
+   "lon": 35.322511
+  },
+  "ערד": {
+   "lat": 31.2594569,
+   "lon": 35.2148796
+  },
+  "פתח תקווה": {
+   "lat": 32.0871,
+   "lon": 34.8875,
+   "council": {
+    "name": "המועצה הדתית פתח תקווה",
+    "phone": "03-9051555",
+    "address": "חובבי ציון 37",
+    "url": "https://mpt.org.il/directory-mikvah/"
+   }
+  },
+  "צפת": {
+   "lat": 32.9729185,
+   "lon": 35.4903815
+  },
+  "קרית אונו": {
+   "lat": 32.0540077,
+   "lon": 34.8607461
+  },
+  "קרית ארבע": {
+   "lat": 31.529327,
+   "lon": 35.11563
+  },
+  "קרית אתא": {
+   "lat": 32.800729999999994,
+   "lon": 35.105189
+  },
+  "קרית גת": {
+   "lat": 31.6061111,
+   "lon": 34.7716667
+  },
+  "קרית שמואל": {
+   "lat": 31.76939,
+   "lon": 35.211325
+  },
+  "קרית שמונה": {
+   "lat": 33.2070115,
+   "lon": 35.5671805
+  },
+  "רמת גן": {
+   "lat": 32.0755197,
+   "lon": 34.82252435
+  },
+  "רמת השרון": {
+   "lat": 32.15,
+   "lon": 34.8333333
+  },
+  "שכונת יעקב": {
+   "lat": 32.26125,
+   "lon": 34.922005
+  },
+  "תל אביב-יפו": {
+   "lat": 32.0853,
+   "lon": 34.7818,
+   "council": {
+    "name": "המועצה הדתית תל אביב-יפו",
+    "phone": "03-6938989",
+    "extra": "מחלקת מקוואות: 03-6938972",
+    "address": "אורי לסר 1 (פינת דוד המלך 33)",
+    "url": "https://rabanut.co.il/"
+   }
+  },
+  "תל מונד": {
+   "lat": 32.2537369,
+   "lon": 34.918592
   }
  },
  "items": [
@@ -65,6 +286,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|women|פקיעין-12"
   },
   {
@@ -79,6 +301,12 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
+   "lat": 32.093339,
+   "lon": 34.793925,
+   "also": [
+    "דפי זהב"
+   ],
    "id": "תל-אביב-יפו|women|צירלסון-10"
   },
   {
@@ -93,6 +321,7 @@
    "acc": "partial",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|women|בן-יהודה-86"
   },
   {
@@ -105,6 +334,7 @@
    "closed": true,
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|women|טאגור-32"
   },
   {
@@ -119,6 +349,7 @@
    "acc": "full-lift",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|women|הט\"ז-8"
   },
   {
@@ -133,6 +364,12 @@
    "acc": "full-lift",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
+   "lat": 32.106945,
+   "lon": 34.828075,
+   "also": [
+    "דפי זהב"
+   ],
    "id": "תל-אביב-יפו|women|ראול-ולנברג-37"
   },
   {
@@ -147,6 +384,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|women|מרק-יעקב-3"
   },
   {
@@ -161,6 +399,13 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
+   "lat": 32.0554,
+   "lon": 34.7595,
+   "also": [
+    "ארגון טהרת המשפחה (mikvah.org)",
+    "דפי זהב"
+   ],
    "id": "תל-אביב-יפו|women|בר-כוכבא-54"
   },
   {
@@ -175,6 +420,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|women|יבנה-10"
   },
   {
@@ -189,6 +435,12 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
+   "lat": 32.062244,
+   "lon": 34.766542,
+   "also": [
+    "דפי זהב"
+   ],
    "id": "תל-אביב-יפו|women|פינס-24"
   },
   {
@@ -203,6 +455,12 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
+   "lat": 32.04046,
+   "lon": 34.778249,
+   "also": [
+    "דפי זהב"
+   ],
    "id": "תל-אביב-יפו|women|החזיון-3א"
   },
   {
@@ -217,6 +475,12 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
+   "lat": 32.050626,
+   "lon": 34.778869,
+   "also": [
+    "דפי זהב"
+   ],
    "id": "תל-אביב-יפו|women|חכמי-ישראל-65"
   },
   {
@@ -231,6 +495,12 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
+   "lat": 32.044288,
+   "lon": 34.801461,
+   "also": [
+    "דפי זהב"
+   ],
    "id": "תל-אביב-יפו|women|בושם-59"
   },
   {
@@ -245,6 +515,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|women|שד'-ההשכלה-10"
   },
   {
@@ -259,6 +530,12 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
+   "lat": 32.056499,
+   "lon": 34.790649,
+   "also": [
+    "דפי זהב"
+   ],
    "id": "תל-אביב-יפו|women|שד'-החייל-4א"
   },
   {
@@ -273,6 +550,7 @@
    "acc": "basic",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|women|שד'-התחיה-4"
   },
   {
@@ -287,6 +565,7 @@
    "closed": true,
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|women|אוריאל-יעקובוב-4"
   },
   {
@@ -301,6 +580,12 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
+   "lat": 32.046953,
+   "lon": 34.788739,
+   "also": [
+    "דפי זהב"
+   ],
    "id": "תל-אביב-יפו|women|כסלו-23"
   },
   {
@@ -315,6 +600,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%D7%97%D7%99%D7%A4%D7%95%D7%A9-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA-%D7%A0%D7%A9%D7%99%D7%9D/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|women|סג'רה-9"
   },
   {
@@ -327,6 +613,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%d7%97%d7%99%d7%a4%d7%95%d7%a9-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa/%d7%a8%d7%a9%d7%99%d7%9e%d7%aa-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa-%d7%9b%d7%9c%d7%99%d7%9d/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|kelim|שד'-החייל-4א"
   },
   {
@@ -339,6 +626,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%d7%97%d7%99%d7%a4%d7%95%d7%a9-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa/%d7%a8%d7%a9%d7%99%d7%9e%d7%aa-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa-%d7%9b%d7%9c%d7%99%d7%9d/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|kelim|שד'-ההשכלה-10"
   },
   {
@@ -351,6 +639,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%d7%97%d7%99%d7%a4%d7%95%d7%a9-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa/%d7%a8%d7%a9%d7%99%d7%9e%d7%aa-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa-%d7%9b%d7%9c%d7%99%d7%9d/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|kelim|בושם-59"
   },
   {
@@ -363,6 +652,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%d7%97%d7%99%d7%a4%d7%95%d7%a9-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa/%d7%a8%d7%a9%d7%99%d7%9e%d7%aa-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa-%d7%9b%d7%9c%d7%99%d7%9d/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|kelim|החזיון-3א"
   },
   {
@@ -375,6 +665,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%d7%97%d7%99%d7%a4%d7%95%d7%a9-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa/%d7%a8%d7%a9%d7%99%d7%9e%d7%aa-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa-%d7%9b%d7%9c%d7%99%d7%9d/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|kelim|כסלו-23"
   },
   {
@@ -387,6 +678,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%d7%97%d7%99%d7%a4%d7%95%d7%a9-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa/%d7%a8%d7%a9%d7%99%d7%9e%d7%aa-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa-%d7%9b%d7%9c%d7%99%d7%9d/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|kelim|שד'-חכמי-ישראל-65"
   },
   {
@@ -399,6 +691,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%d7%97%d7%99%d7%a4%d7%95%d7%a9-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa/%d7%a8%d7%a9%d7%99%d7%9e%d7%aa-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa-%d7%9b%d7%9c%d7%99%d7%9d/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|kelim|יבנה-10"
   },
   {
@@ -411,6 +704,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%d7%97%d7%99%d7%a4%d7%95%d7%a9-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa/%d7%a8%d7%a9%d7%99%d7%9e%d7%aa-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa-%d7%9b%d7%9c%d7%99%d7%9d/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|kelim|פינס-24"
   },
   {
@@ -423,6 +717,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%d7%97%d7%99%d7%a4%d7%95%d7%a9-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa/%d7%a8%d7%a9%d7%99%d7%9e%d7%aa-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa-%d7%9b%d7%9c%d7%99%d7%9d/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|kelim|בר-כוכבא-54"
   },
   {
@@ -435,6 +730,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%d7%97%d7%99%d7%a4%d7%95%d7%a9-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa/%d7%a8%d7%a9%d7%99%d7%9e%d7%aa-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa-%d7%9b%d7%9c%d7%99%d7%9d/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|kelim|צירלסון-10"
   },
   {
@@ -447,6 +743,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%d7%97%d7%99%d7%a4%d7%95%d7%a9-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa/%d7%a8%d7%a9%d7%99%d7%9e%d7%aa-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa-%d7%9b%d7%9c%d7%99%d7%9d/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|kelim|סג'רה-9"
   },
   {
@@ -459,6 +756,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%d7%97%d7%99%d7%a4%d7%95%d7%a9-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa/%d7%a8%d7%a9%d7%99%d7%9e%d7%aa-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa-%d7%9b%d7%9c%d7%99%d7%9d/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|kelim|ראול-ולנברג-37"
   },
   {
@@ -471,6 +769,7 @@
    "acc": "unknown",
    "src": "https://rabanut.co.il/%d7%97%d7%99%d7%a4%d7%95%d7%a9-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa/%d7%a8%d7%a9%d7%99%d7%9e%d7%aa-%d7%9e%d7%a7%d7%95%d7%95%d7%90%d7%95%d7%aa-%d7%9b%d7%9c%d7%99%d7%9d/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית תל אביב-יפו",
    "id": "תל-אביב-יפו|kelim|מרק-יעקב-3"
   },
   {
@@ -483,6 +782,7 @@
    "acc": "unknown",
    "src": "https://mpt.org.il/directory-mikvah/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית פתח תקווה",
    "id": "פתח-תקווה|men|ההגנה-25"
   },
   {
@@ -495,6 +795,7 @@
    "acc": "unknown",
    "src": "https://mpt.org.il/directory-mikvah/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית פתח תקווה",
    "id": "פתח-תקווה|men|שמואל-הנגיד-1"
   },
   {
@@ -508,6 +809,7 @@
    "acc": "unknown",
    "src": "https://mpt.org.il/directory-mikvah/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית פתח תקווה",
    "id": "פתח-תקווה|women|שמואל-הנגיד-1"
   },
   {
@@ -520,6 +822,7 @@
    "acc": "unknown",
    "src": "https://mpt.org.il/directory-mikvah/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית פתח תקווה",
    "id": "פתח-תקווה|women|מוסטובוי-11"
   },
   {
@@ -533,6 +836,7 @@
    "acc": "unknown",
    "src": "https://mpt.org.il/directory-mikvah/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית פתח תקווה",
    "id": "פתח-תקווה|women|שבט-גד-4"
   },
   {
@@ -546,6 +850,7 @@
    "acc": "unknown",
    "src": "https://mpt.org.il/directory-mikvah/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית פתח תקווה",
    "id": "פתח-תקווה|women|דוד-רמז-54"
   },
   {
@@ -559,6 +864,12 @@
    "acc": "unknown",
    "src": "https://mpt.org.il/directory-mikvah/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית פתח תקווה",
+   "lat": 32.07388,
+   "lon": 34.896025,
+   "also": [
+    "דפי זהב"
+   ],
    "id": "פתח-תקווה|women|השופטים-18"
   },
   {
@@ -572,6 +883,7 @@
    "acc": "unknown",
    "src": "https://mpt.org.il/directory-mikvah/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית פתח תקווה",
    "id": "פתח-תקווה|women|חיים-עוזר-8"
   },
   {
@@ -585,6 +897,7 @@
    "acc": "unknown",
    "src": "https://mpt.org.il/directory-mikvah/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית פתח תקווה",
    "id": "פתח-תקווה|women|אסירי-ציון-13"
   },
   {
@@ -598,6 +911,7 @@
    "acc": "unknown",
    "src": "https://mpt.org.il/directory-mikvah/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית פתח תקווה",
    "id": "פתח-תקווה|women|העצמאות-6"
   },
   {
@@ -611,6 +925,7 @@
    "acc": "unknown",
    "src": "https://mpt.org.il/directory-mikvah/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית פתח תקווה",
    "id": "פתח-תקווה|women|דרך-מנחם-בגין-30"
   },
   {
@@ -624,6 +939,7 @@
    "acc": "unknown",
    "src": "https://mpt.org.il/directory-mikvah/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית פתח תקווה",
    "id": "פתח-תקווה|women|דורני-שלום-5"
   },
   {
@@ -638,6 +954,7 @@
    "acc": "unknown",
    "src": "https://mdnh.org.il/directory-mikvah/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית נוף הגליל",
    "id": "נוף-הגליל|women|קדושת-אהרון-1"
   },
   {
@@ -652,6 +969,7 @@
    "acc": "unknown",
    "src": "https://mdnh.org.il/directory-mikvah/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית נוף הגליל",
    "id": "נוף-הגליל|women|נרקיסים"
   },
   {
@@ -665,6 +983,7 @@
    "acc": "unknown",
    "src": "https://mdnh.org.il/directory-mikvah/",
    "checked": "2026-10-22",
+   "srcName": "המועצה הדתית נוף הגליל",
    "id": "נוף-הגליל|women|חרוד-/-יזרעאל"
   },
   {
@@ -677,6 +996,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|women|מסילת-יוסף-13"
   },
   {
@@ -689,6 +1009,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|women|אבני-נזר-14"
   },
   {
@@ -701,6 +1022,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|women|שד'-יחזקאל-33"
   },
   {
@@ -713,6 +1035,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|women|יהודה-הנשיא-26א"
   },
   {
@@ -725,6 +1048,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|women|אלישיב-23"
   },
   {
@@ -737,6 +1061,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|women|הריטב\"א-4"
   },
   {
@@ -749,6 +1074,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|women|חזון-דוד-19"
   },
   {
@@ -760,6 +1086,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|men|אבני-נזר-16"
   },
   {
@@ -771,6 +1098,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|men|מסילת-יוסף-13"
   },
   {
@@ -782,6 +1110,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|men|חזון-דוד-19"
   },
   {
@@ -793,6 +1122,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|men|שד'-יחזקאל-33"
   },
   {
@@ -804,6 +1134,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|men|יהודה-הנשיא-26א"
   },
   {
@@ -815,6 +1146,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|men|קהילות-יעקב-1"
   },
   {
@@ -826,6 +1158,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|men|הריטב\"א-4"
   },
   {
@@ -836,6 +1169,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|kelim|אבני-נזר-16"
   },
   {
@@ -846,6 +1180,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|kelim|אבני-נזר-46-—-חצר-אחורית"
   },
   {
@@ -856,6 +1191,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|kelim|חזון-דוד-19-—-גישה-לרכבים-מרחוב-שערי-תשובה"
   },
   {
@@ -866,6 +1202,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|kelim|שד'-יחזקאל-33"
   },
   {
@@ -876,6 +1213,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|kelim|יהודה-הנשיא-26א"
   },
   {
@@ -886,6 +1224,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|kelim|קהילות-יעקב-1"
   },
   {
@@ -896,6 +1235,7 @@
    "acc": "unknown",
    "src": "https://www.modil.org.il/%D7%A8%D7%A9%D7%99%D7%9E%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA/",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין עילית — מקוואות",
    "id": "מודיעין-עילית|kelim|הריטב\"א-4"
   },
   {
@@ -907,6 +1247,7 @@
    "acc": "unknown",
    "src": "https://www.modiin.muni.il/modiinwebsite/ArticlePage.aspx?PageID=145_374",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין-מכבים-רעות — מקוואות",
    "id": "מודיעין-מכבים-רעות|kelim|אליהו-הנביא-14"
   },
   {
@@ -918,6 +1259,12 @@
    "acc": "unknown",
    "src": "https://www.modiin.muni.il/modiinwebsite/ArticlePage.aspx?PageID=145_374",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין-מכבים-רעות — מקוואות",
+   "lat": 31.8985624,
+   "lon": 35.0186043,
+   "also": [
+    "ארגון טהרת המשפחה (mikvah.org)"
+   ],
    "id": "מודיעין-מכבים-רעות|kelim|עמק-דותן-35"
   },
   {
@@ -929,6 +1276,12 @@
    "acc": "unknown",
    "src": "https://www.modiin.muni.il/modiinwebsite/ArticlePage.aspx?PageID=145_374",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין-מכבים-רעות — מקוואות",
+   "lat": 31.890266,
+   "lon": 35.010398,
+   "also": [
+    "ארגון טהרת המשפחה (mikvah.org)"
+   ],
    "id": "מודיעין-מכבים-רעות|kelim|אבני-החושן-24"
   },
   {
@@ -940,6 +1293,12 @@
    "acc": "unknown",
    "src": "https://www.modiin.muni.il/modiinwebsite/ArticlePage.aspx?PageID=145_374",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין-מכבים-רעות — מקוואות",
+   "lat": 31.88885422,
+   "lon": 35.02514362,
+   "also": [
+    "ארגון טהרת המשפחה (mikvah.org)"
+   ],
    "id": "מודיעין-מכבים-רעות|kelim|גבעת-הלבונה-2,-רעות"
   },
   {
@@ -951,7 +1310,2312 @@
    "acc": "unknown",
    "src": "https://www.modiin.muni.il/modiinwebsite/ArticlePage.aspx?PageID=145_374",
    "checked": "2026-10-22",
+   "srcName": "עיריית מודיעין-מכבים-רעות — מקוואות",
+   "lat": 31.8825275,
+   "lon": 35.0081785,
+   "also": [
+    "ארגון טהרת המשפחה (mikvah.org)"
+   ],
    "id": "מודיעין-מכבים-רעות|kelim|יעל-הגיבורה-62"
+  },
+  {
+   "type": "women",
+   "name": "ויז'ניץ",
+   "city": "בני ברק",
+   "hood": "ויז'ניץ",
+   "address": "רבינא 14",
+   "phone": "03-5744870",
+   "hours": "יום יום: פתיחה שעה לפני זמן הטבילה, סגירה 23:00 · ערבי שבת וחג — לברר בטלפון",
+   "acc": "unknown",
+   "src": "https://www.bnei-brak.muni.il/mikvahs/",
+   "checked": "2026-10-22",
+   "srcName": "עיריית בני ברק — מחלקת מקוואות",
+   "lat": 32.076846,
+   "lon": 34.83807,
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "בני-ברק|women|רבינא-14"
+  },
+  {
+   "type": "women",
+   "name": "זכרון מאיר",
+   "city": "בני ברק",
+   "hood": "זכרון מאיר",
+   "address": "חפץ חיים 7 / מהרש\"ל 14",
+   "phone": "03-6187479",
+   "hours": "יום יום: פתיחה שעה לפני זמן הטבילה, סגירה 23:00 · ערבי שבת וחג — לברר בטלפון",
+   "acc": "unknown",
+   "src": "https://www.bnei-brak.muni.il/mikvahs/",
+   "checked": "2026-10-22",
+   "srcName": "עיריית בני ברק — מחלקת מקוואות",
+   "lat": 32.084703,
+   "lon": 34.832806,
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "בני-ברק|women|חפץ-חיים-7-/-מהרש\"ל-14"
+  },
+  {
+   "type": "women",
+   "name": "מי נחת",
+   "city": "בני ברק",
+   "hood": "מי נחת",
+   "address": "אחיה השילוני 4",
+   "phone": "03-5709617",
+   "hours": "יום יום: פתיחה שעה לפני זמן הטבילה, סגירה 23:00 · ערבי שבת וחג — לברר בטלפון",
+   "acc": "unknown",
+   "src": "https://www.bnei-brak.muni.il/mikvahs/",
+   "checked": "2026-10-22",
+   "srcName": "עיריית בני ברק — מחלקת מקוואות",
+   "lat": 32.08951025,
+   "lon": 34.82412815,
+   "also": [
+    "ארגון טהרת המשפחה (mikvah.org)"
+   ],
+   "id": "בני-ברק|women|אחיה-השילוני-4"
+  },
+  {
+   "type": "women",
+   "name": "מרכז",
+   "city": "בני ברק",
+   "hood": "מרכז",
+   "address": "קאליש 14 (פינת מימון)",
+   "phone": "03-5794489",
+   "hours": "יום יום: פתיחה שעה לפני זמן הטבילה, סגירה 23:00 · ערבי שבת וחג — לברר בטלפון",
+   "acc": "unknown",
+   "src": "https://www.bnei-brak.muni.il/mikvahs/",
+   "checked": "2026-10-22",
+   "srcName": "עיריית בני ברק — מחלקת מקוואות",
+   "lat": 32.087706,
+   "lon": 34.829679,
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "בני-ברק|women|קאליש-14-(פינת-מימון)"
+  },
+  {
+   "type": "women",
+   "name": "נווה אחיעזר",
+   "city": "בני ברק",
+   "hood": "נווה אחיעזר",
+   "address": "נחשוני 28",
+   "phone": "03-5744869",
+   "hours": "יום יום: פתיחה שעה לפני זמן הטבילה, סגירה 23:00 · ערבי שבת וחג — לברר בטלפון",
+   "acc": "unknown",
+   "src": "https://www.bnei-brak.muni.il/mikvahs/",
+   "checked": "2026-10-22",
+   "srcName": "עיריית בני ברק — מחלקת מקוואות",
+   "lat": 32.084935,
+   "lon": 34.83522,
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "בני-ברק|women|נחשוני-28"
+  },
+  {
+   "type": "women",
+   "name": "פרדס כץ",
+   "city": "בני ברק",
+   "hood": "פרדס כץ",
+   "address": "דנגור 12א (בצד ימין של בית הכנסת)",
+   "phone": "03-5790636",
+   "hours": "יום יום: פתיחה שעה לפני זמן הטבילה, סגירה 23:00 · ערבי שבת וחג — לברר בטלפון",
+   "acc": "unknown",
+   "src": "https://www.bnei-brak.muni.il/mikvahs/",
+   "checked": "2026-10-22",
+   "srcName": "עיריית בני ברק — מחלקת מקוואות",
+   "lat": 32.096,
+   "lon": 34.83187,
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "בני-ברק|women|דנגור-12א-(בצד-ימין-של-בית-הכנסת)"
+  },
+  {
+   "type": "women",
+   "name": "קריית הרצוג",
+   "city": "בני ברק",
+   "hood": "קריית הרצוג",
+   "address": "נויפלד 15 / אברבנאל 46",
+   "phone": "03-6196867",
+   "hours": "יום יום: פתיחה שעה לפני זמן הטבילה, סגירה 23:00 · ערבי שבת וחג — לברר בטלפון",
+   "acc": "unknown",
+   "src": "https://www.bnei-brak.muni.il/mikvahs/",
+   "checked": "2026-10-22",
+   "srcName": "עיריית בני ברק — מחלקת מקוואות",
+   "lat": 32.096757,
+   "lon": 34.841232,
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "בני-ברק|women|נויפלד-15-/-אברבנאל-46"
+  },
+  {
+   "type": "women",
+   "name": "שיכון ג'",
+   "city": "בני ברק",
+   "hood": "שיכון ג'",
+   "address": "בארי 7",
+   "phone": "03-5744868",
+   "hours": "יום יום: פתיחה שעה לפני זמן הטבילה, סגירה 23:00 · ערבי שבת וחג — לברר בטלפון",
+   "acc": "unknown",
+   "src": "https://www.bnei-brak.muni.il/mikvahs/",
+   "checked": "2026-10-22",
+   "srcName": "עיריית בני ברק — מחלקת מקוואות",
+   "lat": 32.077694,
+   "lon": 34.828926,
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "בני-ברק|women|בארי-7"
+  },
+  {
+   "type": "women",
+   "name": "שיכון ה'",
+   "city": "בני ברק",
+   "hood": "שיכון ה'",
+   "address": "זבולון המר 13 (מאחורי בר אילן 33)",
+   "phone": "03-5794661",
+   "hours": "יום יום: פתיחה שעה לפני זמן הטבילה, סגירה 23:00 · ערבי שבת וחג — לברר בטלפון",
+   "acc": "unknown",
+   "src": "https://www.bnei-brak.muni.il/mikvahs/",
+   "checked": "2026-10-22",
+   "srcName": "עיריית בני ברק — מחלקת מקוואות",
+   "lat": 32.103,
+   "lon": 34.829,
+   "also": [
+    "ארגון טהרת המשפחה (mikvah.org)",
+    "דפי זהב"
+   ],
+   "id": "בני-ברק|women|זבולון-המר-13-(מאחורי-בר-אילן-33)"
+  },
+  {
+   "type": "women",
+   "name": "סוקולוב",
+   "city": "בני ברק",
+   "hood": "סוקולוב",
+   "address": "אבן שפרוט 4",
+   "phone": "03-9608182",
+   "hours": "יום יום: פתיחה שעה לפני זמן הטבילה, סגירה 23:00 · ערבי שבת וחג — לברר בטלפון",
+   "acc": "unknown",
+   "src": "https://www.bnei-brak.muni.il/mikvahs/",
+   "checked": "2026-10-22",
+   "srcName": "עיריית בני ברק — מחלקת מקוואות",
+   "id": "בני-ברק|women|אבן-שפרוט-4"
+  },
+  {
+   "type": "women",
+   "name": "הסופרים",
+   "city": "בני ברק",
+   "hood": "הסופרים",
+   "address": "מתחת לגשר",
+   "phone": "053-3121976",
+   "hours": "יום יום: פתיחה שעה לפני זמן הטבילה, סגירה 23:00 · ערבי שבת וחג — לברר בטלפון",
+   "acc": "unknown",
+   "src": "https://www.bnei-brak.muni.il/mikvahs/",
+   "checked": "2026-10-22",
+   "srcName": "עיריית בני ברק — מחלקת מקוואות",
+   "id": "בני-ברק|women|מתחת-לגשר"
+  },
+  {
+   "type": "women",
+   "name": "רמת אלחנן",
+   "city": "בני ברק",
+   "hood": "רמת אלחנן",
+   "address": "אבני נזר 13 (צמוד ל\"אם וילד\")",
+   "phone": "03-5705417",
+   "hours": "יום יום: פתיחה שעה לפני זמן הטבילה, סגירה 01:00 (מקווה תורן)",
+   "acc": "unknown",
+   "src": "https://www.bnei-brak.muni.il/mikvahs/",
+   "checked": "2026-10-22",
+   "srcName": "עיריית בני ברק — מחלקת מקוואות",
+   "lat": 32.083419,
+   "lon": 34.841009,
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "בני-ברק|women|אבני-נזר-13-(צמוד-ל\"אם-וילד\")"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah near Maon Yom Chaya Mushka",
+   "city": "כפר חב\"ד",
+   "address": "Near Maon Yom Chaya Mushka",
+   "phone": "03-9606929",
+   "lat": 31.9887,
+   "lon": 34.8519972,
+   "src": "https://mikvah.org/mikvaos/11/israel/kfar-chabad/mikvah-near-maon-yom-chaya-mushka",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "also": [],
+   "hours": "OPEN EVERY EVENING, APPOINTMENT NECESSARY FRIDAY NITES AND YOM TOVIM. Under the supervision of Rabbi Mordechai Shmuel Ashkenazi",
+   "id": "כפר-חב\"ד|women|Near-Maon-Yom-Chaya-Mushka"
+  },
+  {
+   "type": "women",
+   "name": "Talpiot Mizrach (East Talpiot/Armon Hanatziv)",
+   "city": "ירושלים",
+   "address": "Avshalom Haviv St., across from bldg. 105, first ",
+   "phone": "02-6723026",
+   "hours": "Winter: 5-9 pm; Summer: 7-10 pm; erev Shabbat/chag: 10 min. bef. shkiya, for 1 hour; motza'ei Shabbat/chag: 1 hour after end of Sh./Ch., for 2 hours. Under the supervision of Jerusalem Religious Council",
+   "lat": 31.768319,
+   "lon": 35.21371,
+   "src": "https://mikvah.org/mikvaos/1101/israel/jerusalem/talpiot-mizrach-east-talpiotarmon-hanatziv",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "also": [],
+   "id": "ירושלים|women|Avshalom-Haviv-St.,-across-from-bldg.-105,-first-"
+  },
+  {
+   "type": "women",
+   "name": "Mikve Azor",
+   "city": "אזור",
+   "address": "Moshe Sharet 50",
+   "phone": "03-5507950",
+   "lat": 32.027926,
+   "lon": 34.803855,
+   "src": "https://mikvah.org/mikvaos/1104/israel/azor/mikve-azor",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "אזור|women|Moshe-Sharet-50"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Rabbi Akiva",
+   "city": "גן יבנה",
+   "address": "Rabbi Akiva ",
+   "phone": "08-8574379",
+   "lat": 31.7809342,
+   "lon": 34.7059373,
+   "src": "https://mikvah.org/mikvaos/1126/israel/gan-yavne/mikvah-rabbi-akiva",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "גן-יבנה|women|Rabbi-Akiva-"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Beis Fraida",
+   "city": "ירושלים",
+   "address": "6 ohel yehoshua street entrance bet",
+   "phone": "02-5004441",
+   "lat": 31.7948819,
+   "lon": 35.2071541,
+   "src": "https://mikvah.org/mikvaos/1166/israel/jerusalem/mikvah-beis-fraida",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|6-ohel-yehoshua-street-entrance-bet"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Haari Rechavia",
+   "city": "ירושלים",
+   "address": "5 Rechov HaAri",
+   "phone": "02-5632783",
+   "lat": 31.7718967,
+   "lon": 35.213972,
+   "src": "https://mikvah.org/mikvaos/1172/israel/jerusalem/mikvah-haari-rechavia",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "Open nightly no appointment needed. Under the supervision of Moatza Hadatit and Reb Aviad Goldvicht",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "ירושלים|women|5-Rechov-HaAri"
+  },
+  {
+   "type": "women",
+   "name": "מקווה ערלוי. Erlau/Erloi's mikvah",
+   "city": "ירושלים",
+   "address": "רח' יותם 1, ירושלים, ישראל. Yotom 1, Jerusalem, Israel.",
+   "lat": 31.7632128,
+   "lon": 35.2147181,
+   "src": "https://mikvah.org/mikvaos/1184/israel/jerusalem/erlauerlois-mikvah",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|רח'-יותם-1,-ירושלים,-ישראל.-Yotom-1,-Jerusalem,-Israel."
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Ofakim",
+   "city": "אופקים",
+   "address": "14 (Ofakim) Abuchatzira",
+   "phone": "054-8527884",
+   "hours": "Weekdays evening in the winter: from Shkia - 9.30pm, in the Summer: from Shkia- 10:30pm",
+   "lat": 31.311337,
+   "lon": 34.622824,
+   "src": "https://mikvah.org/mikvaos/1240/israel/ofakim/mikvah-ofakim",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "אופקים|women|14-(Ofakim)-Abuchatzira"
+  },
+  {
+   "type": "women",
+   "name": "Katamon Mikvah",
+   "city": "ירושלים",
+   "address": "33 Antignos Street",
+   "phone": "02-6482534",
+   "lat": 31.7555074,
+   "lon": 35.2059711,
+   "src": "https://mikvah.org/mikvaos/1266/israel/jerusalem/katamon-mikvah",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "ירושלים|women|33-Antignos-Street"
+  },
+  {
+   "type": "women",
+   "name": "Women's Mikvah of Tel Mond",
+   "city": "תל מונד",
+   "address": "Hadekel 54",
+   "phone": "053-8470367",
+   "lat": 32.2537369,
+   "lon": 34.918592,
+   "src": "https://mikvah.org/mikvaos/1276/israel/tel-mond/womens-mikvah-of-tel-mond",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "תל-מונד|women|Hadekel-54"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Shimon Agassi Street",
+   "city": "ירושלים",
+   "address": "10 Shimon Agassi Street",
+   "phone": "02-6526903",
+   "lat": 31.7857,
+   "lon": 35.2007,
+   "src": "https://mikvah.org/mikvaos/3/israel/jerusalem/mikvah-shimon-agassi-street",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "also": [],
+   "id": "ירושלים|women|10-Shimon-Agassi-Street"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Chabad",
+   "city": "ערד",
+   "address": "Hakanaim Street 59",
+   "phone": "08-9955014",
+   "lat": 31.2602778,
+   "lon": 35.2147222,
+   "src": "https://mikvah.org/mikvaos/413/israel/arad/mikvah-chabad",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "ערד|women|Hakanaim-Street-59"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Chabad",
+   "city": "נהריה",
+   "address": "Shehunat Givat Osishkin",
+   "phone": "04-9925410",
+   "lat": 33.005424,
+   "lon": 35.098733,
+   "src": "https://mikvah.org/mikvaos/416/israel/naharia/mikvah-chabad",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "נהריה|women|Shehunat-Givat-Osishkin"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Chabad",
+   "city": "צפת",
+   "address": "Kiryat Chabad",
+   "phone": "04-6973321",
+   "lat": 32.9863,
+   "lon": 35.4927,
+   "src": "https://mikvah.org/mikvaos/417/israel/sfad/mikvah-chabad",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "OPEN NIGHTLY. Under the supervision of Rabbi Nachman Kenig",
+   "also": [],
+   "id": "צפת|women|Kiryat-Chabad"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Eilat",
+   "city": "אילת",
+   "address": "R'chov Sheishet Hayamim",
+   "phone": "08-6331791",
+   "lat": 29.55730057,
+   "lon": 34.96269989,
+   "src": "https://mikvah.org/mikvaos/5/israel/eilat/mikvah-eilat",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "אילת|women|R'chov-Sheishet-Hayamim"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Rechov Haetrog",
+   "city": "אשדוד",
+   "address": "R'chov Haetrog",
+   "phone": "08-8544108",
+   "lat": 31.78582198,
+   "lon": 34.65023518,
+   "src": "https://mikvah.org/mikvaos/535/israel/ashdod/mikvah-rechov-haetrog",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "אשדוד|women|R'chov-Haetrog"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Rechov Kineret",
+   "city": "אשדוד",
+   "address": "R'chov Kineret",
+   "phone": "08-8640093",
+   "lat": 31.782555,
+   "lon": 34.628377,
+   "src": "https://mikvah.org/mikvaos/536/israel/ashdod/mikvah-rechov-kineret",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "אשדוד|women|R'chov-Kineret"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Beer Sheva",
+   "city": "באר שבע",
+   "address": "R'chavat Klazner",
+   "phone": "07-6480843",
+   "lat": 31.2503,
+   "lon": 34.79146957,
+   "src": "https://mikvah.org/mikvaos/539/israel/beer-sheva/mikvah-beer-sheva",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "באר-שבע|women|R'chavat-Klazner"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Cholon",
+   "city": "חולון",
+   "address": "R'chov Hashiluach 23",
+   "phone": "03-5594803",
+   "lat": 32.0431,
+   "lon": 34.7722,
+   "src": "https://mikvah.org/mikvaos/540/israel/cholon/mikvah-cholon",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "חולון|women|R'chov-Hashiluach-23"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Lod",
+   "city": "לוד",
+   "address": "Shikun Chabad Behind The Syn.",
+   "phone": "08-9243754",
+   "lat": 31.9484972,
+   "lon": 34.889,
+   "src": "https://mikvah.org/mikvaos/542/israel/lod/mikvah-lod",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "לוד|women|Shikun-Chabad-Behind-The-Syn."
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Rchov Aviv",
+   "city": "מגדל העמק",
+   "address": "R'chov Aviv Near R'chov Harav",
+   "phone": "06-6543220",
+   "lat": 32.6784972,
+   "lon": 35.2443972,
+   "src": "https://mikvah.org/mikvaos/543/israel/migdal-haemek/mikvah-rchov-aviv",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "also": [],
+   "id": "מגדל-העמק|women|R'chov-Aviv-Near-R'chov-Harav"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Hahagana Street",
+   "city": "ירושלים",
+   "address": "Rechov Haganah 15",
+   "phone": "02-5811715",
+   "hours": "Open nightly from sunset to 9 PM in winter to 10 PM in summer. Under the supervision of Rav Avraham Druk, Rabbi Halperin 972-2-581-5197",
+   "lat": 31.8032831,
+   "lon": 35.2376242,
+   "src": "https://mikvah.org/mikvaos/555/israel/jerusalem/mikvah-hahagana-street",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|Rechov-Haganah-15"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Kiryat Yovel",
+   "city": "ירושלים",
+   "address": "3 Florentin",
+   "phone": "002-6417110",
+   "lat": 31.7603164,
+   "lon": 35.1721552,
+   "src": "https://mikvah.org/mikvaos/556/israel/jerusalem/mikvah-kiryat-yovel",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "ירושלים|women|3-Florentin"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Behind Ohel Yitzchok Shul",
+   "city": "מגדל העמק",
+   "address": "Rchov Aviv Near Rchov Boskilah",
+   "lat": 32.6735,
+   "lon": 35.243446,
+   "src": "https://mikvah.org/mikvaos/558/israel/migdal-haemek/mikvah-behind-ohel-yitzchok-shul",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "מגדל-העמק|women|Rchov-Aviv-Near-Rchov-Boskilah"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah HaMatzor (named after Naava)",
+   "city": "ירושלים",
+   "address": "Hamatzor 7 Old Katamon",
+   "phone": "002-5635174",
+   "hours": "Winter: 5-9, Summer: 7-10. Under the supervision of Jerusalem Religious Council",
+   "lat": 31.762251,
+   "lon": 35.2115521,
+   "src": "https://mikvah.org/mikvaos/636/israel/jerusalem/mikvah-hamatzor-named-after-naava",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "ירושלים|women|Hamatzor-7-Old-Katamon"
+  },
+  {
+   "type": "women",
+   "name": "Amishav - Petach Tikva",
+   "city": "פתח תקווה",
+   "address": "Shevet Gad Street",
+   "lat": 32.0936,
+   "lon": 34.8823,
+   "src": "https://mikvah.org/mikvaos/653/israel/petach-tikvah/amishav-petach-tikva",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "פתח-תקווה|women|Shevet-Gad-Street"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Chabad Migdal",
+   "city": "מגדל",
+   "address": "Newar Beit Hakneset Yesod Migdal",
+   "phone": "04-6723561",
+   "hours": "BY APPOINTMENT ONLY",
+   "lat": 32.8391667,
+   "lon": 35.5075,
+   "src": "https://mikvah.org/mikvaos/680/israel/migdal/mikvah-chabad-migdal",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "מגדל|women|Newar-Beit-Hakneset-Yesod-Migdal"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Mei Menachem",
+   "city": "מטולה",
+   "address": "Rechov Hairus 12",
+   "phone": "052-2810573",
+   "lat": 33.2788889,
+   "lon": 35.5744444,
+   "src": "https://mikvah.org/mikvaos/689/israel/metulla/mikvah-mei-menachem",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "מטולה|women|Rechov-Hairus-12"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Taharat Kibbutz Lavi",
+   "city": "גליל תחתון",
+   "address": " ",
+   "phone": "04-6799061",
+   "hours": "BY APPOINTMENT ONLY. Under the supervision of Rabbi Yehudah Gilad, Religious Moaza",
+   "lat": 32.7333333,
+   "lon": 35.45,
+   "src": "https://mikvah.org/mikvaos/728/israel/lower-galilee/mikvah-taharat-kibbutz-lavi",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "גליל-תחתון|women|-"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Kiryat Shmuel Haifa",
+   "city": "קרית שמואל",
+   "address": "Rechov Torah Vavodah",
+   "phone": "04-8710198",
+   "lat": 31.76939,
+   "lon": 35.211325,
+   "src": "https://mikvah.org/mikvaos/748/israel/kiryat-shmuel/mikvah-kiryat-shmuel-haifa",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "קרית-שמואל|women|Rechov-Torah-Vavodah"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Mei Menachem",
+   "city": "קרית גת",
+   "address": "11 Rechov Hashoshan",
+   "phone": "08-6884350",
+   "hours": "OPEN EVERY EVENING, APPOINTMENT NEEDED MOTZOEI SHABBAS. Under the supervision of Rabbi Moshe Havlin",
+   "lat": 31.6061111,
+   "lon": 34.7716667,
+   "src": "https://mikvah.org/mikvaos/753/israel/kiryat-gat/mikvah-mei-menachem",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "also": [],
+   "id": "קרית-גת|women|11-Rechov-Hashoshan"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Sanhedria",
+   "city": "ירושלים",
+   "address": "Bloy 22",
+   "phone": "02-5811977",
+   "lat": 31.7986504,
+   "lon": 35.2200908,
+   "src": "https://mikvah.org/mikvaos/779/israel/jerusalem/mikvah-sanhedria",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "ירושלים|women|Bloy-22"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Shechunat Yaakov",
+   "city": "שכונת יעקב",
+   "address": "18 HaTamar Street",
+   "phone": "09-7964001",
+   "lat": 32.26125,
+   "lon": 34.922005,
+   "src": "https://mikvah.org/mikvaos/785/israel/shechunat-yaakov/mikvah-shechunat-yaakov",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "שכונת-יעקב|women|18-HaTamar-Street"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Kiryat Sanz",
+   "city": "ירושלים",
+   "address": "Rechov Zayit Raanan 3",
+   "phone": "02-5004676",
+   "lat": 31.7973339,
+   "lon": 35.2100317,
+   "src": "https://mikvah.org/mikvaos/786/israel/jerusalem/mikvah-kiryat-sanz",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "ירושלים|women|Rechov-Zayit-Raanan-3"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah on Betzalel",
+   "city": "חיפה",
+   "address": "Betzalel 2",
+   "phone": "04-8629497",
+   "hours": "OPEN NIGHTLY. Under the supervision of Rabbi Ashkenazi",
+   "lat": 32.79380035,
+   "lon": 35.02819824,
+   "src": "https://mikvah.org/mikvaos/792/israel/haifa/mikvah-on-betzalel",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "חיפה|women|Betzalel-2"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Mei Menachem",
+   "city": "רמת השרון",
+   "address": "Hashfela 8",
+   "phone": "03-5476770",
+   "lat": 32.15,
+   "lon": 34.8333333,
+   "src": "https://mikvah.org/mikvaos/820/israel/ramat-hasharon/mikvah-mei-menachem",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "רמת-השרון|women|Hashfela-8"
+  },
+  {
+   "type": "women",
+   "name": "Mishab",
+   "city": "נתניה",
+   "address": "Ben Natan 3 (Entrance from Shpigelman)",
+   "phone": "09-8871071",
+   "lat": 32.3462,
+   "lon": 34.8615,
+   "src": "https://mikvah.org/mikvaos/853/israel/kiryat-hasharon-netanya/mishab",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "נתניה|women|Ben-Natan-3-(Entrance-from-Shpigelman)"
+  },
+  {
+   "type": "women",
+   "name": "Hagefen Mikvah ",
+   "city": "קרית אונו",
+   "address": "Rechov HaGefen 12",
+   "phone": "050-4100514",
+   "hours": "Open Daily  6 PM - 9 PM. Under the supervision of Rabbi B.B.Yurkovitch/ Rabbi Boaz Learner",
+   "lat": 32.0540077,
+   "lon": 34.8607461,
+   "src": "https://mikvah.org/mikvaos/870/israel/kiryat-ono/hagefen-mikvah",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "קרית-אונו|women|Rechov-HaGefen-12"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Maaleh Ephraim",
+   "city": "מעלה אפרים",
+   "address": "Mevoh Habosem",
+   "phone": "02-9942345",
+   "hours": "By Appointment. Under the supervision of Rabbi Menachem Glitzenstein",
+   "lat": 32.069091,
+   "lon": 35.402243,
+   "src": "https://mikvah.org/mikvaos/872/israel/maale-ephraim/mikvah-maaleh-ephraim",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "מעלה-אפרים|women|Mevoh-Habosem"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Moshav Avital",
+   "city": "אביטל",
+   "address": "MOSHAV AVITAL TANCH",
+   "phone": "050-3352770",
+   "lat": 32.557675,
+   "lon": 35.306414,
+   "src": "https://mikvah.org/mikvaos/884/israel/moshav-avital/mikvah-moshav-avital",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "אביטל|women|MOSHAV-AVITAL-TANCH"
+  },
+  {
+   "type": "women",
+   "name": "Mikve Ramat Shikma",
+   "city": "רמת גן",
+   "address": "24 Azriel St",
+   "phone": "03-6737910",
+   "lat": 32.0511608,
+   "lon": 34.8191544,
+   "src": "https://mikvah.org/mikvaos/888/israel/ramat-gan/mikve-ramat-shikma",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "רמת-גן|women|24-Azriel-St"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Chabad ",
+   "city": "בית שמש",
+   "address": "20 Dolev",
+   "phone": "054-7617243",
+   "lat": 31.7145977,
+   "lon": 34.9966861,
+   "src": "https://mikvah.org/mikvaos/889/israel/bet-shemesh/mikvah-chabad",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "בית-שמש|women|20-Dolev"
+  },
+  {
+   "type": "women",
+   "name": "Yizhar Womens Mikvah",
+   "city": "יצהר",
+   "address": "Yitzhar",
+   "phone": "052-6070161",
+   "hours": "by appointment only. Under the supervision of Rav Mordechai Kalev",
+   "lat": 32.312282,
+   "lon": 34.887864,
+   "src": "https://mikvah.org/mikvaos/891/israel/lev-hashomron/yizhar-womens-mikvah",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "יצהר|women|Yitzhar"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Nofit",
+   "city": "נופית",
+   "address": "tavor 18",
+   "phone": "054-6669770",
+   "hours": "by appointment only. Under the supervision of rav kishon",
+   "lat": 32.7567741,
+   "lon": 35.146095,
+   "src": "https://mikvah.org/mikvaos/892/israel/nofit/mikvah-nofit",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "נופית|women|tavor-18"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Bal Shem Tov Petach Tikva",
+   "city": "פתח תקווה",
+   "address": "Ezra Vnecheya 39/2",
+   "phone": "03-9320417",
+   "lat": 32.08404,
+   "lon": 34.887764,
+   "src": "https://mikvah.org/mikvaos/893/israel/petach-tikva/mikvah-bal-shem-tov-petach-tikva",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "פתח-תקווה|women|Ezra-Vnecheya-39/2"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Neve Monoson",
+   "city": "יהוד-מונוסון",
+   "address": "sapir 4",
+   "phone": "03-5337488",
+   "lat": 32.0285487,
+   "lon": 34.870315,
+   "src": "https://mikvah.org/mikvaos/894/israel/yahud-monoson/mikvah-neve-monoson",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "יהוד-מונוסון|women|sapir-4"
+  },
+  {
+   "type": "women",
+   "name": "Gush Etzion Mikvah",
+   "city": "גבעת שמואל",
+   "address": "15 Gush Etzion Street",
+   "phone": "03-5324477",
+   "hours": "By Appointment. Under the supervision of Rav Landau and local Rabbinate",
+   "lat": 32.077299,
+   "lon": 34.849206,
+   "src": "https://mikvah.org/mikvaos/909/israel/givat-shmuel/gush-etzion-mikvah",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "גבעת-שמואל|women|15-Gush-Etzion-Street"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Shvil Haeshel",
+   "city": "בית שמש",
+   "address": "Shvil Haeshel 24",
+   "phone": "02-9917488",
+   "lat": 31.7537601,
+   "lon": 34.9917824,
+   "src": "https://mikvah.org/mikvaos/917/israel/bet-shemesh/mikvah-shvil-haeshel",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "בית-שמש|women|Shvil-Haeshel-24"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Hamishlat",
+   "city": "בית שמש",
+   "address": "Hamishlat 12A",
+   "phone": "02-9913404",
+   "lat": 31.750876,
+   "lon": 34.9917615,
+   "src": "https://mikvah.org/mikvaos/918/israel/bet-shemesh/mikvah-hamishlat",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "בית-שמש|women|Hamishlat-12A"
+  },
+  {
+   "type": "women",
+   "name": "MIkvah Harakefet",
+   "city": "בית שמש",
+   "address": "Harakefet 42",
+   "phone": "02-9925536",
+   "lat": 31.7393982,
+   "lon": 34.9761788,
+   "src": "https://mikvah.org/mikvaos/919/israel/bet-shemesh/mikvah-harakefet",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "בית-שמש|women|Harakefet-42"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Kedushas Habayis",
+   "city": "בית שמש",
+   "address": "Ohr Hachaim 1",
+   "phone": "02-9922322",
+   "lat": 31.747041,
+   "lon": 34.988099,
+   "src": "https://mikvah.org/mikvaos/920/israel/bet-shemesh/mikvah-kedushas-habayis",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "also": [],
+   "id": "בית-שמש|women|Ohr-Hachaim-1"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Nachal Dolev",
+   "city": "בית שמש",
+   "address": "Nachal Dolev 30",
+   "phone": "02-9925213",
+   "lat": 31.7128277,
+   "lon": 34.9981158,
+   "src": "https://mikvah.org/mikvaos/921/israel/ramat-bet-shemesh/mikvah-nachal-dolev",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "בית-שמש|women|Nachal-Dolev-30"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Rechov Reuven",
+   "city": "בית שמש",
+   "address": "Reuven 20",
+   "phone": "02-9952016",
+   "lat": 31.738308,
+   "lon": 34.983947,
+   "src": "https://mikvah.org/mikvaos/923/israel/bet-shemesh/mikvah-rechov-reuven",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "בית-שמש|women|Reuven-20"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Tiferet Moshe",
+   "city": "בית שמש",
+   "address": "Tiferet Moshe 1",
+   "phone": "02-9919254",
+   "lat": 31.7494336,
+   "lon": 34.9937433,
+   "src": "https://mikvah.org/mikvaos/925/israel/bet-shemesh/mikvah-tiferet-moshe",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "בית-שמש|women|Tiferet-Moshe-1"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Zechuta DRama",
+   "city": "בית שמש",
+   "address": "Rashbi 18",
+   "phone": "02-9996363",
+   "lat": 31.7268275,
+   "lon": 34.9923037,
+   "src": "https://mikvah.org/mikvaos/926/israel/ramat-bet-shemesh-b/mikvah-zechuta-drama",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "בית-שמש|women|Rashbi-18"
+  },
+  {
+   "type": "women",
+   "name": "Slonim Mikvah",
+   "city": "בית שמש",
+   "address": "Hachida 8",
+   "phone": "052-7656674",
+   "hours": "By appointment only. Open only Friday night and Chag",
+   "lat": 31.749285,
+   "lon": 34.9995739,
+   "src": "https://mikvah.org/mikvaos/929/israel/bet-shemesh/slonim-mikvah",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "בית-שמש|women|Hachida-8"
+  },
+  {
+   "type": "women",
+   "name": "Tiberias Mikvah",
+   "city": "טבריה",
+   "address": "rechov Hashiloach",
+   "hours": "open nightly",
+   "lat": 32.795859,
+   "lon": 35.530973,
+   "src": "https://mikvah.org/mikvaos/930/israel/tiberias/tiberias-mikvah",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "id": "טבריה|women|rechov-Hashiloach"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Merkaz HaKarmel",
+   "city": "חיפה",
+   "address": "Derech Hayam 10",
+   "phone": "04-8387816",
+   "hours": "Open nightly 5:30 PM - 8 PM winter and 7 PM - 9 PM summer",
+   "lat": 32.8042974,
+   "lon": 34.9860329,
+   "src": "https://mikvah.org/mikvaos/951/israel/haifa/mikvah-merkaz-hakarmel",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "חיפה|women|Derech-Hayam-10"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Neve David",
+   "city": "חיפה",
+   "address": "Rechov Hamelech Shlomo 27",
+   "phone": "04-8374658",
+   "hours": "Call for appointment",
+   "lat": 32.8080337,
+   "lon": 34.962514,
+   "src": "https://mikvah.org/mikvaos/952/israel/haifa/mikvah-neve-david",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "חיפה|women|Rechov-Hamelech-Shlomo-27"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Neve Shanan",
+   "city": "חיפה",
+   "address": "Rechov Shaul 22",
+   "phone": "04-8225139",
+   "lat": 32.7883071,
+   "lon": 35.0168295,
+   "src": "https://mikvah.org/mikvaos/953/israel/haifa/mikvah-neve-shanan",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "חיפה|women|Rechov-Shaul-22"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Chasdei Taharah",
+   "city": "חיפה",
+   "address": "Derech Yad Levanim 212",
+   "phone": "04-8222203",
+   "lat": 32.7940463,
+   "lon": 34.989571,
+   "src": "https://mikvah.org/mikvaos/954/israel/haifa/mikvah-chasdei-taharah",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "hours": "Open nightly for two hours after sunset. Appointment needed Shabbos, Motzoei Shabbos and Yom Tov",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "חיפה|women|Derech-Yad-Levanim-212"
+  },
+  {
+   "type": "women",
+   "name": "Mikvah Kiryat Eliyahu",
+   "city": "חיפה",
+   "address": "Rechov Tel Aviv 37",
+   "phone": "04-8516128",
+   "hours": "Open nightly 5 PM to 8 PM winter and 7:30 PM to 9:30 PM summer. Friday night 45 minutes after candle lighting for about 30 minutes, Motzoei Shabbos one hour after Shabbos is over for about 1 hour. Separate room for brides",
+   "lat": 32.8262741,
+   "lon": 34.9846896,
+   "src": "https://mikvah.org/mikvaos/956/israel/haifa/mikvah-kiryat-eliyahu",
+   "srcName": "ארגון טהרת המשפחה (mikvah.org)",
+   "lang": "en",
+   "checked": "2026-10-22",
+   "also": [
+    "דפי זהב"
+   ],
+   "id": "חיפה|women|Rechov-Tel-Aviv-37"
+  },
+  {
+   "type": "women",
+   "name": "מקווה טהרה",
+   "city": "ירושלים",
+   "address": "סיירת גולני 9",
+   "phone": "02-5858246",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.829138,
+   "lon": 35.243863,
+   "src": "https://www.d.co.il/35012020/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|סיירת-גולני-9"
+  },
+  {
+   "type": "men",
+   "name": "\"מקוה ישראל\"-בית מרחץ ציבורי",
+   "city": "ירושלים",
+   "address": "חיי אדם 18",
+   "phone": "02-6234791",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.78654,
+   "lon": 35.220163,
+   "src": "https://www.d.co.il/5641040/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|men|חיי-אדם-18"
+  },
+  {
+   "type": "women",
+   "name": "מקווה טהרה מרכזי",
+   "city": "קרית אתא",
+   "address": "המייסדים 16",
+   "phone": "04-8444749",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.803893,
+   "lon": 35.10517,
+   "src": "https://www.d.co.il/35921360/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "קרית-אתא|women|המייסדים-16"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה באבוב",
+   "city": "בת ים",
+   "address": "האדמו\"ר מבאבוב 12",
+   "phone": "03-5518031",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.009296,
+   "lon": 34.752201,
+   "src": "https://www.d.co.il/80109435/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "בת-ים|unknown|האדמו\"ר-מבאבוב-12"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה טרומפלדור",
+   "city": "נהריה",
+   "address": "החלוץ",
+   "phone": "04-9828535",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 33.020649,
+   "lon": 35.108137,
+   "src": "https://www.d.co.il/80199436/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "נהריה|unknown|החלוץ"
+  },
+  {
+   "type": "women",
+   "name": "מקווה טהרה",
+   "city": "ירושלים",
+   "address": "סביון 5",
+   "phone": "02-6416946",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.754565,
+   "lon": 35.166888,
+   "src": "https://www.d.co.il/35010040/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|סביון-5"
+  },
+  {
+   "type": "women",
+   "name": "מקווה טהרה",
+   "city": "ירושלים",
+   "address": "אביר יעקב 3",
+   "phone": "02-6564594",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.840914,
+   "lon": 35.250534,
+   "src": "https://www.d.co.il/35009640/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|אביר-יעקב-3"
+  },
+  {
+   "type": "unknown",
+   "name": "טהרת ישראל",
+   "city": "בני ברק",
+   "address": "טהרת ישראל",
+   "phone": "052-3436997",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.084935,
+   "lon": 34.83522,
+   "src": "https://www.d.co.il/65083450/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "בני-ברק|unknown|טהרת-ישראל"
+  },
+  {
+   "type": "men",
+   "name": "בית מרחץ - אחוזה",
+   "city": "חיפה",
+   "address": "שד' סיני 16",
+   "phone": "04-8343148",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.787706,
+   "lon": 34.987594,
+   "src": "https://www.d.co.il/77248670/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "חיפה|men|שד'-סיני-16"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה רמת יוסף",
+   "city": "בת ים",
+   "address": "סמ' הורדים 6",
+   "phone": "03-5076933",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.016634,
+   "lon": 34.756439,
+   "src": "https://www.d.co.il/80109434/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "בת-ים|unknown|סמ'-הורדים-6"
+  },
+  {
+   "type": "unknown",
+   "name": "באר מרים",
+   "city": "רמת גן",
+   "address": "הגלגל 42",
+   "phone": "03-5796599",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.080991,
+   "lon": 34.824994,
+   "src": "https://www.d.co.il/28635610/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "רמת-גן|unknown|הגלגל-42"
+  },
+  {
+   "type": "unknown",
+   "name": "נוה ארזים",
+   "city": "חולון",
+   "address": "ישעיהו 6",
+   "phone": "03-5509978",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.017997,
+   "lon": 34.791108,
+   "src": "https://www.d.co.il/64183880/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "חולון|unknown|ישעיהו-6"
+  },
+  {
+   "type": "unknown",
+   "name": "מקוה דרום",
+   "city": "זכרון יעקב",
+   "address": "מקוה דרום",
+   "phone": "04-6396535",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.573904,
+   "lon": 34.951967,
+   "src": "https://www.d.co.il/19633880/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "זכרון-יעקב|unknown|מקוה-דרום"
+  },
+  {
+   "type": "women",
+   "name": "מקווה טהרה - ש. התימנים",
+   "city": "קרית אתא",
+   "address": "הרב אלשייך",
+   "phone": "04-8437992",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.78845,
+   "lon": 35.08831,
+   "src": "https://www.d.co.il/35921510/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "קרית-אתא|women|הרב-אלשייך"
+  },
+  {
+   "type": "unknown",
+   "name": "בית לוי",
+   "city": "ירושלים",
+   "address": "יוסף חכמי 48",
+   "phone": "058-7687610",
+   "hours": "א'–ה' 17:00–19:00 · ש' 18:36–21:00",
+   "lat": 31.766777,
+   "lon": 35.187922,
+   "src": "https://www.d.co.il/80306823/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|unknown|יוסף-חכמי-48"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה חב\"ד מעלות",
+   "city": "מעלות-תרשיחא",
+   "address": "שד' ירושלים 43",
+   "phone": "04-9978777",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 33.02147,
+   "lon": 35.287638,
+   "src": "https://www.d.co.il/75376570/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "מעלות-תרשיחא|unknown|שד'-ירושלים-43"
+  },
+  {
+   "type": "women",
+   "name": "מקוה טהרה שכונה ג'",
+   "city": "באר שבע",
+   "address": "מקוה טהרה שכונה ג'",
+   "phone": "08-6273987",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.252974,
+   "lon": 34.79146,
+   "src": "https://www.d.co.il/38236630/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "באר-שבע|women|מקוה-טהרה-שכונה-ג'"
+  },
+  {
+   "type": "unknown",
+   "name": "חן המעיין בדי בדיקה",
+   "city": "בית אל",
+   "address": "חן המעיין בדי בדיקה",
+   "phone": "02-9971073",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.9416,
+   "lon": 35.222737,
+   "src": "https://www.d.co.il/80045373/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "בית-אל|unknown|חן-המעיין-בדי-בדיקה"
+  },
+  {
+   "type": "women",
+   "name": "מקווה טהרה",
+   "city": "ירושלים",
+   "address": "בלבן מאיר 4",
+   "phone": "02-5851355",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.845128,
+   "lon": 35.24239,
+   "src": "https://www.d.co.il/35010460/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|בלבן-מאיר-4"
+  },
+  {
+   "type": "unknown",
+   "name": "מקוה רמת ממרא",
+   "city": "קרית ארבע",
+   "address": "מקוה רמת ממרא",
+   "phone": "02-9963033",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.529327,
+   "lon": 35.11563,
+   "src": "https://www.d.co.il/19975920/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "also": [],
+   "id": "קרית-ארבע|unknown|מקוה-רמת-ממרא"
+  },
+  {
+   "type": "women",
+   "name": "מקווה טהרה",
+   "city": "ירושלים",
+   "address": "ראובן ארזי 2",
+   "phone": "02-5856990",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.819869,
+   "lon": 35.241561,
+   "src": "https://www.d.co.il/39280820/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|ראובן-ארזי-2"
+  },
+  {
+   "type": "men",
+   "name": "בית מרחץ וסאונה",
+   "city": "אשקלון",
+   "address": "בית מרחץ וסאונה",
+   "phone": "08-6726127",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.665944,
+   "lon": 34.559467,
+   "src": "https://www.d.co.il/8332850/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "אשקלון|men|בית-מרחץ-וסאונה"
+  },
+  {
+   "type": "unknown",
+   "name": "מועצה דתית ר\"ג",
+   "city": "רמת גן",
+   "address": "עוזיאל 5",
+   "phone": "03-6189340",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.07866,
+   "lon": 34.823467,
+   "src": "https://www.d.co.il/12890400/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "רמת-גן|unknown|עוזיאל-5"
+  },
+  {
+   "type": "unknown",
+   "name": "טהרת המשפחה",
+   "city": "ירושלים",
+   "address": "ישא ברכה 28",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.791987,
+   "lon": 35.217872,
+   "src": "https://www.d.co.il/9320870/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "also": [],
+   "id": "ירושלים|unknown|ישא-ברכה-28"
+  },
+  {
+   "type": "men",
+   "name": "מקווה טל - גברים",
+   "city": "ירושלים",
+   "address": "גדעון 7",
+   "phone": "02-6717597",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.7599,
+   "lon": 35.220211,
+   "src": "https://www.d.co.il/35012770/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "also": [],
+   "id": "ירושלים|men|גדעון-7"
+  },
+  {
+   "type": "women",
+   "name": "מקווה טהרה \"אשא עיני\"",
+   "city": "ירושלים",
+   "address": "סיון שלום 7",
+   "phone": "02-5866357",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.818375,
+   "lon": 35.192718,
+   "src": "https://www.d.co.il/34989530/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|סיון-שלום-7"
+  },
+  {
+   "type": "women",
+   "name": "מקוה טהרה",
+   "city": "מעלה אדומים",
+   "address": "הנחלים 94",
+   "phone": "02-5352007",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.776389,
+   "lon": 35.297196,
+   "src": "https://www.d.co.il/12077940/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "מעלה-אדומים|women|הנחלים-94"
+  },
+  {
+   "type": "women",
+   "name": "מקוה טהרה",
+   "city": "ירושלים",
+   "address": "זיווין ש\"י",
+   "phone": "02-5849889",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.838633,
+   "lon": 35.247406,
+   "src": "https://www.d.co.il/71876020/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|זיווין-ש\"י"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה \"מכון שרה\"",
+   "city": "חולון",
+   "address": "ש\"ץ צבי 15",
+   "phone": "03-6516541",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.024446,
+   "lon": 34.767789,
+   "src": "https://www.d.co.il/64183540/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "חולון|unknown|ש\"ץ-צבי-15"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה עמידר",
+   "city": "בת ים",
+   "address": "החלוצים 9",
+   "phone": "054-3332079",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.026819,
+   "lon": 34.758233,
+   "src": "https://www.d.co.il/80109439/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "בת-ים|unknown|החלוצים-9"
+  },
+  {
+   "type": "unknown",
+   "name": "עדי בדי צח",
+   "city": "בני ברק",
+   "address": "רבי עקיבא 8",
+   "phone": "03-5783278",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.090534,
+   "lon": 34.825459,
+   "src": "https://www.d.co.il/64886620/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "בני-ברק|unknown|רבי-עקיבא-8"
+  },
+  {
+   "type": "women",
+   "name": "מקוה טהרה",
+   "city": "קרית אתא",
+   "address": "שמואל יבניאלי 27",
+   "phone": "04-8452119",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.809847,
+   "lon": 35.122087,
+   "src": "https://www.d.co.il/16519670/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "קרית-אתא|women|שמואל-יבניאלי-27"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה מרכזי",
+   "city": "נהריה",
+   "address": "ישורון 9",
+   "phone": "04-9511398",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 33.005552,
+   "lon": 35.093998,
+   "src": "https://www.d.co.il/80199434/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "נהריה|unknown|ישורון-9"
+  },
+  {
+   "type": "men",
+   "name": "בית מרחץ - קרית חיים",
+   "city": "חיפה",
+   "address": "הראשונים",
+   "phone": "04-8490391",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.820463,
+   "lon": 35.064508,
+   "src": "https://www.d.co.il/77249740/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "חיפה|men|הראשונים"
+  },
+  {
+   "type": "men",
+   "name": "בית מרחץ - תורה ועבודה",
+   "city": "חיפה",
+   "address": "תורה ועבודה",
+   "phone": "04-8710198",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.831313,
+   "lon": 35.06667,
+   "src": "https://www.d.co.il/77249820/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "חיפה|men|תורה-ועבודה"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה גבעת המורה",
+   "city": "עפולה",
+   "address": "מקווה גבעת המורה",
+   "phone": "04-6421617",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.610498,
+   "lon": 35.287918,
+   "src": "https://www.d.co.il/32895350/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "עפולה|unknown|מקווה-גבעת-המורה"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה ברסלב צפת",
+   "city": "צפת",
+   "address": "האר\"י",
+   "phone": "04-6822049",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.968958,
+   "lon": 35.490342,
+   "src": "https://www.d.co.il/80037748/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "צפת|unknown|האר\"י"
+  },
+  {
+   "type": "women",
+   "name": "מקוה טהרה מאור חיים",
+   "city": "צפת",
+   "address": "צה\"ל 4",
+   "phone": "054-8487237",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.965922,
+   "lon": 35.48784,
+   "src": "https://www.d.co.il/66453290/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "צפת|women|צה\"ל-4"
+  },
+  {
+   "type": "women",
+   "name": "מקווה טהרה לנשים",
+   "city": "צפת",
+   "address": "האר\"י 100",
+   "phone": "077-7877848",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.970494,
+   "lon": 35.490644,
+   "src": "https://www.d.co.il/80183705/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "צפת|women|האר\"י-100"
+  },
+  {
+   "type": "unknown",
+   "name": "המועצה הדתית",
+   "city": "זכרון יעקב",
+   "address": "הרצל 50",
+   "phone": "04-6390712",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.574797,
+   "lon": 34.952231,
+   "src": "https://www.d.co.il/11555140/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "זכרון-יעקב|unknown|הרצל-50"
+  },
+  {
+   "type": "unknown",
+   "name": "מקוה מושבה",
+   "city": "זכרון יעקב",
+   "address": "המייסדים 87",
+   "phone": "04-6390308",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.576585,
+   "lon": 34.95344,
+   "src": "https://www.d.co.il/19633700/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "זכרון-יעקב|unknown|המייסדים-87"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה צופים",
+   "city": "קרית שמונה",
+   "address": "יהודה הלוי",
+   "phone": "04-6959265",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 33.212655,
+   "lon": 35.56691,
+   "src": "https://www.d.co.il/66037730/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "קרית-שמונה|unknown|יהודה-הלוי"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה הרצל",
+   "city": "קרית שמונה",
+   "address": "הרצל 87",
+   "phone": "04-6940663",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 33.201368,
+   "lon": 35.567451,
+   "src": "https://www.d.co.il/66037810/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "קרית-שמונה|unknown|הרצל-87"
+  },
+  {
+   "type": "unknown",
+   "name": "מעלות מיכל",
+   "city": "עפולה",
+   "address": "כורש",
+   "phone": "04-6400100",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.606584,
+   "lon": 35.301689,
+   "src": "https://www.d.co.il/80043674/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "עפולה|unknown|כורש"
+  },
+  {
+   "type": "unknown",
+   "name": "מקוה בשכונה הצפונית",
+   "city": "נוף הגליל",
+   "address": "הגבעה",
+   "phone": "04-6574889",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.707054,
+   "lon": 35.316794,
+   "src": "https://www.d.co.il/40787390/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "נוף-הגליל|unknown|הגבעה"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה עפולה עלית",
+   "city": "עפולה עילית",
+   "address": "בורוכוב 1",
+   "phone": "04-6594330",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.627035,
+   "lon": 35.322511,
+   "src": "https://www.d.co.il/32895270/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "עפולה-עילית|unknown|בורוכוב-1"
+  },
+  {
+   "type": "women",
+   "name": "מקווה נשים",
+   "city": "ביריה",
+   "address": "מקווה נשים",
+   "phone": "052-5260213",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.978122,
+   "lon": 35.500663,
+   "src": "https://www.d.co.il/80199437/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ביריה|women|מקווה-נשים"
+  },
+  {
+   "type": "women",
+   "name": "מקוה טהרה שכונה ה'",
+   "city": "באר שבע",
+   "address": "סטרומה",
+   "phone": "08-6410401",
+   "lat": 31.255427,
+   "lon": 34.77776,
+   "src": "https://www.d.co.il/38237960/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "באר-שבע|women|סטרומה"
+  },
+  {
+   "type": "women",
+   "name": "מקווה טהרה לנשים",
+   "city": "ערד",
+   "address": "יהודה 19",
+   "phone": "08-9957182",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.258636,
+   "lon": 35.215037,
+   "src": "https://www.d.co.il/63594590/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ערד|women|יהודה-19"
+  },
+  {
+   "type": "unknown",
+   "name": "מקוה ד' מרכז",
+   "city": "באר שבע",
+   "address": "ככר הקניזי",
+   "phone": "08-6480948",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.261354,
+   "lon": 34.794805,
+   "src": "https://www.d.co.il/38236970/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "באר-שבע|unknown|ככר-הקניזי"
+  },
+  {
+   "type": "women",
+   "name": "מקוה טהרה היכל שלמה",
+   "city": "באר שבע",
+   "address": "רינגלבלום",
+   "phone": "08-6480843",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.269419,
+   "lon": 34.798119,
+   "src": "https://www.d.co.il/38237700/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "באר-שבע|women|רינגלבלום"
+  },
+  {
+   "type": "unknown",
+   "name": "מקוה שאול המלך",
+   "city": "באר שבע",
+   "address": "המלך שאול 529",
+   "phone": "08-6106171",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.260977,
+   "lon": 34.773262,
+   "src": "https://www.d.co.il/37710370/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "באר-שבע|unknown|המלך-שאול-529"
+  },
+  {
+   "type": "women",
+   "name": "מקוה טהרה",
+   "city": "אילת",
+   "address": "מקוה טהרה",
+   "phone": "08-6373801",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 29.561495,
+   "lon": 34.953347,
+   "src": "https://www.d.co.il/28295880/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "אילת|women|מקוה-טהרה"
+  },
+  {
+   "type": "women",
+   "name": "מקוה טהרה שכ' ד' צפון",
+   "city": "באר שבע",
+   "address": "בן שטח",
+   "phone": "08-6480844",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.27149,
+   "lon": 34.791401,
+   "src": "https://www.d.co.il/38237470/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "באר-שבע|women|בן-שטח"
+  },
+  {
+   "type": "unknown",
+   "name": "מקוה רמות",
+   "city": "באר שבע",
+   "address": "המדע",
+   "phone": "08-6486770",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.276378,
+   "lon": 34.802699,
+   "src": "https://www.d.co.il/62619030/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "באר-שבע|unknown|המדע"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה אזור ב' - משרד ראשי",
+   "city": "אשדוד",
+   "address": "הנרייטה סולד 2",
+   "phone": "08-8630602",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.804931,
+   "lon": 34.652904,
+   "src": "https://www.d.co.il/63222910/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "אשדוד|unknown|הנרייטה-סולד-2"
+  },
+  {
+   "type": "women",
+   "name": "מקוה טהרה",
+   "city": "ירושלים",
+   "address": "הממציא 17",
+   "phone": "02-6452431",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.726959,
+   "lon": 35.220496,
+   "src": "https://www.d.co.il/71876360/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|הממציא-17"
+  },
+  {
+   "type": "women",
+   "name": "מקווה טהרה",
+   "city": "ירושלים",
+   "address": "הנשיא יהודה 15",
+   "phone": "02-6782352",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.755427,
+   "lon": 35.202236,
+   "src": "https://www.d.co.il/35011600/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|הנשיא-יהודה-15"
+  },
+  {
+   "type": "women",
+   "name": "מקווה טהרה",
+   "city": "ירושלים",
+   "address": "הנצי\"ב 7",
+   "phone": "02-6255560",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.781535,
+   "lon": 35.213321,
+   "src": "https://www.d.co.il/35012280/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|הנצי\"ב-7"
+  },
+  {
+   "type": "unknown",
+   "name": "מורשה",
+   "city": "ירושלים",
+   "address": "אלישע 8",
+   "phone": "02-6272008",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.780749,
+   "lon": 35.225662,
+   "src": "https://www.d.co.il/691950/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|unknown|אלישע-8"
+  },
+  {
+   "type": "unknown",
+   "name": "מקוה קרן בית ישראל",
+   "city": "ירושלים",
+   "address": "אבן האזל 19",
+   "phone": "02-5388085",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.796542,
+   "lon": 35.213354,
+   "src": "https://www.d.co.il/6476440/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|unknown|אבן-האזל-19"
+  },
+  {
+   "type": "men",
+   "name": "מקווה לגברים",
+   "city": "טירת כרמל",
+   "address": "כלניות 4",
+   "phone": "054-9962641",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.759401,
+   "lon": 34.966839,
+   "src": "https://www.d.co.il/80180010/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "טירת-כרמל|men|כלניות-4"
+  },
+  {
+   "type": "women",
+   "name": "מקווה טהרה",
+   "city": "ירושלים",
+   "address": "אפרסמון",
+   "phone": "02-6766202",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.732953,
+   "lon": 35.199662,
+   "src": "https://www.d.co.il/35011520/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|אפרסמון"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה בית יעקב",
+   "city": "בת ים",
+   "address": "הכרמל 6",
+   "phone": "03-5517298",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.011333,
+   "lon": 34.760772,
+   "src": "https://www.d.co.il/80109436/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "בת-ים|unknown|הכרמל-6"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה בן גוריון",
+   "city": "חולון",
+   "address": "מש' הפז 15",
+   "phone": "03-5518523",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.993965,
+   "lon": 34.774977,
+   "src": "https://www.d.co.il/64183210/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "חולון|unknown|מש'-הפז-15"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה מנרה",
+   "city": "גבעתיים",
+   "address": "מנרה 2",
+   "phone": "03-5719567",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.076505,
+   "lon": 34.803152,
+   "src": "https://www.d.co.il/24338450/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "גבעתיים|unknown|מנרה-2"
+  },
+  {
+   "type": "women",
+   "name": "מקוה טהרה",
+   "city": "ירושלים",
+   "address": "האדמו\"ר מויז'ניץ 9",
+   "phone": "02-5323674",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.802174,
+   "lon": 35.21745,
+   "src": "https://www.d.co.il/71876440/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|האדמו\"ר-מויז'ניץ-9"
+  },
+  {
+   "type": "unknown",
+   "name": "בית ישראל",
+   "city": "ירושלים",
+   "address": "כפר השלוח",
+   "phone": "02-5370931",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.789877,
+   "lon": 35.22104,
+   "src": "https://www.d.co.il/683870/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|unknown|כפר-השלוח"
+  },
+  {
+   "type": "women",
+   "name": "מקווה טהרה",
+   "city": "ירושלים",
+   "address": "הרב חזקיה שבתאי 4",
+   "phone": "02-5863176",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.821579,
+   "lon": 35.196137,
+   "src": "https://www.d.co.il/39281160/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|הרב-חזקיה-שבתאי-4"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה מים חיים הרב מרדכי כלאב",
+   "city": "בית אל",
+   "address": "מקווה מים חיים הרב מרדכי כלאב",
+   "phone": "052-5972675",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.941285,
+   "lon": 35.221393,
+   "src": "https://www.d.co.il/80194720/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "בית-אל|unknown|מקווה-מים-חיים-הרב-מרדכי-כלאב"
+  },
+  {
+   "type": "women",
+   "name": "מקווה טהרה",
+   "city": "ירושלים",
+   "address": "העומר 11",
+   "phone": "02-6283715",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.775968,
+   "lon": 35.232439,
+   "src": "https://www.d.co.il/35011780/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|העומר-11"
+  },
+  {
+   "type": "unknown",
+   "name": "קרית משה גבעת שאול",
+   "city": "ירושלים",
+   "address": "הרב חיים ויטל 37",
+   "phone": "02-6521577",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.788696,
+   "lon": 35.191824,
+   "src": "https://www.d.co.il/698720/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|unknown|הרב-חיים-ויטל-37"
+  },
+  {
+   "type": "unknown",
+   "name": "מקוה עלי",
+   "city": "עלי",
+   "address": "מקוה עלי",
+   "phone": "02-9942129",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.071176,
+   "lon": 35.266851,
+   "src": "https://www.d.co.il/25170920/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "עלי|unknown|מקוה-עלי"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה ייטב",
+   "city": "ייט\"ב",
+   "address": "מקווה ייטב",
+   "phone": "02-9946824",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.94689,
+   "lon": 35.422137,
+   "src": "https://www.d.co.il/80199650/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ייט\"ב|unknown|מקווה-ייטב"
+  },
+  {
+   "type": "women",
+   "name": "מקווה טהרה",
+   "city": "ירושלים",
+   "address": "פארן 6",
+   "phone": "02-5810741",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 31.801392,
+   "lon": 35.228486,
+   "src": "https://www.d.co.il/35011940/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "ירושלים|women|פארן-6"
+  },
+  {
+   "type": "unknown",
+   "name": "רפאל מקוואות",
+   "city": "תל אביב-יפו",
+   "address": "רפאל מקוואות",
+   "phone": "072-3228336",
+   "hours": "א'–ה' 8:00–20:00 · ו' 8:00–13:00",
+   "lat": 32.066236,
+   "lon": 34.778934,
+   "src": "https://www.d.co.il/80118150/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "תל-אביב-יפו|unknown|רפאל-מקוואות"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה בריאות",
+   "city": "חולון",
+   "address": "הסנהדרין 27",
+   "phone": "03-6518899",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.003869,
+   "lon": 34.763126,
+   "src": "https://www.d.co.il/64183050/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "חולון|unknown|הסנהדרין-27"
+  },
+  {
+   "type": "unknown",
+   "name": "מקווה טייבר",
+   "city": "גבעתיים",
+   "address": "טייבר 55",
+   "phone": "03-5719566",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.071814,
+   "lon": 34.807266,
+   "src": "https://www.d.co.il/80137019/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "גבעתיים|unknown|טייבר-55"
+  },
+  {
+   "type": "unknown",
+   "name": "אורם",
+   "city": "רמת גן",
+   "address": "דרך בן גוריון 38",
+   "phone": "03-6833000",
+   "hours": "א'–ה' 7:30–19:30 · ו' 9:00–13:00",
+   "lat": 32.091267,
+   "lon": 34.822482,
+   "src": "https://www.d.co.il/80282170/8120/",
+   "srcName": "דפי זהב",
+   "checked": "2026-10-22",
+   "id": "רמת-גן|unknown|דרך-בן-גוריון-38"
   }
  ]
 }

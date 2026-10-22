@@ -148,3 +148,39 @@ mark { background: var(--color-primary-container); color: inherit; border-radius
   .card { break-inside: avoid; border: 0.06em solid var(--color-outline); margin-bottom: 0.5em; background: none; }
   .group { break-after: avoid; margin-top: 1em; }
 }
+
+/* ── ניווט ערים (כמו בגבולות עירוב) ── */
+.body { flex: 1; display: flex; min-height: 0; }
+.rail { width: 15em; flex-shrink: 0; display: flex; flex-direction: column; gap: 0.4em; padding: 0.6em;
+  background: var(--color-surface-container-low); border-inline-end: 0.06em solid var(--color-outline-variant); }
+.shell.rail-hidden .rail { display: none; }
+.rail-home { display: flex; align-items: center; gap: 0.5em; border: 0; cursor: pointer; padding: 0.5em 0.7em;
+  border-radius: var(--radius-pill); background: transparent; text-align: start; font-weight: 600; }
+.rail-home svg { width: 1.2em; height: 1.2em; }
+.rail-home[aria-current="true"], .city-item[aria-current="true"] { background: var(--color-secondary-container); color: var(--color-on-secondary-container); }
+#cityFilter { padding: 0.35em 0.8em; border-radius: var(--radius-pill); border: 0.06em solid var(--color-outline-variant); background: var(--color-surface); }
+.city-list { flex: 1; overflow: auto; display: flex; flex-direction: column; gap: 0.1em; }
+.city-item { display: flex; align-items: center; gap: 0.4em; border: 0; cursor: pointer; padding: 0.35em 0.7em;
+  border-radius: var(--radius-pill); background: transparent; text-align: start; }
+.city-item:hover { background: var(--color-primary-subtle); }
+.city-item .name { flex: 1; }
+.city-item .n { font-size: 0.8em; color: var(--color-on-surface-variant); }
+.rail-sep { height: 0.06em; background: var(--color-outline-variant); margin: 0.3em 0.5em; }
+.rail-label { font-size: 0.75em; color: var(--color-on-surface-variant); padding: 0.3em 0.7em 0; }
+.main-col { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.hero { grid-column: 1 / -1; display: flex; align-items: center; gap: 1em; flex-wrap: wrap; padding: 0.4em 0 0.2em; }
+.hero h2 { margin: 0; font-size: 1.35em; }
+.hero p { margin: 0.2em 0 0; color: var(--color-on-surface-variant); }
+.hero .grow { flex: 1; min-width: 14em; }
+.section-title { grid-column: 1 / -1; font-weight: 600; color: var(--color-on-surface-variant); margin-top: 0.6em; display: flex; gap: 0.6em; align-items: center; }
+.section-title::after { content: ""; flex: 1; height: 0.06em; background: var(--color-outline-variant); }
+.city-grid { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fill, minmax(12em, 1fr)); gap: 0.7em; }
+.city-card { border: 0.06em solid var(--color-outline-variant); background: var(--color-surface-container-low); cursor: pointer;
+  border-radius: var(--radius-lg); padding: 0.75em 0.9em; text-align: start; display: flex; flex-direction: column; gap: 0.25em; }
+.city-card:hover { border-color: var(--color-primary); background: var(--color-primary-subtle); }
+.city-card strong { font-size: 1.05em; }
+.city-card span { font-size: 0.82em; color: var(--color-on-surface-variant); }
+.badge.unknown { background: var(--color-surface-container-highest); color: var(--color-on-surface-variant); }
+.lang { font-size: 0.75em; color: var(--color-on-surface-variant); }
+@media (max-width: 46em) { .rail { display: none; } .shell.rail-open .rail { display: flex; position: fixed; inset-block: 3.5em 0; inset-inline-start: 0; z-index: 5; } }
+@media print { .rail { display: none !important; } .hero, .section-title, .city-grid { display: none; } }

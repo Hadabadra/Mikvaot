@@ -6,6 +6,12 @@
 - קוד התוסף: `mikvaot/` · בניית נתונים ואריזה: `mikvaot-build/` · תוכנית ומקורות: `mikvaot-docs/PLAN.md`
 - התקנה: באוצריא: כלים ← תוספים ← התקן תוסף חדש, ובחירת קובץ ה-`.otzplugin` מדף ה-Releases.
 
+## מה חדש ב-0.2.0
+- 226 מקוואות ב-56 ערים: נוספו נתוני דפי זהב וארגון טהרת המשפחה (mikvah.org), באישורם, ורשימת עיריית בני ברק.
+- ניווט ערים כמו בגבולות עירוב: רשימת ערים בצד עם סינון, דף בית עם כרטיסי ערים ו"נצפו לאחרונה", דף עיר, ערים מועדפות.
+- מקווה שמופיע בכמה מקורות מוצג פעם אחת; נקודות ציון — מיון לפי מרחק ממך ופתיחה מדויקת במפה/Waze.
+- סינון "עם שעות"; שעות וטלפון בכל כרטיס (או הודעה שלא פורסמו).
+
 ## מה חדש ב-0.1.0
 - גרסה ראשונה: 73 מקוואות ב-5 ערים (תל אביב-יפו, פתח תקווה, נוף הגליל, מודיעין עילית, מודיעין-מכבים-רעות), מאתרי המועצות הדתיות.
 - סינון לפי סוג, נגישות ועיר; חיפוש; מועדפים; העתקת טלפון וכתובת; פתיחה במפה/Waze.
@@ -14,6 +20,8 @@
 
 ## בנייה
 ```
-python3 mikvaot-build/build_data.py      # data.js + mikvaot-data.json
-python3 mikvaot-build/pack.py mikvaot mikvaot-0.1.0.otzplugin
+python3 mikvaot-build/scrape_dzahav.py       # דפי זהב → raw/dzahav.json
+python3 mikvaot-build/scrape_mikvah_org.py   # טהרת המשפחה → raw/mikvah_org.json
+python3 mikvaot-build/build_data.py          # data.js + mikvaot-data.json
+python3 mikvaot-build/pack.py mikvaot mikvaot-0.2.0.otzplugin
 ```

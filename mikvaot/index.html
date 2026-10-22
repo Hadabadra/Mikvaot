@@ -18,6 +18,7 @@
       <input id="q" type="search" autocomplete="off" placeholder="עיר, שכונה או רחוב" aria-label="חיפוש">
     </label>
     <div class="actions">
+      <button class="icon-btn" id="btnRail" title="הצגת/הסתרת רשימת הערים" aria-label="רשימת ערים"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
       <button class="icon-btn" id="btnLoc" title="המיקום שלי — העיר הקרובה" aria-label="המיקום שלי"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
       <button class="icon-btn" id="btnFav" title="מועדפים" aria-label="מועדפים" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 4l2.4 5 5.4.6-4 3.7 1.1 5.3L12 16l-4.9 2.6 1.1-5.3-4-3.7L9.6 9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
       <button class="icon-btn" id="btnPrint" title="הדפסה / שמירה כ-PDF של הרשימה המוצגת" aria-label="הדפסה"><svg viewBox="0 0 24 24"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M7 14h10v6H7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
@@ -25,20 +26,27 @@
     </div>
   </header>
 
-  <div class="filters">
-    <div class="chips" id="types" role="tablist">
-      <button class="chip" data-type="" aria-selected="true">הכל</button>
-      <button class="chip" data-type="women">נשים</button>
-      <button class="chip" data-type="men">גברים</button>
-      <button class="chip" data-type="kelim">כלים</button>
+  <div class="body">
+    <aside class="rail" aria-label="ערים">
+      <button class="rail-home" id="btnHome"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> כל הערים</button>
+      <input id="cityFilter" type="search" placeholder="סינון ערים" aria-label="סינון ערים">
+      <nav id="cityList" class="city-list"></nav>
+    </aside>
+    <div class="main-col">
+      <div class="filters">
+        <div class="chips" id="types" role="tablist">
+          <button class="chip" data-type="" aria-selected="true">הכל</button>
+          <button class="chip" data-type="women">נשים</button>
+          <button class="chip" data-type="men">גברים</button>
+          <button class="chip" data-type="kelim">כלים</button>
+        </div>
+        <label class="toggle"><input type="checkbox" id="accOnly"> נגיש בלבד</label>
+        <label class="toggle"><input type="checkbox" id="hoursOnly"> עם שעות</label>
+      </div>
+      <div class="daybar" id="daybar" hidden></div>
+      <main id="list" class="list" tabindex="-1"></main>
     </div>
-    <label class="toggle"><input type="checkbox" id="accOnly"> נגיש בלבד</label>
-    <select id="city" aria-label="עיר"></select>
   </div>
-
-  <div class="daybar" id="daybar" hidden></div>
-
-  <main id="list" class="list" tabindex="-1"></main>
 
   <footer class="note">השעות משתנות בין קיץ לחורף ובערבי שבת וחג — יש לאמת בטלפון לפני ההגעה. לכל שאלה: רב הקהילה והאחראית/האחראי במקווה.</footer>
 </div>
