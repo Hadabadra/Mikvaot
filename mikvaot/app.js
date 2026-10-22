@@ -1,7 +1,7 @@
 /* מקוואות — מדריך מעשי (מיקום, שעות, טלפון). אין בו הלכות; לשאלות — רב הקהילה ואחראית המקווה. */
 (function () {
   'use strict';
-  const VERSION = '0.3.0';
+  const VERSION = '0.3.1';
   const O = window.Otzaria, hasOtz = !!(O && O.call);
   const $ = s => document.querySelector(s);
   const call = async (m, p) => { if (!hasOtz) return { success: false }; try { const r = await O.call(m, p || {}); return r && typeof r === 'object' && 'success' in r ? r : { success: true, data: r }; } catch (e) { return { success: false, error: e }; } };
