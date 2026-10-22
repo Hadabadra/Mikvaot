@@ -1,0 +1,38 @@
+{
+  "id": "com.hadabadra.mikvaot",
+  "name": "מקוואות",
+  "version": "0.1.0",
+  "description": "מדריך מעשי למקוואות נשים, גברים וכלים בארץ: כתובת, טלפון, שעות ונגישות, לפי עיר או לפי המיקום. מתוך אתרי המועצות הדתיות. עובד בלי אינטרנט.",
+  "author": "חד בדרא",
+  "schemaVersion": 1,
+  "sdkVersion": "1.x",
+  "stability": "beta",
+  "minAppVersion": "0.9.98",
+  "entrypoint": "index.html",
+  "permissions": [
+    "app.open_url",
+    "app.info.read",
+    "calendar.read",
+    "events.subscribe:theme.changed",
+    "events.subscribe:calendar.city_changed",
+    "plugin.storage.read",
+    "plugin.storage.write",
+    "ui.feedback",
+    "network.localhost",
+    "fs.user_files.read"
+  ],
+  "network": {
+    "enabled": true,
+    "allowlist": ["127.0.0.1", "localhost"]
+  },
+  "contributes": {
+    "toolTab": {
+      "title": "מקוואות",
+      "order": 216,
+      "defaultPinned": false,
+      "iconName": "fluent:drop_24_regular"
+    }
+  },
+  "homepage": "https://github.com/Hadabadra/Prayer-pointA/tree/%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA",
+  "icon": "icon.png"
+}

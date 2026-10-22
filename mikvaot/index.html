@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מקוואות</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3 4 6 7 6 10.5A6 6 0 0 1 6 13.5C6 10 9 7 12 3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 15a3 3 0 0 0 3 2.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <div class="titles"><h1>מקוואות</h1><span class="sub" id="crumb">כל הערים</span></div>
+    </div>
+    <label class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 15l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="q" type="search" autocomplete="off" placeholder="עיר, שכונה או רחוב" aria-label="חיפוש">
+    </label>
+    <div class="actions">
+      <button class="icon-btn" id="btnLoc" title="המיקום שלי — העיר הקרובה" aria-label="המיקום שלי"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+      <button class="icon-btn" id="btnFav" title="מועדפים" aria-label="מועדפים" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 4l2.4 5 5.4.6-4 3.7 1.1 5.3L12 16l-4.9 2.6 1.1-5.3-4-3.7L9.6 9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
+      <button class="icon-btn" id="btnPrint" title="הדפסה / שמירה כ-PDF של הרשימה המוצגת" aria-label="הדפסה"><svg viewBox="0 0 24 24"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M7 14h10v6H7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
+      <button class="icon-btn" id="btnInfo" title="אודות, מקורות ועדכון נתונים" aria-label="אודות"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+  </header>
+
+  <div class="filters">
+    <div class="chips" id="types" role="tablist">
+      <button class="chip" data-type="" aria-selected="true">הכל</button>
+      <button class="chip" data-type="women">נשים</button>
+      <button class="chip" data-type="men">גברים</button>
+      <button class="chip" data-type="kelim">כלים</button>
+    </div>
+    <label class="toggle"><input type="checkbox" id="accOnly"> נגיש בלבד</label>
+    <select id="city" aria-label="עיר"></select>
+  </div>
+
+  <div class="daybar" id="daybar" hidden></div>
+
+  <main id="list" class="list" tabindex="-1"></main>
+
+  <footer class="note">השעות משתנות בין קיץ לחורף ובערבי שבת וחג — יש לאמת בטלפון לפני ההגעה. לכל שאלה: רב הקהילה והאחראית/האחראי במקווה.</footer>
+</div>
+
+<div class="scrim" id="infoScrim" hidden>
+  <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+    <header><h2 id="infoTitle">אודות</h2><button class="icon-btn" id="infoClose" aria-label="סגירה"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></header>
+    <div class="dialog-body" id="infoBody"></div>
+  </section>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+<div class="print-head" id="printHead"></div>
+
+<script src="data.js"></script>
+<script src="bridge.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
