@@ -1,0 +1,41 @@
+name: מקוואות — העברת Releases ממאגר Prayer-pointA (חד-פעמי)
+
+# רץ אוטומטית פעם אחת כשהקובץ הזה נדחף. יוצר את התגיות והגרסאות ההיסטוריות
+# במאגר הזה, כולל הקבצים המצורפים, כפי שפורסמו במאגר הישן. אפשר למחוק אחר כך.
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/mikvaot-migrate-releases.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      OLD: Hadabadra/Prayer-pointA
+      NEW: ${{ github.repository }}
+    steps:
+      - name: Copy releases
+        run: |
+          set -euo pipefail
+          for t in mikvaot-v0.1.0 mikvaot-v0.2.0 mikvaot-v0.3.0 mikvaot-v0.3.1; do
+            echo "== $t"
+            if gh release view "$t" -R "$NEW" >/dev/null 2>&1; then echo "כבר קיים, מדלג"; continue; fi
+            sha="$(git ls-remote "https://github.com/$OLD" "refs/tags/$t^{}" | cut -f1)"
+            [ -n "$sha" ] || sha="$(git ls-remote "https://github.com/$OLD" "refs/tags/$t" | cut -f1)"
+            [ -n "$sha" ] || { echo "::error::לא נמצאה תגית $t במאגר הישן"; exit 1; }
+            d="dl/$t"; mkdir -p "$d"
+            gh release download "$t" -R "$OLD" -D "$d"
+            gh release view "$t" -R "$OLD" --json body -q .body > "$d/notes.md"
+            name="$(gh release view "$t" -R "$OLD" --json name -q .name)"
+            pre="$(gh release view "$t" -R "$OLD" --json isPrerelease -q .isPrerelease)"
+            flag=""; [ "$pre" = "true" ] && flag="--prerelease"
+            files=()
+            while IFS= read -r -d '' f; do files+=("$f"); done < <(find "$d" -type f ! -name notes.md -print0)
+            gh release create "$t" "${files[@]}" -R "$NEW" --target "$sha" \
+              --title "$name" --notes-file "$d/notes.md" $flag
+          done
