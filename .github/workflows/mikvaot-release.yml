@@ -4,7 +4,7 @@ name: מקוואות — Release
 # בודק קודם שהחבילה בענף זהה לאריזה של הקוד (אריזה דטרמיניסטית).
 on:
   push:
-    branches: ['מקוואות']
+    branches: ['main']
   workflow_dispatch:
 
 permissions:
