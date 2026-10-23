@@ -1,7 +1,8 @@
 /* מקוואות — מדריך מעשי (מיקום, שעות, טלפון). אין בו הלכות; לשאלות — רב הקהילה ואחראית המקווה. */
 (function () {
   'use strict';
-  const VERSION = '0.3.1';
+  const VERSION = '0.3.2';
+  const REPO = 'https://github.com/Hadabadra/Mikvaot';
   const O = window.Otzaria, hasOtz = !!(O && O.call);
   const $ = s => document.querySelector(s);
   const call = async (m, p) => { if (!hasOtz) return { success: false }; try { const r = await O.call(m, p || {}); return r && typeof r === 'object' && 'success' in r ? r : { success: true, data: r }; } catch (e) { return { success: false, error: e }; } };
@@ -16,7 +17,12 @@
   // ── עזרים ──
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const norm = s => String(s || '').toLowerCase().replace(/[֑-ׇ"'׳״`’\-–—,.()]/g, ' ').replace(/קריית/g, 'קרית').replace(/יי/g, 'י').replace(/וו/g, 'ו').replace(/\s+/g, ' ').trim();
-  const words = () => norm(state.q).split(' ').filter(Boolean);
+  // קיצורי ערים נפוצים → שם מלא (לפני הנרמול, כי הנרמול מוחק גרשיים ומקפים)
+  const Q = '["״\'׳]';
+  const ALIASES = [['י', 'ם', 'ירושלים', '[-־–"״\'׳]'], ['ב', 'ב', 'בני ברק'], ['ת', 'א', 'תל אביב'], ['פ', 'ת', 'פתח תקווה'], ['ב', 'ש', 'באר שבע'], ['ר', 'ג', 'רמת גן'], ['ר', 'ל', 'ראשון לציון'], ['ק', 'ש', 'קרית שמונה'], ['ק', 'ג', 'קרית גת']]
+    .map(([a, b, full, sep]) => [new RegExp('(^|\\s)' + a + (sep || Q) + b + '(?=\\s|$)', 'g'), full]);
+  const expand = s => ALIASES.reduce((t, [re, full]) => t.replace(re, '$1' + full), String(s || ''));
+  const words = () => norm(expand(state.q)).split(' ').filter(Boolean);
   function hl(text) {
     const t = esc(text), w = words().filter(x => x.length > 1).map(x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
     return w.length ? t.replace(new RegExp('(' + w.join('|') + ')', 'gi'), '<mark>$1</mark>') : t;
@@ -171,7 +177,7 @@
   }
 
   function renderRail() {
-    const f = norm($('#cityFilter').value);
+    const f = norm(expand($('#cityFilter').value));
     const item = c => `<button class="city-item" data-city="${esc(c)}" aria-current="${state.view === 'city' && state.city === c && !state.q}"><span class="name">${esc(c)}</span><span class="n">${byCity.get(c).length}</span></button>`;
     const favC = state.favs.filter(x => x.startsWith('city:')).map(x => x.slice(5)).filter(c => byCity.has(c) && (!f || norm(c).includes(f)));
     const list = cityNames.filter(c => !f || norm(c + ' ' + ((DATA.cities[c] || {}).country || '')).includes(f));
@@ -191,6 +197,7 @@
     else if (state.view === 'favs') { main.innerHTML = favView(); $('#crumb').textContent = 'מועדפים'; }
     else { state.view = 'home'; main.innerHTML = homeView(); $('#crumb').textContent = 'כל הערים'; }
     $('#printHead').textContent = 'מקוואות — ' + $('#crumb').textContent + (state.type ? ' · ' + TYPE[state.type] : '');
+    $('#printFoot').textContent = `מתוך תוסף "מקוואות" לאוצריא · יש לאמת שעות בטלפון · GitHub: ${REPO}/releases · חנות התוספים של אוצריא: כלים ← תוספים ← חנות, חיפוש "מקוואות"`;
     document.querySelectorAll('#types .chip').forEach(b => b.setAttribute('aria-selected', String(b.dataset.type === state.type)));
     $('#accOnly').checked = state.acc; $('#hoursOnly').checked = state.withHours;
     $('#btnFav').setAttribute('aria-pressed', String(state.view === 'favs'));
@@ -263,11 +270,20 @@
     else if (b.dataset.act === 'map') openExternal(it.lat ? `https://www.google.com/maps/search/?api=1&query=${it.lat},${it.lon}` : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('מקווה ' + addr));
     else if (b.dataset.act === 'waze') openExternal(it.lat ? `https://waze.com/ul?ll=${it.lat},${it.lon}&navigate=yes` : 'https://waze.com/ul?q=' + encodeURIComponent(addr));
     else if (b.dataset.act === 'fav') { state.favs = state.favs.includes(it.id) ? state.favs.filter(x => x !== it.id) : [...state.favs, it.id]; save('favs', state.favs); render(true); }
-    else if (b.dataset.act === 'report') report(it);
+    else if (b.dataset.act === 'report') reportChoice(it);
     else if (b.dataset.act === 'remind') remindDialog(it);
   });
+  // בחירת ערוץ דיווח: דרך אוצריא (למפתחת) או Issue פתוח ב-GitHub עם פרטי המקווה מולאו מראש
+  const reportHead = it => it ? `טעות בפרטי מקווה: ${TYPE[it.type]} · ${it.city} · ${it.address} (${it.id})\nמה צריך לתקן: ` : 'מקווה חסר / עיר חסרה — פרטים (עיר, כתובת, טלפון, שעות, מקור):\n';
+  const issueUrl = it => `${REPO}/issues/new?title=${encodeURIComponent(it ? `תיקון: ${it.city} · ${it.address}` : 'מקווה חסר')}&body=${encodeURIComponent(`[מקוואות ${VERSION}] ` + reportHead(it))}`;
+  function reportChoice(it) {
+    const id = it ? esc(it.id) : '';
+    dialog('דיווח על טעות', `<p>${it ? esc(`${TYPE[it.type]} · ${it.city} · ${it.address}`) : 'מקווה או עיר שחסרים ברשימה'}</p>
+      <div class="btns"><button class="btn tonal" id="repApp" data-id="${id}">שליחה דרך אוצריא</button><button class="btn tonal" id="repGh" data-id="${id}">פתיחת דיווח ב-GitHub</button></div>
+      <p class="src">דיווח ב-GitHub הוא פומבי וצריך חשבון GitHub; הקישור נפתח בדפדפן.</p>`);
+  }
   async function report(it) {
-    const head = it ? `טעות בפרטי מקווה: ${TYPE[it.type]} · ${it.city} · ${it.address} (${it.id})\nמה צריך לתקן: ` : 'מקווה חסר / עיר חסרה — פרטים (עיר, כתובת, טלפון, שעות, מקור):\n';
+    const head = reportHead(it);
     const r = await call('feedback.report', { details: `[מקוואות ${VERSION}] ` + head, reportType: 'content' });
     if (!r.success) toast('הדיווח לא נשלח'); else if (r.data === 'cancelled') return; else call('ui.showSuccess', { message: 'תודה! הדיווח נשלח למפתחת התוסף' });
   }
@@ -313,12 +329,14 @@
       <p>מדריך מעשי למקוואות נשים, גברים וכלים: כתובת, טלפון, שעות ונגישות. ${DATA.items.length} מקוואות ב-${cityNames.length} ערים, נתונים מ-${esc(DATA.version.split('-').reverse().join('.'))}.</p>
       <p><b>התוסף אינו עוסק בהלכה.</b> לכל שאלה — רב הקהילה והאחראית/האחראי במקווה. השעות משתנות; יש לאמת בטלפון לפני ההגעה.</p>
       <h3>מקורות הנתונים (באישור)</h3><ul>${srcs}</ul>
-      <p class="src">מקווה שמופיע בכמה מקורות מוצג פעם אחת, והמקורות הנוספים מצוינים בכרטיס.</p>
+      <p class="src">הנתונים שייכים למקורותיהם ומוצגים כאן באישורם. מקווה שמופיע בכמה מקורות מוצג פעם אחת, והמקורות הנוספים מצוינים בכרטיס.</p>
       <h3>עדכון נתונים</h3>
       <p>אפשר לטעון קובץ נתונים מעודכן (mikvaot-data.json) מדף ההורדות של התוסף.</p>
       <div class="btns"><button class="btn tonal" id="imp">טעינת קובץ נתונים</button>${localData ? '<button class="btn tonal" id="impReset">חזרה לנתונים המובנים</button>' : ''}
       <button class="btn tonal" id="rep">דיווח על מקווה חסר</button><button class="btn tonal" id="showCl">יומן שינויים מלא</button><button class="btn tonal" id="showPlan">תכנון והמשך</button></div>
-      <p>דף התוסף: ${linkBtns('https://github.com/Hadabadra/Prayer-pointA/tree/%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA')}</p>
+      <h3>פרטיות</h3>
+      <p>התוסף אינו שולח את המיקום שלכם לשום שרת. המיקום משמש רק למיון לפי מרחק, ונשאר במכשיר. התוסף עובד בלי אינטרנט. דיווח דרך אוצריא או GitHub נשלח רק אם בחרתם לשלוח.</p>
+      <p>דף התוסף: ${linkBtns(REPO)}</p>
       <p class="src">מקוואות ${VERSION} · חד בדרא · מיקום אוטומטי דרך הגשר "אחת שאלתי" (אם מותקן)</p>`;
     $('#infoScrim').hidden = false;
   }
@@ -332,7 +350,12 @@
     if (id === 'rmSave') return saveReminder(e.target.dataset.id);
     if (id === 'showCl') return changelog();
     if (id === 'showPlan') return planView();
-    if (id === 'rep') report(null);
+    if (id === 'rep') reportChoice(null);
+    else if (id === 'repApp' || id === 'repGh') {
+      const it = e.target.dataset.id ? DATA.items.find(x => x.id === e.target.dataset.id) : null;
+      if (id === 'repGh') return openExternal(issueUrl(it));
+      $('#infoScrim').hidden = true; report(it);
+    }
     else if (id === 'backInfo') info();
     else if (id === 'imp') importData();
     else if (id === 'impReset') { await call('storage.remove', { key: 'data' }); localData = null; DATA = window.MIKVAOT_DATA; index(); render(); info(); toast('חזרה לנתונים המובנים'); }
@@ -382,7 +405,7 @@
   function exportText() {
     const list = currentList();
     let last = null, out = [`מקוואות — ${$('#crumb').textContent}${state.type ? ' · ' + TYPE[state.type] : ''}`, `(מתוך תוסף "מקוואות" לאוצריא · ${DATA.version.split('-').reverse().join('.')} · יש לאמת שעות בטלפון)`, ''];
-    const tail = ['', '—', 'להורדת התוסף "מקוואות" לאוצריא:', '• GitHub: https://github.com/Hadabadra/Prayer-pointA/releases?q=mikvaot', '• חנות התוספים של אוצריא: כלים ← תוספים ← חנות, חיפוש "מקוואות"'];
+    const tail = ['', '—', 'להורדת התוסף "מקוואות" לאוצריא:', '• GitHub: ' + REPO + '/releases', '• חנות התוספים של אוצריא: כלים ← תוספים ← חנות, חיפוש "מקוואות"'];
     for (const it of list) {
       if (it.city !== last) { out.push('', '■ ' + it.city); last = it.city; }
       out.push(`• ${TYPE[it.type] || 'מקווה'}: ${[it.name, it.hood].filter(Boolean).join(' · ') || it.address} — ${it.address}`);

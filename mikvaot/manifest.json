@@ -1,7 +1,7 @@
 {
   "id": "com.hadabadra.mikvaot",
   "name": "מקוואות",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "מדריך מקוואות נשים, גברים וכלים בארץ ובחו\"ל: כתובת, טלפון, שעות ונגישות, לפי עיר או מיקום. כולל מועצות דתיות, תזכורת ויומן.",
   "author": "חד בדרא",
   "schemaVersion": 1,
@@ -38,6 +38,6 @@
       "iconName": "fluent:drop_24_regular"
     }
   },
-  "homepage": "https://github.com/Hadabadra/Prayer-pointA/tree/%D7%9E%D7%A7%D7%95%D7%95%D7%90%D7%95%D7%AA",
+  "homepage": "https://github.com/Hadabadra/Mikvaot",
   "icon": "icon.png"
 }

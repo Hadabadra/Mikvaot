@@ -138,12 +138,14 @@ mark { background: var(--color-primary-container); color: inherit; border-radius
   background: var(--color-inverse-surface); color: var(--color-on-inverse-surface); padding: 0.55em 1.1em;
   border-radius: var(--radius-sm); z-index: 20; }
 .print-head { display: none; }
+.print-foot { display: none; }
 
 @media print {
   body { overflow: visible; background: var(--color-surface); color: var(--color-on-surface); }
   .shell { height: auto; }
   .topbar, .filters, .daybar, .card-foot, .toast, .scrim { display: none !important; }
   .print-head { display: block; font-size: 1.3em; font-weight: 700; margin-bottom: 0.5em; }
+  .print-foot { display: block; margin-top: 1em; font-size: 0.85em; color: var(--color-on-surface-variant, inherit); }
   .list { overflow: visible; display: block; padding: 0; }
   .card { break-inside: avoid; border: 0.06em solid var(--color-outline); margin-bottom: 0.5em; background: none; }
   .group { break-after: avoid; margin-top: 1em; }
