@@ -1,7 +1,7 @@
 /* מקוואות — מדריך מעשי (מיקום, שעות, טלפון). אין בו הלכות; לשאלות — רב הקהילה ואחראית המקווה. */
 (function () {
   'use strict';
-  const VERSION = '0.3.2';
+  const VERSION = '0.3.3';
   const REPO = 'https://github.com/Hadabadra/Mikvaot';
   const O = window.Otzaria, hasOtz = !!(O && O.call);
   const $ = s => document.querySelector(s);
@@ -322,6 +322,29 @@
     const p = window.MIKVAOT_PLAN || [];
     dialog('תכנון והמשך', '<div class="cl">' + p.map(g => `<h4>${esc(g.title)}</h4><ul>${g.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul>`).join('') + '</div><div class="btns"><button class="btn tonal" id="backInfo">חזרה</button></div>');
   }
+  // מפה (בפיתוח): בסיס משותף עם גבולות עירוב וכיוון תפילה (map-core.js). כרגע נקודות בלבד, בלי שכבת רחובות.
+  function mapDev() {
+    const MC = window.MapCore;
+    const pts = (state.view === 'city' ? (byCity.get(state.city) || []) : []).filter(it => it.lat != null && it.lon != null);
+    let body;
+    if (!MC) body = '<p>רכיב המפה לא נטען.</p>';
+    else if (!pts.length) body = `<p>בחרו עיר ברשימה כדי לראות את המקוואות שלה על המפה.${state.view === 'city' ? ' לעיר שנבחרה אין עדיין נקודות ציון.' : ''}</p>`;
+    else {
+      const lat = pts.reduce((a, i) => a + i.lat, 0) / pts.length, lon = pts.reduce((a, i) => a + i.lon, 0) / pts.length;
+      const far = Math.max(200, ...pts.map(i => MC.distM([lat, lon], [i.lat, i.lon])));
+      const view = MC.createView({ lat, lon, zoom: Math.max(0.05, Math.min(4, 300 / (far * 1.25))) });
+      const layer = MC.toLayer(MC.toGeoJSON(pts, 'mikvaot', i => ({ id: i.id, name: [TYPE[i.type], i.name || i.hood || i.address].filter(Boolean).join(' · ') })), 'mikvaot', 'מ');
+      body = `<p><b>${esc(state.city)}</b> · ${pts.length} מקוואות עם נקודת ציון. מעבירים עכבר על נקודה לראות פרטים.</p><div class="mapdev">${MC.renderSVG({ area: null, view, layers: [layer] })}</div>`;
+    }
+    const withPos = DATA.items.filter(i => i.lat != null).length;
+    dialog('מפה (בפיתוח)', `${body}
+      <p class="src">זו תצוגה ראשונית: נקודות בלבד, בלי רחובות. ב-${withPos} מתוך ${DATA.items.length} מקוואות יש נקודת ציון.</p>
+      <h3>מה מתוכנן</h3><ul><li>שכבת רחובות בלי אינטרנט, כמו בכיוון תפילה</li><li>מסלול הליכה או נסיעה למקווה</li><li>חיפוש רחוב ופינה</li><li>הצגה משותפת עם עירוב (גבולות עירוב) וכיוון תפילה</li></ul>
+      <h3>מחכה לעזרה</h3><p>בדיקות בתוך אוצריא, דיווח על מקוואות חסרים או שגויים, והוספת כתובות לרשימת האתרים המותרים של אוצריא. הצטרפות:</p>
+      <p>${linkBtns(REPO + '/issues/new')}</p>
+      <p>שרשור בפורום: ${linkBtns('https://otzaria.org/forum/post/45135')}</p>
+      <div class="btns"><button class="btn tonal" id="backInfo">חזרה</button></div>`);
+  }
   function info() {
     $('#infoTitle').textContent = 'אודות';
     const srcs = (DATA.sources || []).map(s => `<li>${esc(s)}</li>`).join('');
@@ -333,7 +356,7 @@
       <h3>עדכון נתונים</h3>
       <p>אפשר לטעון קובץ נתונים מעודכן (mikvaot-data.json) מדף ההורדות של התוסף.</p>
       <div class="btns"><button class="btn tonal" id="imp">טעינת קובץ נתונים</button>${localData ? '<button class="btn tonal" id="impReset">חזרה לנתונים המובנים</button>' : ''}
-      <button class="btn tonal" id="rep">דיווח על מקווה חסר</button><button class="btn tonal" id="showCl">יומן שינויים מלא</button><button class="btn tonal" id="showPlan">תכנון והמשך</button></div>
+      <button class="btn tonal" id="rep">דיווח על מקווה חסר</button><button class="btn tonal" id="showCl">יומן שינויים מלא</button><button class="btn tonal" id="showPlan">תכנון והמשך</button><button class="btn tonal" id="mapDev">מפה (בפיתוח)</button></div>
       <h3>פרטיות</h3>
       <p>התוסף אינו שולח את המיקום שלכם לשום שרת. המיקום משמש רק למיון לפי מרחק, ונשאר במכשיר. התוסף עובד בלי אינטרנט. דיווח דרך אוצריא או GitHub נשלח רק אם בחרתם לשלוח.</p>
       <p>דף התוסף: ${linkBtns(REPO)}</p>
@@ -350,6 +373,7 @@
     if (id === 'rmSave') return saveReminder(e.target.dataset.id);
     if (id === 'showCl') return changelog();
     if (id === 'showPlan') return planView();
+    if (id === 'mapDev') return mapDev();
     if (id === 'rep') reportChoice(null);
     else if (id === 'repApp' || id === 'repGh') {
       const it = e.target.dataset.id ? DATA.items.find(x => x.id === e.target.dataset.id) : null;

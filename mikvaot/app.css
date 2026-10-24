@@ -198,4 +198,5 @@ mark { background: var(--color-primary-container); color: inherit; border-radius
 .field { display: flex; flex-direction: column; gap: 0.2em; margin: 0.5em 0; }
 .field input { padding: 0.4em 0.6em; border-radius: var(--radius-sm); border: 0.06em solid var(--color-outline-variant); background: var(--color-surface); }
 .cl h4 { margin: 0.8em 0 0.2em; }
+.mapdev svg { display: block; width: 100%; height: auto; max-height: 60vh; background: var(--color-surface-container, transparent); border-radius: var(--radius-md); }
 .cl ul { margin: 0; }
