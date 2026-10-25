@@ -35,6 +35,7 @@
     'ייצוא להעתקה': 'Export for copying', 'ארגונים ומועצות דתיות': 'Organizations and religious councils', 'חורף': 'Winter', 'קיץ': 'Summer'
   });
   const P = [
+    [/^הורדת רחובות: (.+)$/, (m, a) => 'Download streets: ' + (window.STREET_CITIES && window.STREET_CITIES[a] ? window.STREET_CITIES[a].en : a)],
     [/^(\d+) מקוואות$/, '$1 mikvaot'], [/^(\d+) ערים$/, '$1 cities'], [/^(.+) ממך$/, '$1 away'], [/^מקווה (.+)$/, 'Mikveh $1'], [/^חורף: (.+)$/, 'Winter: $1'], [/^קיץ: (.+)$/, 'Summer: $1'],
     [/^מקור: (.+)$/, 'Source: $1'], [/^(.+) \| מקוואות$/, '$1 | Mikvaot']
   ];

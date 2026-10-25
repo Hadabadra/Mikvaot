@@ -1,7 +1,7 @@
 /* מקוואות — מדריך מעשי (מיקום, שעות, טלפון). אין בו הלכות; לשאלות — רב הקהילה ואחראית המקווה. */
 (function () {
   'use strict';
-  const VERSION = '0.4.3';
+  const VERSION = '1.0.0';
   const REPO = 'https://github.com/Hadabadra/Mikvaot';
   const O = window.Otzaria, hasOtz = !!(O && O.call);
   const $ = s => document.querySelector(s);
@@ -37,7 +37,15 @@
     }
     toast(ok ? (label || 'הועתק') + ': ' + text : 'ההעתקה נכשלה');
   }
+  async function confirmExternal(url) {
+    if (!/^https?:/i.test(url)) return true;
+    let host = url; try { host = new URL(url).hostname || url; } catch (e) {}
+    const c = await call('ui.showConfirm', { title: 'קישור לאתר חיצוני', content: 'הקישור מוביל אל "' + host + '", מחוץ לתוסף. לפתוח אותו בדפדפן המערכת?' });
+    if (!c || !c.success || !c.data) return true;   // אין חלון אישור זמין: ממשיכים לפתוח
+    return c.data.confirmed === true;
+  }
   async function openExternal(url) {
+    if (!(await confirmExternal(url))) return;
     const r = await call('app.openUrl', { url });
     if (r.success && r.data !== false) return;
     copy(url, 'הקישור הועתק');
@@ -329,7 +337,7 @@
     const base = selId ? DATA.items.filter(i => i.city === (DATA.items.find(x => x.id === selId) || {}).city) : (state.view === 'city' ? (byCity.get(state.city) || []) : regionItems());
     const pts = base.filter(it => it.lat != null && it.lon != null).map(i => ({ id: i.id, lat: i.lat, lon: i.lon, name: [TYPE[i.type], i.name || i.hood || i.address].filter(Boolean).join(' · '), sub: [i.address, i.phone].filter(Boolean).join(' · ') }));
     dialog('מפה (בפיתוח)', '<div id="mapHost"></div><div class="btns"><button class="btn tonal" id="backInfo">סגירה</button></div>');
-    $('#infoScrim').classList.add('full');
+    $('#infoScrim').classList.add('full'); $('#infoScrim').style.top = Math.round(document.querySelector('.topbar').getBoundingClientRect().bottom) + 'px';
     if (!MC || !UI) return $('#mapHost').textContent = 'רכיב המפה לא נטען.';
     UI.mount($('#mapHost'), { points: pts, layerId: 'mikvaot', glyph: 'מ', layerName: 'מקוואות', selectedId: selId, me: state.pos ? [state.pos.lat, state.pos.lon] : null,
       call, openLink: openExternal, repo: REPO, forumUrl: 'https://otzaria.org/forum/post/45135', issueUrl: REPO + '/issues/new?title=' + encodeURIComponent('מפה: '),
@@ -339,7 +347,7 @@
     dialog(name + ' (בקרוב)', `<p>האפשרות הזו מתוכננת ועדיין לא עובדת. היא מסומנת כאן כדי שיהיה ברור איך תיראה. מחכה לעזרה, הצטרפות:</p><p>${linkBtns(REPO + '/issues/new')}</p><div class="btns"><button class="btn tonal" id="backInfo">חזרה</button></div>`);
   }
   function info() {
-    $('#infoScrim').classList.remove('full');
+    $('#infoScrim').classList.remove('full'); $('#infoScrim').style.top = '';
     $('#infoTitle').textContent = 'אודות';
     const srcs = (DATA.sources || []).map(s => `<li>${esc(s)}</li>`).join('');
     $('#infoBody').innerHTML = `
@@ -354,7 +362,7 @@
       <h3>פרטיות</h3>
       <p>התוסף אינו שולח את המיקום שלכם לשום שרת. המיקום משמש רק למיון לפי מרחק, ונשאר במכשיר. התוסף עובד בלי אינטרנט. דיווח דרך אוצריא או GitHub נשלח רק אם בחרתם לשלוח.</p>
       <p>דף התוסף: ${linkBtns(REPO)}</p>
-      <p class="src">מקוואות ${VERSION} · חד בדרא · מיקום אוטומטי דרך הגשר "אחת שאלתי" (אם מותקן)</p>`;
+      <p class="src">מקוואות ${VERSION} · מאת לזש"ק לרמב"ר ומבק"י · מיקום אוטומטי דרך הגשר "אחת שאלתי" (אם מותקן)</p>`;
     $('#infoScrim').hidden = false;
   }
   $('#btnInfo').addEventListener('click', info);
@@ -397,7 +405,7 @@
 
 
   // ── חלון כללי ──
-  function dialog(title, html) { $('#infoScrim').classList.remove('full'); $('#infoTitle').textContent = title; $('#infoBody').innerHTML = html; $('#infoScrim').hidden = false; $('#infoBody').scrollTop = 0; }
+  function dialog(title, html) { $('#infoScrim').classList.remove('full'); $('#infoScrim').style.top = ''; $('#infoTitle').textContent = title; $('#infoBody').innerHTML = html; $('#infoScrim').hidden = false; $('#infoBody').scrollTop = 0; }
   const linkBtns = u => `<button class="mini" data-open="${esc(u)}">פתיחה בדפדפן</button><button class="mini" data-copy="${esc(u)}">העתקת קישור</button>`;
 
   // ── ארגונים ומועצות דתיות ──

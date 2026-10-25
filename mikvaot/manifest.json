@@ -1,9 +1,9 @@
 {
   "id": "com.hadabadra.mikvaot",
   "name": "מקוואות",
-  "version": "0.4.3",
+  "version": "1.0.0",
   "description": "מדריך מקוואות נשים, גברים וכלים בארץ ובחו\"ל: כתובת, טלפון, שעות ונגישות, לפי עיר או מיקום. כולל מועצות דתיות, תזכורת ויומן.",
-  "author": "חד בדרא",
+  "author": "לזש\"ק לרמב\"ר ומבק\"י",
   "schemaVersion": 1,
   "sdkVersion": "1.x",
   "stability": "beta",

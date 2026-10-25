@@ -1,0 +1,30 @@
+name: רחובות לערים — בנייה
+
+# מוריד נתוני רחובות מ-OpenStreetMap לכל עיר ומעלה כקבצים לשחרור הקבוע streets-data.
+# התוספים מקשרים לקבצים האלה (הורדה ישירה), ואז טוענים אותם במסך המפה.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 1 * *'
+  push:
+    paths: ['streets-build/**', 'shared/streets/cities.json', '.github/workflows/streets-build.yml']
+    branches: ['main']
+
+permissions:
+  contents: write
+
+jobs:
+  streets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: node streets-build/build-streets.js streets
+      - name: Upload
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release view streets-data >/dev/null 2>&1 || gh release create streets-data --title "קובצי רחובות לערים" --notes "קובצי רחובות ובתי כנסת מ-OpenStreetMap (ODbL, © תורמי OpenStreetMap), לטעינה במסך המפה של התוספים. מתעדכן אוטומטית." --prerelease
+          gh release upload streets-data streets/*.json --clobber
