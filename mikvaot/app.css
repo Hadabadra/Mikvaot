@@ -206,3 +206,11 @@ mark { background: var(--color-primary-container); color: inherit; border-radius
 .scrim.full .dialog { position: absolute; inset-block: 0; inset-inline-end: 0; width: min(46vw, 44em); height: 100%; max-height: 100%; border-radius: 0; pointer-events: auto; box-shadow: 0 0 1.5em var(--color-shadow-soft); }
 @media (max-width: 760px) { .scrim.full .dialog { width: 100%; } }
 .scrim.full .mapui .view svg { max-height: 62vh; }
+
+/* 1.1.0: לשוניות רשימה | מפה בתוך אזור התוכן */
+.viewbar { display: flex; align-items: center; gap: 0.75em; padding: 0.5em 1em 0; }
+.viewtabs { width: 12em; flex: 0 0 auto; }
+.viewscope { color: var(--color-on-surface-variant); font-size: 0.9em; }
+.map-tab { flex: 1; overflow: auto; padding: 0.4em 1em 1em; }
+/* מצב מנותק באוצריא: בלי קישורים החוצה */
+body.offline [data-open], body.offline [data-copy^="http"], body.offline .ext-only { display: none !important; }

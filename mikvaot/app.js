@@ -12,7 +12,7 @@
   const ORDER = ['women', 'men', 'kelim', 'unknown'];
   const ACC = { partial: 'נגישות חלקית', basic: 'נגישות בסיסית', full: 'נגישות מלאה', 'full-lift': 'נגישות מלאה כולל מנוף' };
   // view: home | city | favs ; q = חיפוש חופשי
-  const state = { view: 'home', city: '', type: '', acc: false, withHours: false, q: '', favs: [], recent: [], online: false, pos: null, rail: true, region: 'il' };
+  const state = { view: 'home', city: '', type: '', acc: false, withHours: false, q: '', favs: [], recent: [], online: false, pos: null, rail: true, region: 'il', tab: 'list', mapSel: null };
 
   // ── עזרים ──
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -45,6 +45,7 @@
     return c.data.confirmed === true;
   }
   async function openExternal(url) {
+    if (!state.online) return toast('אוצריא במצב מנותק: קישורים חיצוניים כבויים');
     if (!(await confirmExternal(url))) return;
     const r = await call('app.openUrl', { url });
     if (r.success && r.data !== false) return;
@@ -83,7 +84,7 @@
   // ── שמירה ──
   const save = (k, v) => call('storage.set', { key: k, value: v });
   function saveView() {
-    const v = { view: state.view, city: state.city, type: state.type, acc: state.acc, withHours: state.withHours, rail: state.rail, region: state.region };
+    const v = { view: state.view, city: state.city, type: state.type, acc: state.acc, withHours: state.withHours, rail: state.rail, region: state.region, tab: state.tab };
     save('view', v);
     call('plugin.setRestoreState', { state: Object.assign({ q: state.q, scroll: $('#list').scrollTop }, v) });
   }
@@ -212,13 +213,14 @@
     $('.shell').classList.toggle('rail-hidden', !state.rail);
     if (!keepScroll) main.scrollTop = 0;
     dayTimes();
+    showTab();
   }
 
   // ── ניווט ──
   function goCity(c) {
     const r = isAbroad(c) ? 'abroad' : 'il'; if (r !== state.region) { state.region = r; regionCities(); }
     state.view = 'city'; state.city = c; state.q = ''; $('#q').value = '';
-    if (!$('#infoScrim').hidden && $('#infoScrim').classList.contains('full')) setTimeout(() => mapDev(), 0);
+    state.mapSel = null;
     state.recent = [c, ...state.recent.filter(x => x !== c)].slice(0, 8); save('recent', state.recent);
     $('.shell').classList.remove('rail-open');
     render(); saveView();
@@ -279,7 +281,7 @@
     else if (b.dataset.act === 'map') openExternal(it.lat ? `https://www.google.com/maps/search/?api=1&query=${it.lat},${it.lon}` : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('מקווה ' + addr));
     else if (b.dataset.act === 'waze') openExternal(it.lat ? `https://waze.com/ul?ll=${it.lat},${it.lon}&navigate=yes` : 'https://waze.com/ul?q=' + encodeURIComponent(addr));
     else if (b.dataset.act === 'fav') { state.favs = state.favs.includes(it.id) ? state.favs.filter(x => x !== it.id) : [...state.favs, it.id]; save('favs', state.favs); render(true); }
-    else if (b.dataset.act === 'mapview') mapDev(it.id);
+    else if (b.dataset.act === 'mapview') { state.mapSel = it.id; state.tab = 'map'; showTab(); saveView(); }
     else if (b.dataset.act === 'report') reportChoice(it);
     else if (b.dataset.act === 'remind') remindDialog(it);
   });
@@ -333,17 +335,34 @@
     dialog('תכנון והמשך', '<div class="cl">' + p.map(g => `<h4>${esc(g.title)}</h4><ul>${g.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul>`).join('') + '</div><div class="btns"><button class="btn tonal" id="backInfo">חזרה</button></div>');
   }
   // מפה: מסך משותף (map-ui.js) עם זום, גרירה, טעינת רחובות מקובץ וחיפוש. מה שעדיין לא קיים מסומן "בקרוב".
-  function mapDev(selId) {
-    const MC = window.MapCore, UI = window.MapUI;
-    const base = selId ? DATA.items.filter(i => i.city === (DATA.items.find(x => x.id === selId) || {}).city) : (state.view === 'city' ? (byCity.get(state.city) || []) : regionItems());
-    const pts = base.filter(it => it.lat != null && it.lon != null).map(i => ({ id: i.id, lat: i.lat, lon: i.lon, name: [TYPE[i.type], i.name || i.hood || i.address].filter(Boolean).join(' · '), sub: [i.address, i.phone].filter(Boolean).join(' · ') }));
-    dialog('מפה (בפיתוח)', '<div id="mapHost"></div><div class="btns"><button class="btn tonal" id="mapClose">סגירה</button></div>');
-    $('#infoScrim').classList.add('full'); $('#infoScrim').style.top = Math.round(document.querySelector('.topbar').getBoundingClientRect().bottom) + 'px';
-    if (!MC || !UI) return $('#mapHost').textContent = 'רכיב המפה לא נטען.';
-    UI.mount($('#mapHost'), { points: pts, layerId: 'mikvaot', glyph: 'מ', layerName: 'מקוואות', selectedId: selId, me: state.pos ? [state.pos.lat, state.pos.lon] : null,
-      call, openLink: openExternal, repo: REPO, forumUrl: 'https://otzaria.org/forum/post/45135', issueUrl: REPO + '/issues/new?title=' + encodeURIComponent('מפה: '),
-      pickLabel: 'הצגה ברשימה', onPick: id => { const it = DATA.items.find(x => x.id === id); if (it) { state.q = ''; goCity(it.city); } } });
+  // ── לשונית מפה (1.1.0): חלק מהתוסף, לא חלון מעליו. מציגה את מה שנבחר בניווט ──
+  function mapScope() {
+    if (state.mapSel) { const it = DATA.items.find(x => x.id === state.mapSel); if (it) return { items: byCity.get(it.city) || [], label: it.city }; }
+    if (state.view === 'city' && byCity.has(state.city)) return { items: byCity.get(state.city), label: state.city };
+    if (state.view === 'favs') return { items: DATA.items.filter(i => state.favs.includes(i.id)), label: 'מועדפים' };
+    return { items: regionItems(), label: state.region === 'abroad' ? 'חו"ל' : 'ישראל' };
   }
+  let mapKey = '';
+  function showTab() {
+    const map = state.tab === 'map';
+    document.querySelectorAll('#viewTabs [data-tab]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === state.tab)));
+    $('#list').hidden = map; $('#mapTab').hidden = !map; $('.filters').hidden = map || $('.filters').hidden; $('#daybar').hidden = map || $('#daybar').hidden;
+    const sc = mapScope(); $('#viewScope').textContent = map ? sc.label : '';
+    if (!map) return;
+    const key = [sc.label, state.type, state.acc, state.mapSel, state.online, state.lang].join('|');
+    if (key === mapKey && $('#mapTab').firstChild) return; mapKey = key;
+    const MC = window.MapCore, UI = window.MapUI;
+    if (!MC || !UI) { $('#mapTab').textContent = 'רכיב המפה לא נטען.'; return; }
+    const pts = sc.items.filter(it => it.lat != null && it.lon != null && (!state.type || it.type === state.type) && (!state.acc || it.acc === 'yes'))
+      .map(i => ({ id: i.id, lat: i.lat, lon: i.lon, name: [TYPE[i.type], i.name || i.hood || i.address].filter(Boolean).join(' · '), sub: [i.address, i.phone].filter(Boolean).join(' · ') }));
+    UI.mount($('#mapTab'), { tab: true, online: state.online, points: pts, layerId: 'mikvaot', glyph: 'מ', layerName: 'מקוואות', selectedId: state.mapSel, me: state.pos ? [state.pos.lat, state.pos.lon] : null,
+      call, openLink: openExternal, repo: REPO, forumUrl: 'https://otzaria.org/forum/post/45135', issueUrl: REPO + '/issues/new?title=' + encodeURIComponent('מפה: '),
+      pickLabel: 'הצגה ברשימה', onPick: id => { const it = DATA.items.find(x => x.id === id); if (it) { state.tab = 'list'; state.mapSel = null; state.q = ''; goCity(it.city); } } });
+  }
+  function mapDev(selId) { $('#infoScrim').hidden = true; state.mapSel = selId || null; state.tab = 'map'; showTab(); }
+  // ── מצב מנותק באוצריא: מסתירים כל קישור החוצה ──
+  function setOnline(v) { const was = state.online; state.online = !!v; document.body.classList.toggle('offline', !state.online); if (was !== state.online) { mapKey = ''; if (document.getElementById('list').innerHTML) render(true); } }
+  async function recheckOnline() { if (!hasOtz) return; const c = await call('app.getConnectivity'); if (c && c.success && c.data) setOnline(c.data.isOnline); }
   function featureDev(name) {
     dialog(name + ' (בקרוב)', `<p>האפשרות הזו מתוכננת ועדיין לא עובדת. היא מסומנת כאן כדי שיהיה ברור איך תיראה. מחכה לעזרה, הצטרפות:</p><p>${linkBtns(REPO + '/issues/new')}</p><div class="btns"><button class="btn tonal" id="backInfo">חזרה</button></div>`);
   }
@@ -367,7 +386,7 @@
     $('#infoScrim').hidden = false;
   }
   $('#btnInfo').addEventListener('click', info);
-  $('#btnMap').addEventListener('click', () => { const sc = $('#infoScrim'); if (!sc.hidden && sc.classList.contains('full')) sc.hidden = true; else mapDev(); });
+  $('#viewTabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (!b) return; state.tab = b.dataset.tab; if (state.tab === 'list') state.mapSel = null; showTab(); saveView(); });
   $('#infoClose').addEventListener('click', () => $('#infoScrim').hidden = true);
   $('#infoScrim').addEventListener('click', async e => {
     if (e.target === e.currentTarget) return e.currentTarget.hidden = true;
@@ -501,7 +520,8 @@
     const rs = payload.restore && payload.restore.state; if (rs) Object.assign(state, rs);
     let online = payload.connectivity ? payload.connectivity.isOnline : null;
     if (online == null) { const c = await call('app.getConnectivity'); online = c.success && c.data ? c.data.isOnline : !hasOtz; }
-    state.online = !!online;
+    setOnline(online);
+    addEventListener('focus', recheckOnline); if (hasOtz) O.on('plugin.resumed', recheckOnline);
     $('#q').value = state.q || ''; render();
     if (rs && rs.scroll) $('#list').scrollTop = rs.scroll;
   }
