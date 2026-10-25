@@ -1,7 +1,7 @@
 /* מקוואות — מדריך מעשי (מיקום, שעות, טלפון). אין בו הלכות; לשאלות — רב הקהילה ואחראית המקווה. */
 (function () {
   'use strict';
-  const VERSION = '0.3.3';
+  const VERSION = '0.4.0';
   const REPO = 'https://github.com/Hadabadra/Mikvaot';
   const O = window.Otzaria, hasOtz = !!(O && O.call);
   const $ = s => document.querySelector(s);
@@ -114,7 +114,7 @@
       ${ACC[it.acc] ? `<div class="row"><span class="k">נגישות</span><span>${ACC[it.acc]}</span></div>` : ''}
       <div class="card-foot">
         ${state.online ? '<button class="mini" data-act="map">פתיחה במפה</button><button class="mini" data-act="waze">Waze</button>' : ''}
-        <button class="mini" data-act="copyAddr">העתקת כתובת</button>
+        ${it.lat != null ? '<button class="mini" data-act="mapview">במפה</button>' : ''}<button class="mini" data-act="copyAddr">העתקת כתובת</button>
         <button class="mini" data-act="remind">תזכורת / יומן</button>
         <button class="mini" data-act="report">דיווח על טעות</button>
         <button class="mini star" data-act="fav" aria-pressed="${fav}" title="מועדף">${fav ? '★' : '☆'}</button>
@@ -270,6 +270,7 @@
     else if (b.dataset.act === 'map') openExternal(it.lat ? `https://www.google.com/maps/search/?api=1&query=${it.lat},${it.lon}` : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('מקווה ' + addr));
     else if (b.dataset.act === 'waze') openExternal(it.lat ? `https://waze.com/ul?ll=${it.lat},${it.lon}&navigate=yes` : 'https://waze.com/ul?q=' + encodeURIComponent(addr));
     else if (b.dataset.act === 'fav') { state.favs = state.favs.includes(it.id) ? state.favs.filter(x => x !== it.id) : [...state.favs, it.id]; save('favs', state.favs); render(true); }
+    else if (b.dataset.act === 'mapview') mapDev(it.id);
     else if (b.dataset.act === 'report') reportChoice(it);
     else if (b.dataset.act === 'remind') remindDialog(it);
   });
@@ -322,28 +323,19 @@
     const p = window.MIKVAOT_PLAN || [];
     dialog('תכנון והמשך', '<div class="cl">' + p.map(g => `<h4>${esc(g.title)}</h4><ul>${g.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul>`).join('') + '</div><div class="btns"><button class="btn tonal" id="backInfo">חזרה</button></div>');
   }
-  // מפה (בפיתוח): בסיס משותף עם גבולות עירוב וכיוון תפילה (map-core.js). כרגע נקודות בלבד, בלי שכבת רחובות.
-  function mapDev() {
-    const MC = window.MapCore;
-    const pts = (state.view === 'city' ? (byCity.get(state.city) || []) : []).filter(it => it.lat != null && it.lon != null);
-    let body;
-    if (!MC) body = '<p>רכיב המפה לא נטען.</p>';
-    else if (!pts.length) body = `<p>בחרו עיר ברשימה כדי לראות את המקוואות שלה על המפה.${state.view === 'city' ? ' לעיר שנבחרה אין עדיין נקודות ציון.' : ''}</p>`;
-    else {
-      const lat = pts.reduce((a, i) => a + i.lat, 0) / pts.length, lon = pts.reduce((a, i) => a + i.lon, 0) / pts.length;
-      const far = Math.max(200, ...pts.map(i => MC.distM([lat, lon], [i.lat, i.lon])));
-      const view = MC.createView({ lat, lon, zoom: Math.max(0.05, Math.min(4, 300 / (far * 1.25))) });
-      const layer = MC.toLayer(MC.toGeoJSON(pts, 'mikvaot', i => ({ id: i.id, name: [TYPE[i.type], i.name || i.hood || i.address].filter(Boolean).join(' · ') })), 'mikvaot', 'מ');
-      body = `<p><b>${esc(state.city)}</b> · ${pts.length} מקוואות עם נקודת ציון. מעבירים עכבר על נקודה לראות פרטים.</p><div class="mapdev">${MC.renderSVG({ area: null, view, layers: [layer] })}</div>`;
-    }
-    const withPos = DATA.items.filter(i => i.lat != null).length;
-    dialog('מפה (בפיתוח)', `${body}
-      <p class="src">זו תצוגה ראשונית: נקודות בלבד, בלי רחובות. ב-${withPos} מתוך ${DATA.items.length} מקוואות יש נקודת ציון.</p>
-      <h3>מה מתוכנן</h3><ul><li>שכבת רחובות בלי אינטרנט, כמו בכיוון תפילה</li><li>מסלול הליכה או נסיעה למקווה</li><li>חיפוש רחוב ופינה</li><li>הצגה משותפת עם עירוב (גבולות עירוב) וכיוון תפילה</li></ul>
-      <h3>מחכה לעזרה</h3><p>בדיקות בתוך אוצריא, דיווח על מקוואות חסרים או שגויים, והוספת כתובות לרשימת האתרים המותרים של אוצריא. הצטרפות:</p>
-      <p>${linkBtns(REPO + '/issues/new')}</p>
-      <p>שרשור בפורום: ${linkBtns('https://otzaria.org/forum/post/45135')}</p>
-      <div class="btns"><button class="btn tonal" id="backInfo">חזרה</button></div>`);
+  // מפה: מסך משותף (map-ui.js) עם זום, גרירה, טעינת רחובות מקובץ וחיפוש. מה שעדיין לא קיים מסומן "בקרוב".
+  function mapDev(selId) {
+    const MC = window.MapCore, UI = window.MapUI;
+    const base = selId ? DATA.items.filter(i => i.city === (DATA.items.find(x => x.id === selId) || {}).city) : (state.view === 'city' ? (byCity.get(state.city) || []) : regionItems());
+    const pts = base.filter(it => it.lat != null && it.lon != null).map(i => ({ id: i.id, lat: i.lat, lon: i.lon, name: [TYPE[i.type], i.name || i.hood || i.address].filter(Boolean).join(' · '), sub: [i.address, i.phone].filter(Boolean).join(' · ') }));
+    dialog('מפה (בפיתוח)', '<div id="mapHost"></div><div class="btns"><button class="btn tonal" id="backInfo">סגירה</button></div>');
+    if (!MC || !UI) return $('#mapHost').textContent = 'רכיב המפה לא נטען.';
+    UI.mount($('#mapHost'), { points: pts, layerId: 'mikvaot', glyph: 'מ', layerName: 'מקוואות', selectedId: selId, me: state.pos ? [state.pos.lat, state.pos.lon] : null,
+      call, openLink: openExternal, repo: REPO, forumUrl: 'https://otzaria.org/forum/post/45135', issueUrl: REPO + '/issues/new?title=' + encodeURIComponent('מפה: '),
+      pickLabel: 'הצגה ברשימה', onPick: id => { $('#infoScrim').hidden = true; const it = DATA.items.find(x => x.id === id); if (it) { state.q = ''; goCity(it.city); } } });
+  }
+  function featureDev(name) {
+    dialog(name + ' (בקרוב)', `<p>האפשרות הזו מתוכננת ועדיין לא עובדת. היא מסומנת כאן כדי שיהיה ברור איך תיראה. מחכה לעזרה, הצטרפות:</p><p>${linkBtns(REPO + '/issues/new')}</p><div class="btns"><button class="btn tonal" id="backInfo">חזרה</button></div>`);
   }
   function info() {
     $('#infoTitle').textContent = 'אודות';
@@ -356,7 +348,7 @@
       <h3>עדכון נתונים</h3>
       <p>אפשר לטעון קובץ נתונים מעודכן (mikvaot-data.json) מדף ההורדות של התוסף.</p>
       <div class="btns"><button class="btn tonal" id="imp">טעינת קובץ נתונים</button>${localData ? '<button class="btn tonal" id="impReset">חזרה לנתונים המובנים</button>' : ''}
-      <button class="btn tonal" id="rep">דיווח על מקווה חסר</button><button class="btn tonal" id="showCl">יומן שינויים מלא</button><button class="btn tonal" id="showPlan">תכנון והמשך</button><button class="btn tonal" id="mapDev">מפה (בפיתוח)</button></div>
+      <button class="btn tonal" id="rep">דיווח על מקווה חסר</button><button class="btn tonal" id="showCl">יומן שינויים מלא</button><button class="btn tonal" id="showPlan">תכנון והמשך</button><button class="btn tonal" id="mapDev">מפה (בפיתוח)</button><button class="btn tonal" data-soon="בדיקת עדכון נתונים מהרשת">בדיקת עדכון נתונים (בקרוב)</button><button class="btn tonal" data-soon="הוספת מקווה משלי">הוספת מקווה משלי (בקרוב)</button></div>
       <h3>פרטיות</h3>
       <p>התוסף אינו שולח את המיקום שלכם לשום שרת. המיקום משמש רק למיון לפי מרחק, ונשאר במכשיר. התוסף עובד בלי אינטרנט. דיווח דרך אוצריא או GitHub נשלח רק אם בחרתם לשלוח.</p>
       <p>דף התוסף: ${linkBtns(REPO)}</p>
@@ -364,9 +356,11 @@
     $('#infoScrim').hidden = false;
   }
   $('#btnInfo').addEventListener('click', info);
+  $('#btnMap').addEventListener('click', () => mapDev());
   $('#infoClose').addEventListener('click', () => $('#infoScrim').hidden = true);
   $('#infoScrim').addEventListener('click', async e => {
     if (e.target === e.currentTarget) return e.currentTarget.hidden = true;
+    const soon = e.target.closest && e.target.closest('[data-soon]'); if (soon) return featureDev(soon.dataset.soon);
     const id = e.target.id;
     if (id === 'expCopy') return copy($('#expText').value, 'הרשימה הועתקה').then(() => toast('הרשימה הועתקה'));
     if (id === 'expPrint') { $('#infoScrim').hidden = true; return $('#btnPrint').click(); }
