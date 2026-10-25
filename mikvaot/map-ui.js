@@ -47,7 +47,7 @@
 .mapui .layers { display: flex; flex-wrap: wrap; gap: .3em 1em; margin: .4em 0; font-size: .9em; }
 .mapui .layers label.off { opacity: .55; }
 .mapui h4 { margin: .8em 0 .2em; }
-.mapui.tab .view svg { max-height: calc(100vh - 16em); min-height: 18em; }
+.mapui.mapui-tab .view svg { max-height: calc(100vh - 16em); min-height: 18em; }
 `;
 
   function mount(el, o) {
@@ -73,7 +73,7 @@
     const off = o.online === false;
     const join = off ? '' : [o.repo ? `<button class="mu" data-mu-open="${esc(o.repo + '/issues/new')}">הצטרפות</button>` : '', o.issueUrl ? `<button class="mu" data-mu-open="${esc(o.issueUrl)}">הבקשה בגיטהאב</button>` : '', o.forumUrl ? `<button class="mu" data-mu-open="${esc(o.forumUrl)}">השרשור בפורום</button>` : ''].join(' ');
 
-    el.classList.add('mapui'); el.classList.toggle('tab', !!o.tab);
+    el.classList.add('mapui'); el.classList.toggle('mapui-tab', !!o.tab);
     el.innerHTML = `
       <div class="bar"><button class="mu" data-mu="in" title="זום פנימה" aria-label="זום פנימה">+</button><button class="mu" data-mu="out" title="זום החוצה" aria-label="זום החוצה">−</button><button class="mu" data-mu="fit">מרכוז</button>
         <span class="msg" id="mu-hint">${pts.length ? 'מעבירים עכבר על נקודה, ולוחצים לפרטים' : 'אין נקודות עם מיקום להצגה'}</span></div>
