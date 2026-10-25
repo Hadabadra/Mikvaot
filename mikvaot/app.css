@@ -202,6 +202,7 @@ mark { background: var(--color-primary-container); color: inherit; border-radius
 .cl ul { margin: 0; }
 
 /* מפה במסך מלא */
-.scrim.full { padding: 0; display: block; }
-.scrim.full .dialog { width: 100%; height: 100%; max-height: 100%; border-radius: 0; }
+.scrim.full { padding: 0; display: block; background: none; pointer-events: none; }
+.scrim.full .dialog { position: absolute; inset-block: 0; inset-inline-end: 0; width: min(46vw, 44em); height: 100%; max-height: 100%; border-radius: 0; pointer-events: auto; box-shadow: 0 0 1.5em var(--color-shadow-soft); }
+@media (max-width: 760px) { .scrim.full .dialog { width: 100%; } }
 .scrim.full .mapui .view svg { max-height: 62vh; }

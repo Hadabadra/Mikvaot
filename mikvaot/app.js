@@ -218,6 +218,7 @@
   function goCity(c) {
     const r = isAbroad(c) ? 'abroad' : 'il'; if (r !== state.region) { state.region = r; regionCities(); }
     state.view = 'city'; state.city = c; state.q = ''; $('#q').value = '';
+    if (!$('#infoScrim').hidden && $('#infoScrim').classList.contains('full')) setTimeout(() => mapDev(), 0);
     state.recent = [c, ...state.recent.filter(x => x !== c)].slice(0, 8); save('recent', state.recent);
     $('.shell').classList.remove('rail-open');
     render(); saveView();
@@ -336,12 +337,12 @@
     const MC = window.MapCore, UI = window.MapUI;
     const base = selId ? DATA.items.filter(i => i.city === (DATA.items.find(x => x.id === selId) || {}).city) : (state.view === 'city' ? (byCity.get(state.city) || []) : regionItems());
     const pts = base.filter(it => it.lat != null && it.lon != null).map(i => ({ id: i.id, lat: i.lat, lon: i.lon, name: [TYPE[i.type], i.name || i.hood || i.address].filter(Boolean).join(' · '), sub: [i.address, i.phone].filter(Boolean).join(' · ') }));
-    dialog('מפה (בפיתוח)', '<div id="mapHost"></div><div class="btns"><button class="btn tonal" id="backInfo">סגירה</button></div>');
+    dialog('מפה (בפיתוח)', '<div id="mapHost"></div><div class="btns"><button class="btn tonal" id="mapClose">סגירה</button></div>');
     $('#infoScrim').classList.add('full'); $('#infoScrim').style.top = Math.round(document.querySelector('.topbar').getBoundingClientRect().bottom) + 'px';
     if (!MC || !UI) return $('#mapHost').textContent = 'רכיב המפה לא נטען.';
     UI.mount($('#mapHost'), { points: pts, layerId: 'mikvaot', glyph: 'מ', layerName: 'מקוואות', selectedId: selId, me: state.pos ? [state.pos.lat, state.pos.lon] : null,
       call, openLink: openExternal, repo: REPO, forumUrl: 'https://otzaria.org/forum/post/45135', issueUrl: REPO + '/issues/new?title=' + encodeURIComponent('מפה: '),
-      pickLabel: 'הצגה ברשימה', onPick: id => { $('#infoScrim').hidden = true; const it = DATA.items.find(x => x.id === id); if (it) { state.q = ''; goCity(it.city); } } });
+      pickLabel: 'הצגה ברשימה', onPick: id => { const it = DATA.items.find(x => x.id === id); if (it) { state.q = ''; goCity(it.city); } } });
   }
   function featureDev(name) {
     dialog(name + ' (בקרוב)', `<p>האפשרות הזו מתוכננת ועדיין לא עובדת. היא מסומנת כאן כדי שיהיה ברור איך תיראה. מחכה לעזרה, הצטרפות:</p><p>${linkBtns(REPO + '/issues/new')}</p><div class="btns"><button class="btn tonal" id="backInfo">חזרה</button></div>`);
@@ -366,7 +367,7 @@
     $('#infoScrim').hidden = false;
   }
   $('#btnInfo').addEventListener('click', info);
-  $('#btnMap').addEventListener('click', () => mapDev());
+  $('#btnMap').addEventListener('click', () => { const sc = $('#infoScrim'); if (!sc.hidden && sc.classList.contains('full')) sc.hidden = true; else mapDev(); });
   $('#infoClose').addEventListener('click', () => $('#infoScrim').hidden = true);
   $('#infoScrim').addEventListener('click', async e => {
     if (e.target === e.currentTarget) return e.currentTarget.hidden = true;
