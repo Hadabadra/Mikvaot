@@ -435,7 +435,7 @@
       ${it.phone ? `<span class="phone">${esc(it.phone)}</span><button class="mini" data-copy="${esc(it.phone)}">העתק</button>` : ''}
       ${it.email ? `<span class="phone">${esc(it.email)}</span><button class="mini" data-copy="${esc(it.email)}">העתק</button>` : ''}
       ${it.url ? linkBtns(it.url) : ''}</div>`;
-    const groups = [['org', 'ארגונים ומאגרים'], ['council', 'מועצות דתיות, מחלקות דת ורבנויות']];
+    const groups = [['org', 'ארגונים ומאגרים'], ['council', 'מועצות דתיות, מחלקות דת ורבנויות'], ['abroad', 'בתי דין ורבנויות בחו"ל']];
     dialog('ארגונים ומועצות דתיות', `<p>טלפונים ואתרים מהמקורות הרשמיים, מדפי זהב ומאתרי הגופים עצמם. לפני הגעה כדאי לאמת בטלפון.</p>
       <div class="field"><input id="orgQ" type="search" placeholder="סינון לפי עיר או שם"></div><div id="orgList">${groups.map(([k, t]) => {
         const g = list.filter(o => (o.kind || 'council') === k); return g.length ? `<h3>${t} · ${g.length}</h3>` + g.map(f).join('') : '';
