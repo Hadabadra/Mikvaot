@@ -356,7 +356,7 @@ for c in sorted({i["city"] for i in items}):
     a, b = CITIES.get(c, (None, None))
     cities_out[c] = {k: v for k, v in {"lat": a, "lon": b, "council": COUNCILS.get(c), "country": ABROAD_CITY.get(c)}.items() if v is not None}
 ABROAD_ORGS = json.load(open(os.path.join(here, "abroad_orgs.json"), encoding="utf-8"))
-data = {"version": CHECKED, "orgs": ORGS + ABROAD_ORGS, "sources": [v["name"] for v in COUNCILS.values() if v] + list(SRC_NAMES.values()),
+data = {"version": max(CHECKED, "2026-10-27"), "orgs": ORGS + ABROAD_ORGS, "sources": [v["name"] for v in COUNCILS.values() if v] + list(SRC_NAMES.values()),
         "cities": cities_out, "items": items}
 
 # ── יומן שינויים ותכנון להצגה בתוסף ──────────────────────────────

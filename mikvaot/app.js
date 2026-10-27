@@ -1,7 +1,7 @@
 /* מקוואות — מדריך מעשי (מיקום, שעות, טלפון). אין בו הלכות; לשאלות — רב הקהילה ואחראית המקווה. */
 (function () {
   'use strict';
-  const VERSION = '1.3.1';
+  const VERSION = '1.3.2';
   const REPO = 'https://github.com/Hadabadra/Mikvaot';
   const O = window.Otzaria, hasOtz = !!(O && O.call);
   const $ = s => document.querySelector(s);
@@ -552,7 +552,9 @@
     payload = payload || {};
     if (payload.theme) applyTheme(payload.theme); else { const r = await call('app.getTheme'); if (r.success) applyTheme(r.data); }
     const d = await call('storage.get', { key: 'data' });
-    if (d.success && valid(d.data) && d.data.version >= DATA.version) { DATA = d.data; localData = d.data; }
+    if (d.success && valid(d.data) && d.data.version > DATA.version) { DATA = d.data; localData = d.data; }
+    // 1.3.2: נתונים שמורים באותו תאריך כמו המובנים הסתירו את החדשים (בתי דין בחו"ל ועוד) — עכשיו גוברים רק אם חדשים יותר
+    else if (d.success && d.data) call('storage.remove', { key: 'data' });
     index();
     for (const k of ['favs', 'recent']) { const r = await call('storage.get', { key: k }); if (r.success && Array.isArray(r.data)) state[k] = r.data; }
     const v = await call('storage.get', { key: 'view' }); if (v.success && v.data && typeof v.data === 'object') Object.assign(state, v.data);
