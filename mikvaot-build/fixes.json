@@ -1,0 +1,15 @@
+{
+  "_note": "תיקונים מדיווחי משתמשים, מוחלים אחרי איסוף המקורות (build_data.py) ובנתונים הארוזים. כל רשומה עם מקור ה-issue.",
+  "replace": [
+    {"match": {"city": "Maison Alfort, צרפת", "type": "women", "address": "92/94, Rue Victor Hugo"},
+     "set": {"name": "Mikvé Maisons-Alfort (נשים)", "address": "4 Impasse Saillenfait, 94700 Maisons-Alfort", "phone": "+33-6-46-73-32-87",
+             "hours": "BY APPOINTMENT ONLY", "src": "https://mikveden.fr/Mikve-Maisons-Alfort", "srcName": "דיווח משתמש (issue #1) לפי mikveden.fr", "checked": "2026-10-27"},
+     "drop": ["lat", "lon"]}
+  ],
+  "add": [
+    {"type": "men", "name": "מקווה גברים — בית הכנסת Rue Victor Hugo", "city": "Maison Alfort, צרפת", "address": "92/94, Rue Victor Hugo, 94700 Maisons-Alfort",
+     "lat": 48.7996216, "lon": 2.4444855, "src": "https://github.com/Hadabadra/Mikvaot/issues/1", "srcName": "דיווח משתמש (issue #1)", "lang": "en", "checked": "2026-10-27"},
+    {"type": "kelim", "name": "מקווה כלים — בית הכנסת Rue Victor Hugo", "city": "Maison Alfort, צרפת", "address": "92/94, Rue Victor Hugo, 94700 Maisons-Alfort",
+     "lat": 48.7996216, "lon": 2.4444855, "src": "https://github.com/Hadabadra/Mikvaot/issues/1", "srcName": "דיווח משתמש (issue #1)", "lang": "en", "checked": "2026-10-27"}
+  ]
+}

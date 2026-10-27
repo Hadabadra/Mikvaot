@@ -307,6 +307,19 @@ for it in items:
         if pts: CITIES[it["city"]] = (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts))
 for c in CITIES: COUNCILS.setdefault(c, None)
 
+# תיקונים מדיווחי משתמשים (fixes.json)
+def apply_fixes(items, fx):
+    for f in fx.get("replace", []):
+        for it in items:
+            if all(it.get(k) == v for k, v in f["match"].items()):
+                it.update(f["set"])
+                for k in f.get("drop", []): it.pop(k, None)
+    have = {(i["city"], i["type"], i["address"]) for i in items}
+    for r in fx.get("add", []):
+        if (r["city"], r["type"], r["address"]) not in have: items.append(dict(r))
+fx_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fixes.json")
+if os.path.exists(fx_path): apply_fixes(items, json.load(open(fx_path, encoding="utf-8")))
+
 # מזהה יציב
 seen = {}
 for it in items:
