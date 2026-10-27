@@ -140,6 +140,21 @@
     return co ? `${esc(co.name)}${co.phone ? ' · <span class="phone">' + esc(co.phone) + '</span> <button class="mini" data-copy="' + esc(co.phone) + '">העתק</button>' : ''}${co.extra ? ' · ' + esc(co.extra) : ''}${co.url ? ' · ' + linkBtns(co.url) : ''}` : '';
   }
 
+  // ── בתי דין ורבנויות בחו"ל (1.3.0, #2): גם בדף הבית של חו"ל ובדף עיר, לא רק בחלון הארגונים ──
+  const ORG_CO = { 'אנגליה': 'בריטניה', 'ארה"ב': 'ארצות הברית', 'Deutschland': 'גרמניה', 'United States Of America': 'ארצות הברית' };
+  const orgCountry = o => { const k = o.name.split(/,| —/)[0].trim(); return ORG_CO[k] || k; };
+  const coNorm = c => ORG_CO[c] || c;
+  const abroadOrgs = co => (DATA.orgs || []).filter(o => o.kind === 'abroad' && (!co || orgCountry(o) === coNorm(co)));
+  const orgRow = it => `<div class="org"><div class="nm">${esc(it.name)}${it.note || it.address ? `<small>${esc([it.address, it.note].filter(Boolean).join(' · '))}</small>` : ''}</div>
+      ${it.phone ? `<span class="phone">${esc(it.phone)}</span><button class="mini" data-copy="${esc(it.phone)}">העתק</button>` : ''}
+      ${it.email ? `<span class="phone">${esc(it.email)}</span><button class="mini" data-copy="${esc(it.email)}">העתק</button>` : ''}
+      ${it.url && state.online ? linkBtns(it.url) : ''}</div>`;
+  function abroadOrgsHTML(co) {
+    const L = abroadOrgs(co); if (!L.length) return '';
+    return `<details class="abroad-orgs"${co ? ' open' : ''}><summary class="section-title">בתי דין ורבנויות${co ? ' · ' + esc(coNorm(co)) : ' בחו"ל'} · ${L.length}</summary>
+      <p class="src">טלפון ואימייל מהמקורות הרשמיים. לשאלות על מקווה — הרב המקומי.</p>${L.map(orgRow).join('')}</details>`;
+  }
+
   // ── מסכים ──
   function homeView() {
     const cardC = c => { const arr = byCity.get(c); return `<button class="city-card" data-city="${esc(c)}"><strong>${esc(c)}</strong><span>${arr.length} מקוואות · ${countText(arr)}</span></button>`; };
@@ -151,6 +166,7 @@
       const countries = [...byC.keys()].sort((a, b) => byC.get(b).reduce((s, c) => s + byCity.get(c).length, 0) - byC.get(a).reduce((s, c) => s + byCity.get(c).length, 0));
       return `<div class="hero"><div class="grow"><h2>מקוואות בחו"ל</h2><p>${n} מקוואות ב-${cityNames.length} ערים ב-${countries.length} מדינות, מתוך מאגר ארגון טהרת המשפחה (הפרטים באנגלית כמו במקור).</p></div>
         <button class="btn tonal" id="heroLoc">המיקום שלי</button></div>
+        ${abroadOrgsHTML(null)}
         ${countries.map(k => `<div class="section-title">${esc(k)} · ${byC.get(k).reduce((s, c) => s + byCity.get(c).length, 0)}</div><div class="city-grid">${byC.get(k).map(cardC).join('')}</div>`).join('')}`;
     }
     return `<div class="hero"><div class="grow"><h2>מקוואות בארץ</h2>
@@ -163,6 +179,7 @@
     const all = byCity.get(c) || [], list = sortItems(all.filter(pass));
     let html = `<div class="hero"><div class="grow"><h2>${esc(c)}</h2><p>${all.length} מקוואות · ${countText(all)}${councilLine(c) ? '<br>' + councilLine(c) : ''}</p></div>
       <button class="btn ${state.favs.includes('city:' + c) ? 'tonal' : 'text'}" data-favcity="${esc(c)}">${state.favs.includes('city:' + c) ? '★ במועדפים' : '☆ הוספה למועדפים'}</button></div>`;
+    if (isAbroad(c)) html += abroadOrgsHTML(DATA.cities[c].country);
     if (state.pos) html += `<div class="section-title">ממוין לפי מרחק ממך</div>` + list.map(i => card(i)).join('');
     else for (const t of ORDER) { const g = list.filter(i => i.type === t); if (g.length) html += `<div class="section-title">${t === 'unknown' ? 'מקוואות שסוגם לא צוין במקור' : 'מקוואות ' + TYPE[t]} · ${g.length}</div>` + g.map(i => card(i)).join(''); }
     if (!list.length) html += `<div class="empty">אין מקוואות שמתאימים לסינון. נקו את הסינון למעלה.</div>`;
@@ -431,15 +448,14 @@
   // ── ארגונים ומועצות דתיות ──
   function orgs() {
     const list = (DATA.orgs || []).slice();
-    const f = it => `<div class="org"><div class="nm">${esc(it.name)}${it.note || it.address ? `<small>${esc([it.address, it.note].filter(Boolean).join(' · '))}</small>` : ''}</div>
-      ${it.phone ? `<span class="phone">${esc(it.phone)}</span><button class="mini" data-copy="${esc(it.phone)}">העתק</button>` : ''}
-      ${it.email ? `<span class="phone">${esc(it.email)}</span><button class="mini" data-copy="${esc(it.email)}">העתק</button>` : ''}
-      ${it.url ? linkBtns(it.url) : ''}</div>`;
+    const f = orgRow;
     const groups = [['org', 'ארגונים ומאגרים'], ['council', 'מועצות דתיות, מחלקות דת ורבנויות'], ['abroad', 'בתי דין ורבנויות בחו"ל']];
     dialog('ארגונים ומועצות דתיות', `<p>טלפונים ואתרים מהמקורות הרשמיים, מדפי זהב ומאתרי הגופים עצמם. לפני הגעה כדאי לאמת בטלפון.</p>
+      <div class="btns">${groups.map(([k, t]) => `<button class="mini" data-orgjump="${k}">${t}</button>`).join('')}</div>
       <div class="field"><input id="orgQ" type="search" placeholder="סינון לפי עיר או שם"></div><div id="orgList">${groups.map(([k, t]) => {
-        const g = list.filter(o => (o.kind || 'council') === k); return g.length ? `<h3>${t} · ${g.length}</h3>` + g.map(f).join('') : '';
+        const g = list.filter(o => (o.kind || 'council') === k); return g.length ? `<h3 id="og-${k}">${t} · ${g.length}</h3>` + g.map(f).join('') : '';
       }).join('')}</div>`);
+    document.querySelectorAll('[data-orgjump]').forEach(b => b.onclick = () => { const h = document.getElementById('og-' + b.dataset.orgjump); if (h) h.scrollIntoView({ block: 'start' }); });
     $('#orgQ').addEventListener('input', e => { const q = norm(e.target.value); document.querySelectorAll('#orgList .org').forEach(el => el.hidden = !!q && !norm(el.textContent).includes(q)); });
   }
 

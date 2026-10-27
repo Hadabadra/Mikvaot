@@ -214,3 +214,5 @@ mark { background: var(--color-primary-container); color: inherit; border-radius
 .map-tab { flex: 1; overflow: auto; padding: 0.4em 1em 1em; }
 /* מצב מנותק באוצריא: בלי קישורים החוצה */
 body.offline [data-open], body.offline [data-copy^="http"], body.offline .ext-only { display: none !important; }
+.abroad-orgs { margin: .6em 0 1em; }
+.abroad-orgs > summary { cursor: pointer; list-style: revert; }
