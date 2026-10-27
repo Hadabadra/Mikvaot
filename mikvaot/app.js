@@ -303,15 +303,31 @@
     else if (b.dataset.act === 'remind') remindDialog(it);
   });
   // בחירת ערוץ דיווח: דרך אוצריא (למפתחת) או Issue פתוח ב-GitHub עם פרטי המקווה מולאו מראש
-  const reportHead = it => it ? `טעות בפרטי מקווה: ${TYPE[it.type]} · ${it.city} · ${it.address} (${it.id})\nמה צריך לתקן: ` : 'מקווה חסר / עיר חסרה — פרטים (עיר, כתובת, טלפון, שעות, מקור):\n';
+  const reportHead = it => it ? `טעות בפרטי מקווה: ${TYPE[it.type]} · ${it.city} · ${it.address} (${it.id})\nמה צריך לתקן: ` : 'מקווה חסר / עיר חסרה:\n' + missText;
   const issueUrl = it => `${REPO}/issues/new?title=${encodeURIComponent(it ? `תיקון: ${it.city} · ${it.address}` : 'מקווה חסר')}&body=${encodeURIComponent(`[מקוואות ${VERSION}] ` + reportHead(it))}`;
-  function reportChoice(it) {
+  // 1.3.0 (#3): דיווח על מקווה חסר — עיר חובה ולפחות פרט אחד נוסף, כדי שלא יגיע דיווח ריק
+  const MISS = [['mfCity', 'עיר'], ['mfAddr', 'כתובת'], ['mfPhone', 'טלפון'], ['mfHours', 'שעות'], ['mfNote', 'מקור / הערה']];
+  let missText = '';
+  const missVals = () => MISS.map(([k, t]) => [t, (($('#' + k) || {}).value || '').trim()]);
+  const missOk = () => { const v = missVals(); return !!v[0][1] && v.slice(1).some(x => x[1]); };
+  function missingForm() {
+    dialog('דיווח על מקווה חסר', `<p>חובה למלא עיר ולפחות פרט אחד נוסף.</p>
+      ${MISS.map(([k, t], i) => i === 4 ? `<label class="field">${t}<textarea id="${k}" rows="2"></textarea></label>` : `<label class="field">${t}${i ? '' : ' *'}<input id="${k}"${i ? '' : ' required'}></label>`).join('')}
+      <p class="src" id="mfMsg"></p>
+      <div class="btns"><button class="btn tonal" id="mfNext" disabled>המשך לשליחה</button></div>`);
+    const upd = () => { $('#mfNext').disabled = !missOk(); $('#mfMsg').textContent = missOk() ? '' : !missVals()[0][1] ? 'נא למלא עיר.' : 'נא למלא לפחות פרט אחד: כתובת, טלפון, שעות או מקור.'; };
+    $('#infoBody').oninput = upd; upd(); $('#mfCity').focus();
+    $('#mfNext').onclick = () => { if (!missOk()) return upd(); missText = missVals().filter(x => x[1]).map(x => x[0] + ': ' + x[1]).join('\n'); $('#infoBody').oninput = null; reportChoice(null, true); };
+  }
+  function reportChoice(it, filled) {
+    if (!it && !filled) return missingForm();
     const id = it ? esc(it.id) : '';
     dialog('דיווח על טעות', `<p>${it ? esc(`${TYPE[it.type]} · ${it.city} · ${it.address}`) : 'מקווה או עיר שחסרים ברשימה'}</p>
       <div class="btns"><button class="btn tonal" id="repApp" data-id="${id}">שליחה דרך אוצריא</button><button class="btn tonal" id="repGh" data-id="${id}">פתיחת דיווח ב-GitHub</button></div>
       <p class="src">דיווח ב-GitHub הוא פומבי וצריך חשבון GitHub; הקישור נפתח בדפדפן.</p>`);
   }
   async function report(it) {
+    if (!it && !missText.trim()) return missingForm();   // בלי פרטים — לא שולחים
     const head = reportHead(it);
     const r = await call('feedback.report', { details: `[מקוואות ${VERSION}] ` + head, reportType: 'content' });
     if (!r.success) toast('הדיווח לא נשלח'); else if (r.data === 'cancelled') return; else call('ui.showSuccess', { message: 'תודה! הדיווח נשלח למפתחת התוסף' });

@@ -216,3 +216,4 @@ mark { background: var(--color-primary-container); color: inherit; border-radius
 body.offline [data-open], body.offline [data-copy^="http"], body.offline .ext-only { display: none !important; }
 .abroad-orgs { margin: .6em 0 1em; }
 .abroad-orgs > summary { cursor: pointer; list-style: revert; }
+.btn:disabled { opacity: .5; cursor: default; }
