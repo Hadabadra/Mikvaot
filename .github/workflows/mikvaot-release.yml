@@ -19,7 +19,9 @@ jobs:
         run: |
           v="$(node -p "require('./mikvaot/manifest.json').version")"
           python3 mikvaot-build/pack.py mikvaot /tmp/e.otzplugin
-          cmp /tmp/e.otzplugin "mikvaot-$v.otzplugin" || { echo "::error::mikvaot-$v.otzplugin אינו תואם לקוד. ארזו מחדש."; exit 1; }
+          # משווים תוכן (שם + CRC + גודל לכל קובץ) ולא בייטים: zlib שונה (למשל zlib-ng) דוחס אחרת את אותם קבצים
+          sig() { python3 -c "import zipfile,sys;[print(i.filename,i.CRC,i.file_size) for i in zipfile.ZipFile(sys.argv[1]).infolist()]" "$1"; }
+          diff <(sig /tmp/e.otzplugin) <(sig "mikvaot-$v.otzplugin") || { echo "::error::mikvaot-$v.otzplugin אינו תואם לקוד. ארזו מחדש."; exit 1; }
       - name: Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
