@@ -55,7 +55,7 @@
     if (!document.getElementById('mapui-css')) { const st = document.createElement('style'); st.id = 'mapui-css'; st.textContent = CSS; document.head.append(st); }
     const pts = (o.points || []).filter(p => p.lat != null && p.lon != null);
     const S = { lat: 0, lon: 0, zoom: 1, area: null, areaName: '', sel: o.selectedId != null ? String(o.selectedId) : null, street: null,
-      show: { pts: true, streets: true, syn: true } };
+      show: { pts: true, streets: true, syn: true }, from: null, route: null };
     const byId = new Map(pts.map(p => [String(p.id), p]));
     const layer = () => MC.toLayer({ type: 'FeatureCollection', features: pts.map(p => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [p.lon, p.lat] }, properties: { id: p.id, name: p.name } })) }, o.layerId || 'pts', o.glyph || '•');
 
@@ -69,7 +69,8 @@
     const selPt = () => (S.sel != null ? byId.get(S.sel) : null);
     if (selPt()) { S.lat = selPt().lat; S.lon = selPt().lon; S.zoom = 3; } else fit();
 
-    const future = (o.future || ['מסלול הליכה או נסיעה (בקרוב)', 'קווי עירוב (בקרוב)']);
+    const future = (o.future || ['קווי עירוב (בקרוב)']);
+    const routeOn = o.route !== false && !!o.builtinStreets;
     const off = o.online === false;
     const join = off ? '' : [o.repo ? `<button class="mu" data-mu-open="${esc(o.repo + '/issues/new')}">הצטרפות</button>` : '', o.issueUrl ? `<button class="mu" data-mu-open="${esc(o.issueUrl)}">הבקשה בגיטהאב</button>` : '', o.forumUrl ? `<button class="mu" data-mu-open="${esc(o.forumUrl)}">השרשור בפורום</button>` : ''].join(' ');
 
@@ -117,7 +118,7 @@
 
     function draw() { setTimeout(updDl, 0);
       const v = MC.createView({ lat: S.lat, lon: S.lon, zoom: S.zoom, width: W, height: H });
-      const svg = MC.renderSVG({ area: S.area, view: v, layers: S.show.pts ? [layer()] : [], streets: S.show.streets, syn: S.show.syn, me: o.me, hl: S.sel, selected: S.street, labels: S.zoom >= 2, outline: !S.area });
+      const svg = MC.renderSVG({ area: S.area, view: v, layers: [...(S.route ? [{ id: 'route', lines: [{ coords: S.route.coords, label: 'מסלול הליכה' }], points: [] }] : []), ...(S.show.pts ? [layer()] : [])], streets: S.show.streets, syn: S.show.syn, me: o.me, hl: S.sel, selected: S.street, labels: S.zoom >= 2, outline: !S.area });
       $('mu-view').innerHTML = svg; $('mu-view')._v = v;
     }
     function showSel() {
@@ -128,7 +129,8 @@
         + (o.onPick ? `<button class="mu" data-mu="pick">${esc(o.pickLabel || 'פתיחה ברשימה')}</button>` : '')
         + (off ? '' : `<button class="mu" data-mu-open="https://waze.com/ul?ll=${p.lat},${p.lon}&navigate=yes">ניווט ב-Waze</button>`
         + `<button class="mu" data-mu-open="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lon}">פתיחה ב-Google Maps</button>`)
-        + `<button class="mu" aria-disabled="true" data-mu="soon" title="בפיתוח: מחכה לעזרה">${esc(future[0])}</button></div>`;
+        + (routeOn ? `<button class="mu" data-mu="route">מסלול הליכה</button>` : '') + '</div>'
+        + (S.route && S.route.to === S.sel ? `<div class="msg">מסלול הליכה: ${S.route.m >= 1000 ? (S.route.m / 1000).toFixed(1) + ' ק"מ' : S.route.m + " מ'"} · כ-${Math.max(1, Math.round(S.route.m / 80))} דקות. לפי רחובות OpenStreetMap, להתמצאות בלבד.</div>` : '');
     }
     function nearList(center) {
       if (o.nearby === false || !center) { $('mu-near').innerHTML = ''; return; }
@@ -162,10 +164,10 @@
           const r = MC.findCorner(S.area, c[0], c[1]);
           if (!r) return say(`לא נמצא רחוב בשם "${MC.findWays(S.area, c[0]).length ? c[1] : c[0]}"`);
           if (!r.ok) return say('הרחובות לא נפגשים באזור הזה');
-          S.lat = r.lat; S.lon = r.lon; S.zoom = 3; S.street = { i: r.i, k: r.k }; S.sel = null; say(`נמצא: ${c[0]} פינת ${c[1]}`); refresh(); return nearList([r.lat, r.lon]);
+          S.lat = r.lat; S.lon = r.lon; S.zoom = 3; S.street = { i: r.i, k: r.k }; S.sel = null; S.from = [r.lat, r.lon]; S.route = null; say(`נמצא: ${c[0]} פינת ${c[1]}`); refresh(); return nearList([r.lat, r.lon]);
         }
         const r = MC.searchStreet(S.area, qa);
-        if (r) { S.lat = r.lat; S.lon = r.lon; S.zoom = 3; S.street = { i: r.i, k: r.k }; S.sel = null; say(`נמצא: ${r.name}`); refresh(); return nearList([r.lat, r.lon]); }
+        if (r) { S.lat = r.lat; S.lon = r.lon; S.zoom = 3; S.street = { i: r.i, k: r.k }; S.sel = null; S.from = [r.lat, r.lon]; S.route = null; say(`נמצא: ${r.name}`); refresh(); return nearList([r.lat, r.lon]); }
       }
       // לפי שם הנקודה (גם בלי קובץ רחובות)
       const nq = MC.normHe(qa), hit = pts.find(p => MC.normHe(p.name + ' ' + (p.sub || '')).includes(nq));
@@ -203,6 +205,15 @@
       else if (a === 'dl') { const sl = b.dataset.slug; if (!sl) return say('אין קובץ רחובות מוכן לעיר הזו. אפשר לנסות מקור חלופי.'); say('ההורדה נפתחה בדפדפן. אחריה: "טעינת רחובות מקובץ".'); if (o.openLink) o.openLink((window.STREETS_BASE || '') + sl + '.json'); }
       else if (a === 'url' || a === 'url2') { const u = MC.overpassUrl(S.lat, S.lon, 1500, a === 'url2' ? 1 : 0); say('נפתח בדפדפן. שומרים את הקובץ שמתקבל (Ctrl+S) ואז "טעינת רחובות מקובץ".'); if (o.openLink) o.openLink(u); }
       else if (a === 'search') search();
+      else if (a === 'route') {
+        const p = selPt(), from = S.from || o.me;
+        if (!p) return;
+        if (!from) return say('לחיפוש מסלול: חפשו קודם את נקודת המוצא (רחוב או פינה) או "המיקום שלי", ואז בחרו את הנקודה.');
+        if (!S.area) return say('אין רחובות לאזור הזה. מתקרבים לעיר בזום (או טוענים קובץ רחובות) ומנסים שוב.');
+        const r = MC.walkRoute(S.area, from, [p.lat, p.lon]);
+        if (!r) return say('לא נמצא מסלול ברחובות שבאזור. ייתכן שהנקודות רחוקות מהרחובות הטעונים.');
+        S.route = Object.assign(r, { to: S.sel }); say(''); refresh();
+      }
       else if (a === 'pick') { const p = selPt(); if (p && o.onPick) o.onPick(p.id); }
       else if (a === 'soon') say('בפיתוח: הפעולה הזו עדיין לא קיימת. מחכה לעזרה, ראו את הקישורים למטה.');
     });
