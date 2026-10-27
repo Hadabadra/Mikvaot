@@ -1,7 +1,7 @@
 /* מקוואות — מדריך מעשי (מיקום, שעות, טלפון). אין בו הלכות; לשאלות — רב הקהילה ואחראית המקווה. */
 (function () {
   'use strict';
-  const VERSION = '1.3.0';
+  const VERSION = '1.3.1';
   const REPO = 'https://github.com/Hadabadra/Mikvaot';
   const O = window.Otzaria, hasOtz = !!(O && O.call);
   const $ = s => document.querySelector(s);
@@ -151,8 +151,10 @@
       ${it.url && state.online ? linkBtns(it.url) : ''}</div>`;
   function abroadOrgsHTML(co) {
     const L = abroadOrgs(co); if (!L.length) return '';
-    return `<details class="abroad-orgs"${co ? ' open' : ''}><summary class="section-title">בתי דין ורבנויות${co ? ' · ' + esc(coNorm(co)) : ' בחו"ל'} · ${L.length}</summary>
-      <p class="src">טלפון ואימייל מהמקורות הרשמיים. לשאלות על מקווה — הרב המקומי.</p>${L.map(orgRow).join('')}</details>`;
+    // 1.3.1: כפתור פתיחה/סגירה ב-JS במקום <details> — בחלון אוצריא הלשונית לא נפתחה (דיווח 27.10)
+    const open = !!co;
+    return `<div class="abroad-orgs${open ? ' open' : ''}"><button class="section-title ao-toggle" data-aotoggle aria-expanded="${open}">${open ? '▾' : '▸'} בתי דין ורבנויות${co ? ' · ' + esc(coNorm(co)) : ' בחו"ל'} · ${L.length}</button>
+      <div class="ao-body"${open ? '' : ' hidden'}><p class="src">טלפון ואימייל מהמקורות הרשמיים. לשאלות על מקווה — הרב המקומי.</p>${L.map(orgRow).join('')}</div></div>`;
   }
 
   // ── מסכים ──
@@ -285,6 +287,8 @@
 
   // ── לחיצות ──
   document.addEventListener('click', async e => {
+    const aot = e.target.closest('[data-aotoggle]');
+    if (aot) { const w = aot.parentElement, body = w.querySelector('.ao-body'), o = body.hidden; body.hidden = !o; w.classList.toggle('open', o); aot.setAttribute('aria-expanded', o); aot.textContent = (o ? '▾' : '▸') + aot.textContent.slice(1); return; }
     const cityBtn = e.target.closest('[data-city]'); if (cityBtn) return goCity(cityBtn.dataset.city);
     const fc = e.target.closest('[data-favcity]');
     if (fc) { const k = 'city:' + fc.dataset.favcity; state.favs = state.favs.includes(k) ? state.favs.filter(x => x !== k) : [...state.favs, k]; save('favs', state.favs); return render(true); }
@@ -467,12 +471,15 @@
     const f = orgRow;
     const groups = [['org', 'ארגונים ומאגרים'], ['council', 'מועצות דתיות, מחלקות דת ורבנויות'], ['abroad', 'בתי דין ורבנויות בחו"ל']];
     dialog('ארגונים ומועצות דתיות', `<p>טלפונים ואתרים מהמקורות הרשמיים, מדפי זהב ומאתרי הגופים עצמם. לפני הגעה כדאי לאמת בטלפון.</p>
-      <div class="btns">${groups.map(([k, t]) => `<button class="mini" data-orgjump="${k}">${t}</button>`).join('')}</div>
+      <div class="btns org-tabs">${groups.map(([k, t]) => `<button class="mini" data-orgjump="${k}">${t} · ${list.filter(o => (o.kind || 'council') === k).length}</button>`).join('')}</div>
       <div class="field"><input id="orgQ" type="search" placeholder="סינון לפי עיר או שם"></div><div id="orgList">${groups.map(([k, t]) => {
-        const g = list.filter(o => (o.kind || 'council') === k); return g.length ? `<h3 id="og-${k}">${t} · ${g.length}</h3>` + g.map(f).join('') : '';
+        const g = list.filter(o => (o.kind || 'council') === k); return `<section class="og" data-og="${k}"><h3>${t} · ${g.length}</h3>${g.map(f).join('') || '<div class="empty">אין רשומות.</div>'}</section>`;
       }).join('')}</div>`);
-    document.querySelectorAll('[data-orgjump]').forEach(b => b.onclick = () => { const h = document.getElementById('og-' + b.dataset.orgjump); if (h) h.scrollIntoView({ block: 'start' }); });
-    $('#orgQ').addEventListener('input', e => { const q = norm(e.target.value); document.querySelectorAll('#orgList .org').forEach(el => el.hidden = !!q && !norm(el.textContent).includes(q)); });
+    // 1.3.1: לשוניות אמיתיות — מוצגת קבוצה אחת בכל פעם (קפיצת גלילה לא עבדה בחלון אוצריא)
+    const tab = k => { document.querySelectorAll('#orgList .og').forEach(sec => sec.hidden = sec.dataset.og !== k); document.querySelectorAll('[data-orgjump]').forEach(b => b.classList.toggle('on', b.dataset.orgjump === k)); $('#infoBody').scrollTop = 0; };
+    document.querySelectorAll('[data-orgjump]').forEach(b => b.onclick = () => tab(b.dataset.orgjump));
+    tab(state.region === 'abroad' ? 'abroad' : 'org');
+    $('#orgQ').addEventListener('input', e => { const q = norm(e.target.value); document.querySelectorAll('#orgList .og').forEach(sec => { if (q) sec.hidden = false; }); if (!q) tab((document.querySelector('[data-orgjump].on') || {}).dataset?.orgjump || 'org'); document.querySelectorAll('#orgList .org').forEach(el => el.hidden = !!q && !norm(el.textContent).includes(q)); });
   }
 
   // ── ייצוא לטקסט להעתקה ──

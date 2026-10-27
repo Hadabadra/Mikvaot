@@ -215,5 +215,6 @@ mark { background: var(--color-primary-container); color: inherit; border-radius
 /* מצב מנותק באוצריא: בלי קישורים החוצה */
 body.offline [data-open], body.offline [data-copy^="http"], body.offline .ext-only { display: none !important; }
 .abroad-orgs { margin: .6em 0 1em; }
-.abroad-orgs > summary { cursor: pointer; list-style: revert; }
+.abroad-orgs > .ao-toggle { cursor: pointer; width: 100%; background: none; border: 0; padding: 0; font: inherit; text-align: start; }
+.org-tabs .mini.on { background: var(--color-primary); color: var(--color-on-primary); }
 .btn:disabled { opacity: .5; cursor: default; }
