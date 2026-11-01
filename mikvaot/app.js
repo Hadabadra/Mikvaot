@@ -1,7 +1,7 @@
 /* מקוואות — מדריך מעשי (מיקום, שעות, טלפון). אין בו הלכות; לשאלות — רב הקהילה ואחראית המקווה. */
 (function () {
   'use strict';
-  const VERSION = '1.3.2';
+  const VERSION = '1.5.0';
   const REPO = 'https://github.com/Hadabadra/Mikvaot';
   const O = window.Otzaria, hasOtz = !!(O && O.call);
   const $ = s => document.querySelector(s);
@@ -363,9 +363,11 @@
 
   // ── אודות / מקורות / ייבוא נתונים ──
   let localData = null;
+  // קישורים בסגנון [טקסט](כתובת) ביומן השינויים: כפתור שנפתח בדפדפן (מוסתר כשאוצריא במצב מנותק)
+  const mdLinks = t => esc(t).replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, (m, a, u) => state.online === false ? a : `<button class="mini" data-open="${u}">${a}</button>`);
   function changelog() {
     const cl = window.MIKVAOT_CHANGELOG || [];
-    dialog('יומן שינויים', '<div class="cl">' + cl.map(v => `<h4>${esc(v.v)} · ${esc(v.date)}</h4><ul>${v.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul>`).join('') + '</div><div class="btns"><button class="btn tonal" id="backInfo">חזרה</button></div>');
+    dialog('יומן שינויים', '<div class="cl">' + cl.map(v => `<h4>${esc(v.v)} · ${esc(v.date)}</h4><ul>${v.items.map(i => `<li>${mdLinks(i)}</li>`).join('')}</ul>`).join('') + '</div><div class="btns"><button class="btn tonal" id="backInfo">חזרה</button></div>');
   }
   function planView() {
     const p = window.MIKVAOT_PLAN || [];
@@ -392,7 +394,7 @@
     if (!MC || !UI) { $('#mapTab').textContent = 'רכיב המפה לא נטען.'; return; }
     const pts = sc.items.filter(it => it.lat != null && it.lon != null && (!state.type || it.type === state.type) && (!state.acc || it.acc === 'yes'))
       .map(i => ({ id: i.id, lat: i.lat, lon: i.lon, name: [TYPE[i.type], i.name || i.hood || i.address].filter(Boolean).join(' · '), sub: [i.address, i.phone].filter(Boolean).join(' · ') }));
-    UI.mount($("#mapTab"), { tab: true, self: 'com.hadabadra.mikvaot', center: state.mapCenter || null, builtinStreets: true, online: state.online, points: pts, layerId: 'mikvaot', glyph: 'מ', layerName: 'מקוואות', selectedId: state.mapSel, me: state.pos ? [state.pos.lat, state.pos.lon] : null,
+    UI.mount($("#mapTab"), { tab: true, self: 'com.hadabadra.mikvaot', future: [], center: state.mapCenter || null, builtinStreets: true, online: state.online, points: pts, layerId: 'mikvaot', glyph: 'מ', layerName: 'מקוואות', selectedId: state.mapSel, me: state.pos ? [state.pos.lat, state.pos.lon] : null,
       call, openLink: openExternal, repo: REPO, forumUrl: 'https://otzaria.org/forum/post/45135', issueUrl: REPO + '/issues/new?title=' + encodeURIComponent('מפה: '),
       pickLabel: 'הצגה ברשימה', onPick: id => { const it = DATA.items.find(x => x.id === id); if (it) { state.tab = 'list'; state.mapSel = null; state.q = ''; goCity(it.city); } } });
   }
@@ -417,9 +419,12 @@
       <h3>עדכון נתונים</h3>
       <p>אפשר לטעון קובץ נתונים מעודכן (mikvaot-data.json) מדף ההורדות של התוסף.</p>
       <div class="btns"><button class="btn tonal" id="imp">טעינת קובץ נתונים</button>${localData ? '<button class="btn tonal" id="impReset">חזרה לנתונים המובנים</button>' : ''}
-      <button class="btn tonal" id="rep">דיווח על מקווה חסר</button><button class="btn tonal" id="showCl">יומן שינויים מלא</button><button class="btn tonal" id="showPlan">תכנון והמשך</button><button class="btn tonal" id="mapDev">מפה (בפיתוח)</button><button class="btn tonal" data-soon="בדיקת עדכון נתונים מהרשת">בדיקת עדכון נתונים (בקרוב)</button><button class="btn tonal" data-soon="הוספת מקווה משלי">הוספת מקווה משלי (בקרוב)</button></div>
+      <button class="btn tonal" id="rep">דיווח על מקווה חסר</button><button class="btn tonal" id="showCl">יומן שינויים מלא</button><button class="btn tonal" id="showPlan">תכנון והמשך</button><button class="btn tonal" id="mapDev">מפה</button><button class="btn tonal" data-soon="בדיקת עדכון נתונים מהרשת">בדיקת עדכון נתונים (בקרוב)</button><button class="btn tonal" data-soon="הוספת מקווה משלי">הוספת מקווה משלי (בקרוב)</button></div>
+      <h3>המפה המשותפת</h3>
+      <p>לשונית המפה משותפת לארבעה תוספים: כיוון תפילה, מקוואות, גבולות עירוב ועינים למקרא. הקוד במקום אחד (Hadabadra/Mikvaot, תיקייה shared), וכל תיקון מגיע לכולם. בכפתור השכבות שעל המפה פותחים את השכבות של התוספים האחרים באותו מקום.</p>
+      ${state.online === false ? '' : `<p>${['הסבר על המפה המשותפת|https://github.com/Hadabadra/Mikvaot/blob/main/shared/map-core/SHARED-MAP.md', 'הקוד של המפה|https://github.com/Hadabadra/Mikvaot/tree/main/shared/map-core', 'כיוון תפילה בחנות|https://otzaria.org/plugins/6ac80057bd083fcc18562fa0', 'גבולות עירוב בחנות|https://otzaria.org/plugins/6ad93b5d2917198d73992a9d', 'עינים למקרא בחנות|https://otzaria.org/plugins/6a671db1dd175558ae6f20ac'].map(x => { const [a, u] = x.split('|'); return `<button class="mini" data-open="${u}">${a}</button>`; }).join(' ')}</p>`}
       <h3>פרטיות</h3>
-      <p>התוסף אינו שולח את המיקום שלכם לשום שרת. המיקום משמש רק למיון לפי מרחק, ונשאר במכשיר. התוסף עובד בלי אינטרנט. דיווח דרך אוצריא או GitHub נשלח רק אם בחרתם לשלוח.</p>
+      <p>התוסף אינו שולח את המיקום שלכם לשום שרת. חיפוש כתובת עם מספר בית במפה נשלח ל-OpenStreetMap רק כשאתם מחפשים, ורק כשאוצריא מחוברת. המיקום משמש רק למיון לפי מרחק, ונשאר במכשיר. התוסף עובד בלי אינטרנט. דיווח דרך אוצריא או GitHub נשלח רק אם בחרתם לשלוח.</p>
       <p>דף התוסף: ${linkBtns(REPO)}</p>
       <p class="src">מקוואות ${VERSION} · מאת לזש"ק לרמב"ר ומבק"י · מיקום אוטומטי דרך הגשר "אחת שאלתי" (אם מותקן)</p>`;
     $('#infoScrim').hidden = false;
