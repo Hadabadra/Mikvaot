@@ -11,7 +11,7 @@
      layers: [{id, name, glyph, points, lines, on}],   // שכבות נוספות של התוסף עצמו
      call(method, params), openLink(url), onPick(id), pickLabel, nearby, nearbyLabel,
      builtinStreets, online, tab, jerusalem, onJerusalem, repo, forumUrl, issueUrl, future: [...] })
-   MapUI.layersButton(element, { self, getPos, call, openLink, online })   // אותו תפריט שכבות למפה שאינה map-ui (כיוון תפילה)
+   MapUI.layersButton(element, { self, getPos, call, openLink, online, extraHTML, onExtra(pop) })   // אותו תפריט שכבות למפה שאינה map-ui (כיוון תפילה, עינים למקרא)
    MapUI.onOpenMap(cb)             // תוסף אחר ביקש לפתוח את המפה כאן: cb({lat, lon, from}) */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory(require('./map-core.js'));
@@ -96,20 +96,20 @@
 .mapui .mu-pop h5 { margin: .3em 0 .35em; font-size: .82em; letter-spacing: .02em; opacity: .75; font-weight: 600; }
 .mapui .mu-row { display: flex; align-items: center; gap: .6em; padding: .4em .45em; border-radius: .7em; cursor: pointer; }
 .mapui .mu-row:hover { background: var(--color-secondary-container, rgba(128,128,128,.12)); }
-.mapui .mu-row .mu-g { width: 1.75em; height: 1.75em; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: .85em; background: var(--color-primary); color: var(--color-on-primary, #fff); flex: none; }
+.mapui .mu-row .mu-g { width: 1.75em; height: 1.75em; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: .85em; background: var(--color-primary, #3f6fa8); color: var(--color-on-primary, #fff); flex: none; }
 .mapui .mu-row .mu-g.alt { background: var(--color-surface-container-high, rgba(128,128,128,.2)); color: var(--color-on-surface, inherit); }
 .mapui .mu-row .mu-t { flex: 1; min-width: 0; line-height: 1.25; }
 .mapui .mu-row .mu-t small { display: block; opacity: .7; font-size: .8em; }
 .mapui .mu-row.off { opacity: .5; cursor: default; }
 .mapui .mu-sw { appearance: none; -webkit-appearance: none; width: 2.2em; height: 1.25em; border-radius: 1em; background: var(--color-outline-variant, rgba(128,128,128,.4)); position: relative; cursor: pointer; flex: none; margin: 0; transition: background .15s; }
 .mapui .mu-sw::after { content: ''; position: absolute; top: .15em; inset-inline-start: .15em; width: .95em; height: .95em; border-radius: 50%; background: var(--color-surface, #fff); transition: inset-inline-start .15s; }
-.mapui .mu-sw:checked { background: var(--color-primary); }
+.mapui .mu-sw:checked { background: var(--color-primary, #3f6fa8); }
 .mapui .mu-sw:checked::after { inset-inline-start: 1.1em; }
 .mapui .mu-ask { margin: .2em 2.3em .4em 0; font-size: .9em; display: flex; flex-wrap: wrap; gap: .4em; align-items: center; }
 .mapui button.mu { font: inherit; cursor: pointer; padding: .38em .95em; border-radius: var(--radius-pill, 2em); border: 0; background: var(--color-secondary-container, rgba(128,128,128,.15)); color: var(--color-on-secondary-container, inherit); display: inline-flex; align-items: center; gap: .35em; transition: filter .15s, transform .15s; }
 .mapui button.mu:hover { filter: brightness(.96); }
 .mapui button.mu:active { transform: scale(.97); }
-.mapui button.mu.pri { background: var(--color-primary); color: var(--color-on-primary, #fff); }
+.mapui button.mu.pri { background: var(--color-primary, #3f6fa8); color: var(--color-on-primary, #fff); }
 .mapui button.mu svg { width: 1.05em; height: 1.05em; }
 .mapui button.mu[aria-disabled="true"] { opacity: .55; cursor: help; }
 .mapui .mu-card { position: absolute; bottom: .6em; inset-inline: .6em; z-index: 3; border-radius: var(--radius-md, 1em); padding: .7em .9em; animation: mu-in .16s ease-out; max-height: 45%; overflow: auto; }
@@ -182,13 +182,22 @@
     css();
     const box = document.createElement('span'); box.className = 'mapui mu-lbtn';
     box.innerHTML = `<button type="button" class="mu-ib mu-glass" title="שכבות" aria-label="שכבות" aria-expanded="false">${ic('layers')}</button>
-      <div class="mu-pop mu-glass" hidden role="dialog" aria-label="שכבות"><h5>שכבות מתוספים אחרים</h5>${otherRows(opt.self)}
+      <div class="mu-pop mu-glass" hidden role="dialog" aria-label="שכבות">${opt.extraHTML || ''}<h5>שכבות מתוספים אחרים</h5>${otherRows(opt.self)}
       <p class="msg">כל תוסף מציג את השכבה שלו. הלחיצה פותחת אותו באותו מקום במפה.</p></div>`;
     el.append(box);
     const btn = box.firstElementChild, pop = box.lastElementChild;
-    btn.addEventListener('click', () => { pop.hidden = !pop.hidden; btn.setAttribute('aria-expanded', String(!pop.hidden)); });
-    document.addEventListener('pointerdown', e => { if (!box.contains(e.target)) { pop.hidden = true; btn.setAttribute('aria-expanded', 'false'); } });
+    // התפריט עובר לגוף הדף: אב עם transform/overflow (למשל פקדי Leaflet) לא יזיז ולא יחתוך אותו
+    const host = document.createElement('div'); host.className = 'mapui mu-float'; document.body.append(host); host.append(pop);
+    btn.addEventListener('click', () => {
+      pop.hidden = !pop.hidden; btn.setAttribute('aria-expanded', String(!pop.hidden));
+      if (!pop.hidden) {   // מיקום קבוע מעל הכול, כדי שמיכל עם overflow לא יחתוך את התפריט
+        const r = btn.getBoundingClientRect(), w = Math.min(336, innerWidth - 16);
+        Object.assign(pop.style, { position: 'fixed', top: (r.bottom + 6) + 'px', left: Math.max(8, Math.min(innerWidth - w - 8, r.left)) + 'px', width: w + 'px', maxHeight: (innerHeight - r.bottom - 20) + 'px', zIndex: 9500 });
+      }
+    });
+    document.addEventListener('pointerdown', e => { if (!box.contains(e.target) && !host.contains(e.target)) { pop.hidden = true; btn.setAttribute('aria-expanded', 'false'); } });
     wireOthers(pop, opt, () => (opt.getPos ? opt.getPos() : null));
+    if (opt.onExtra) opt.onExtra(pop);
     return box;
   }
 
