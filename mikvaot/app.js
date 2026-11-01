@@ -392,10 +392,12 @@
     if (!MC || !UI) { $('#mapTab').textContent = 'רכיב המפה לא נטען.'; return; }
     const pts = sc.items.filter(it => it.lat != null && it.lon != null && (!state.type || it.type === state.type) && (!state.acc || it.acc === 'yes'))
       .map(i => ({ id: i.id, lat: i.lat, lon: i.lon, name: [TYPE[i.type], i.name || i.hood || i.address].filter(Boolean).join(' · '), sub: [i.address, i.phone].filter(Boolean).join(' · ') }));
-    UI.mount($("#mapTab"), { tab: true, builtinStreets: true, online: state.online, points: pts, layerId: 'mikvaot', glyph: 'מ', layerName: 'מקוואות', selectedId: state.mapSel, me: state.pos ? [state.pos.lat, state.pos.lon] : null,
+    UI.mount($("#mapTab"), { tab: true, self: 'com.hadabadra.mikvaot', center: state.mapCenter || null, builtinStreets: true, online: state.online, points: pts, layerId: 'mikvaot', glyph: 'מ', layerName: 'מקוואות', selectedId: state.mapSel, me: state.pos ? [state.pos.lat, state.pos.lon] : null,
       call, openLink: openExternal, repo: REPO, forumUrl: 'https://otzaria.org/forum/post/45135', issueUrl: REPO + '/issues/new?title=' + encodeURIComponent('מפה: '),
       pickLabel: 'הצגה ברשימה', onPick: id => { const it = DATA.items.find(x => x.id === id); if (it) { state.tab = 'list'; state.mapSel = null; state.q = ''; goCity(it.city); } } });
   }
+  // תוסף אחר (כיוון תפילה / גבולות עירוב) מבקש לפתוח את המפה באותו מקום
+  if (window.MapUI && window.MapUI.onOpenMap) window.MapUI.onOpenMap(p => { $('#infoScrim').hidden = true; state.mapSel = null; state.mapCenter = p.lat != null ? [p.lat, p.lon] : null; state.tab = 'map'; mapKey = ''; showTab(); });
   function mapDev(selId) { $('#infoScrim').hidden = true; state.mapSel = selId || null; state.tab = 'map'; showTab(); }
   // ── מצב מנותק באוצריא: מסתירים כל קישור החוצה ──
   function setOnline(v) { const was = state.online; state.online = !!v; document.body.classList.toggle('offline', !state.online); if (was !== state.online) { mapKey = ''; if (document.getElementById('list').innerHTML) render(true); } }

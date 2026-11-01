@@ -50,6 +50,24 @@
 .mapui.mapui-tab .view svg { max-height: calc(100vh - 16em); min-height: 18em; }
 `;
 
+  // ── שכבות של תוספים אחרים (מפה משותפת, Prayer-pointA#11) ──
+  // שכבה של תוסף אחר לא מצוירת כאן: הלחיצה פותחת את התוסף ההוא באותו מקום במפה (plugin.openOther, param.type = "open-map").
+  // אם התוסף לא מותקן, מוצג קישור לדף החנות. תוסף חדש עם מפה: מוסיפים שורה כאן, ובתוסף מפעילים MapUI.onOpenMap.
+  const PLUGINS = [
+    { id: 'com.shiachrina.kivuntefila', name: 'כיוון תפילה', store: 'https://otzaria.org/plugins/6ac80057bd083fcc18562fa0' },
+    { id: 'com.hadabadra.mikvaot', name: 'מקוואות', store: 'https://otzaria.org/plugins' },
+    { id: 'com.hadabadra.gvulot-eruv', name: 'גבולות עירוב', store: 'https://otzaria.org/plugins' }
+  ];
+  // מקבל בקשה מתוסף אחר לפתוח את המפה במקום מסוים: cb({ lat, lon, from })
+  function onOpenMap(cb) {
+    const O = typeof window !== 'undefined' && window.Otzaria;
+    if (!O || !O.on) return;
+    O.on('plugin.page_opened', e => {
+      const p = e && (e.param || (e.data && e.data.param));
+      if (p && typeof p === 'object' && p.type === 'open-map') cb({ lat: +p.lat || null, lon: +p.lon || null, from: p.from || '' });
+    });
+  }
+
   function mount(el, o) {
     if (!MC) { el.innerHTML = '<p>רכיב המפה לא נטען.</p>'; return; }
     if (!document.getElementById('mapui-css')) { const st = document.createElement('style'); st.id = 'mapui-css'; st.textContent = CSS; document.head.append(st); }
@@ -67,7 +85,8 @@
       S.lat = lat; S.lon = lon; S.zoom = Math.max(0.0005, Math.min(4, 300 / (far * 1.2)));
     }
     const selPt = () => (S.sel != null ? byId.get(S.sel) : null);
-    if (selPt()) { S.lat = selPt().lat; S.lon = selPt().lon; S.zoom = 3; } else fit();
+    if (selPt()) { S.lat = selPt().lat; S.lon = selPt().lon; S.zoom = 3; } else if (o.center && o.center[0] != null) { S.lat = o.center[0]; S.lon = o.center[1]; S.zoom = 2; } else fit();
+    const others = PLUGINS.filter(p => p.id !== o.self);
 
     const future = (o.future || ['קווי עירוב (בקרוב)']);
     const routeOn = o.route !== false && !!o.builtinStreets;
@@ -86,6 +105,7 @@
         <label class="off"><input type="checkbox" data-mu-layer="streets" checked disabled> רחובות</label>
         <label class="off"><input type="checkbox" data-mu-layer="syn" checked disabled> בתי כנסת</label>
         ${future.map(f => `<label class="off" title="בפיתוח: מחכה לעזרה"><input type="checkbox" disabled> ${esc(f)}</label>`).join('')}
+        ${o.self ? others.map(p => `<button class="mu" data-mu-other="${esc(p.id)}" title="פתיחת התוסף ${esc(p.name)} באותו מקום במפה">↗ ${esc(p.name)}</button>`).join('') : ''}
       </div>
       <h4>רחובות וחיפוש</h4>
       <div class="bar">${off || o.builtinStreets ? '' : '<button class="mu" data-mu="dl" id="mu-dl">הורדת רחובות לעיר</button>'}<button class="mu" data-mu="load">טעינת רחובות מקובץ</button></div>
@@ -194,6 +214,14 @@
       const g = t.closest && t.closest('#mu-view g[data-id]');
       if (g && !(drag && drag.moved)) return selectPt(g.dataset.id);
       const open = t.closest && t.closest('[data-mu-open]'); if (open) { if (o.openLink) o.openLink(open.dataset.muOpen); return; }
+      const ot = t.closest && t.closest('[data-mu-other]');
+      if (ot) {
+        const p = PLUGINS.find(x => x.id === ot.dataset.muOther); if (!p) return;
+        const fail = () => { say(`התוסף "${p.name}" לא נפתח. אם אינו מותקן, אפשר להתקין אותו מחנות התוספים של אוצריא.`); if (!off && o.openLink) $('mu-msg').insertAdjacentHTML('beforeend', ` <button class="mu" data-mu-open="${esc(p.store)}">לחנות</button>`); };
+        if (!o.call) return fail();
+        o.call('plugin.openOther', { pluginId: p.id, param: { type: 'open-map', lat: S.lat, lon: S.lon, from: o.self } }).then(r => { if (r && r.success === false) fail(); }).catch(fail);
+        return;
+      }
       const sp = t.closest && t.closest('[data-mu-sel]'); if (sp) return selectPt(sp.dataset.muSel);
       const lay = t.closest && t.closest('[data-mu-layer]'); if (lay) { S.show[lay.dataset.muLayer] = lay.checked; return draw(); }
       const b = t.closest && t.closest('[data-mu]'); if (!b) return;
@@ -222,5 +250,5 @@
     return { state: S, refresh, select: selectPt };
   }
 
-  return { mount, EN, CSS };
+  return { mount, onOpenMap, PLUGINS, EN, CSS };
 });
