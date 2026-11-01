@@ -91,7 +91,7 @@
 .mapui .mu-grp .mu-ib + .mu-ib { border-top: 1px solid var(--color-outline-variant, rgba(128,128,128,.25)); }
 .mapui .mu-scale { position: absolute; bottom: .55em; inset-inline-start: .7em; font-size: .78em; padding: .2em .65em; z-index: 2; pointer-events: none; }
 .mapui .mu-scale i { display: inline-block; height: .45em; border: 1.5px solid currentColor; border-top: 0; margin-inline-end: .4em; vertical-align: middle; }
-.mapui .mu-pop { position: absolute; top: .6em; inset-inline-end: 3.75em; width: min(21em, calc(100% - 5em)); max-height: calc(100% - 1.2em); overflow: auto; z-index: 4; border-radius: var(--radius-md, 1em); padding: .7em .8em; animation: mu-in .16s ease-out; }
+.mapui .mu-pop { position: absolute; top: .6em; inset-inline-end: 3.75em; width: min(21em, calc(100% - 5em)); max-height: calc(100% - 1.2em); overflow: auto; z-index: 6; border-radius: var(--radius-md, 1em); padding: .7em .8em; animation: mu-in .16s ease-out; }
 @keyframes mu-in { from { opacity: 0; transform: translateY(-4px) scale(.98); } }
 .mapui .mu-pop h5 { margin: .3em 0 .35em; font-size: .82em; letter-spacing: .02em; opacity: .75; font-weight: 600; }
 .mapui .mu-row { display: flex; align-items: center; gap: .6em; padding: .4em .45em; border-radius: .7em; cursor: pointer; }
