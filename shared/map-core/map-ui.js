@@ -18,10 +18,11 @@
   else root.MapUI = factory(root.MapCore);
 })(this, function (MC) {
   'use strict';
-  const VERSION = '2.0.0';
+  const VERSION = '2.1.0';
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const W = 400, H = 300, ZMIN = 0.00004, ZMAX = 10;
+  const W = 400, ZMIN = 0.00004, ZMAX = 10;
   const JERUSALEM = [31.7767, 35.2345];
+  let H = 300;   // 2.1: גובה ה-viewBox מחושב לפי יחס הרוחב-גובה של המיכל, כדי שהמפה תמלא את החלון בלי גלילה
   const SHARED_URL = 'https://github.com/Hadabadra/Mikvaot/tree/main/shared/map-core';
   const SHARED_DOC = 'https://github.com/Hadabadra/Mikvaot/blob/main/shared/map-core/SHARED-MAP.md';
 
@@ -71,9 +72,13 @@
 .mapui .mu-view svg { display: block; width: 100%; height: auto; max-height: 58vh; cursor: grab; }
 .mapui .mu-view svg:active { cursor: grabbing; }
 .mapui .mu-view svg g[data-id] { cursor: pointer; }
-.mapui.mapui-tab .mu-view svg { max-height: calc(100vh - 13em); min-height: 20em; }
-.mapui.mu-full { position: fixed; inset: 0; z-index: 9000; background: var(--color-surface, #fff); padding: .6em; overflow: auto; }
-.mapui.mu-full .mu-view svg { max-height: calc(100vh - 2em); min-height: calc(100vh - 2em); }
+.mapui.mapui-tab, .mapui.mu-full { display: flex; flex-direction: column; overflow: hidden; min-height: 0; box-sizing: border-box; }
+.mapui.mapui-tab > .mu-stage, .mapui.mu-full > .mu-stage { flex: 1 1 auto; min-height: 14em; }
+.mapui.mapui-tab .mu-view, .mapui.mu-full .mu-view { position: absolute; inset: 0; }
+.mapui.mapui-tab .mu-view svg, .mapui.mu-full .mu-view svg { width: 100%; height: 100%; max-height: none; }
+.mapui.mapui-tab > :not(.mu-stage), .mapui.mu-full > :not(.mu-stage) { flex: none; }
+.mapui.mapui-tab > details.mu-more[open], .mapui.mu-full > details.mu-more[open] { max-height: 38%; overflow: auto; }
+.mapui.mu-full { position: fixed; inset: 0; z-index: 9000; background: var(--color-surface, #fff); padding: .6em; }
 .mapui .mu-glass { background: var(--color-surface, #fff); color: var(--color-on-surface, inherit); box-shadow: var(--mu-sh); border-radius: var(--radius-pill, 2em); }
 .mapui .mu-search { position: absolute; top: .6em; inset-inline: .6em 3.6em; display: flex; align-items: center; gap: .3em; padding: .15em .25em .15em .7em; z-index: 3; }
 .mapui .mu-search input { flex: 1; min-width: 0; font: inherit; border: 0; outline: 0; background: transparent; color: inherit; padding: .45em .2em; }
@@ -112,7 +117,7 @@
 .mapui button.mu.pri { background: var(--color-primary, #3f6fa8); color: var(--color-on-primary, #fff); }
 .mapui button.mu svg { width: 1.05em; height: 1.05em; }
 .mapui button.mu[aria-disabled="true"] { opacity: .55; cursor: help; }
-.mapui .mu-card { position: absolute; bottom: .6em; inset-inline: .6em; z-index: 3; border-radius: var(--radius-md, 1em); padding: .7em .9em; animation: mu-in .16s ease-out; max-height: 45%; overflow: auto; }
+.mapui .mu-card { position: absolute; bottom: .6em; inset-inline: .6em; z-index: 3; border-radius: var(--radius-md, 1em); padding: .7em .9em; animation: mu-in .16s ease-out; max-height: 32%; overflow: auto; }
 .mapui .mu-card .mu-x { position: absolute; top: .35em; inset-inline-end: .35em; width: 2em; height: 2em; }
 .mapui .mu-card strong { display: block; padding-inline-end: 2em; }
 .mapui .mu-card .sub { opacity: .8; font-size: .9em; }
@@ -289,8 +294,13 @@
     // ── ציור ──
     let raf = 0;
     const draw = () => { if (raf) return; raf = requestAnimationFrame(() => { raf = 0; drawNow(); }); };
+    function sizeH() {   // 2.1: יחס ה-viewBox לפי המיכל (מסך מלא / לשונית ממלאים את הגובה)
+      if (!el.classList.contains('mapui-tab') && !el.classList.contains('mu-full')) { H = 300; return; }
+      const r = view.getBoundingClientRect();
+      if (r.width > 50 && r.height > 50) H = Math.max(150, Math.min(1600, Math.round(W * r.height / r.width)));
+    }
     function drawNow() {
-      setTimeout(updDl, 0);
+      setTimeout(updDl, 0); sizeH();
       const v = MC.createView({ lat: S.lat, lon: S.lon, zoom: S.zoom, rot: S.rot, width: W, height: H });
       const layers = [];
       if (S.route && S.show.route) layers.push({ id: 'route', lines: [{ coords: S.route.coords, label: 'מסלול הליכה', style: 'route' }], points: [] });
