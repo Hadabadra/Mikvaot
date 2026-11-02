@@ -403,7 +403,10 @@
   function mapDev(selId) { $('#infoScrim').hidden = true; state.mapSel = selId || null; state.tab = 'map'; showTab(); }
   // ── מצב מנותק באוצריא: מסתירים כל קישור החוצה ──
   function setOnline(v) { const was = state.online; state.online = !!v; document.body.classList.toggle('offline', !state.online); if (was !== state.online) { mapKey = ''; if (document.getElementById('list').innerHTML) render(true); } }
-  async function recheckOnline() { if (!hasOtz) return; const c = await call('app.getConnectivity'); if (c && c.success && c.data) setOnline(c.data.isOnline); }
+  // 1.6.0: כמו בגבולות עירוב — מנותק רק לפי ההגדרה "ללא גישה לאינטרנט" (isOfflineMode), לא לפי זיהוי רשת בפועל.
+  // זיהוי הרשת החזיר לפעמים "לא מחובר", ולכן כפתורי הניווט (Waze / Google Maps) לא הופיעו במפה של מקוואות.
+  const onlineOf = c => c ? (c.isOfflineMode != null ? c.isOfflineMode !== true : c.isOnline !== false) : null;
+  async function recheckOnline() { if (!hasOtz) return; const c = await call('app.getConnectivity'); if (c && c.success && c.data) setOnline(onlineOf(c.data)); }
   function featureDev(name) {
     dialog(name + ' (בקרוב)', `<p>האפשרות הזו מתוכננת ועדיין לא עובדת. היא מסומנת כאן כדי שיהיה ברור איך תיראה. מחכה לעזרה, הצטרפות:</p><p>${linkBtns(REPO + '/issues/new')}</p><div class="btns"><button class="btn tonal" id="backInfo">חזרה</button></div>`);
   }
@@ -566,8 +569,8 @@
     for (const k of ['favs', 'recent']) { const r = await call('storage.get', { key: k }); if (r.success && Array.isArray(r.data)) state[k] = r.data; }
     const v = await call('storage.get', { key: 'view' }); if (v.success && v.data && typeof v.data === 'object') Object.assign(state, v.data);
     const rs = payload.restore && payload.restore.state; if (rs) Object.assign(state, rs);
-    let online = payload.connectivity ? payload.connectivity.isOnline : null;
-    if (online == null) { const c = await call('app.getConnectivity'); online = c.success && c.data ? c.data.isOnline : !hasOtz; }
+    let online = onlineOf(payload.connectivity);
+    if (online == null) { const c = await call('app.getConnectivity'); online = c.success && c.data ? onlineOf(c.data) : !hasOtz; }
     setOnline(online);
     addEventListener('focus', recheckOnline); if (hasOtz) O.on('plugin.resumed', recheckOnline);
     $('#q').value = state.q || ''; render();
