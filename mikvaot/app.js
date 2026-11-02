@@ -426,10 +426,12 @@
       <h3>המפה המשותפת</h3>
       <p>לשונית המפה משותפת לארבעה תוספים: כיוון תפילה, מקוואות, גבולות עירוב ועינים למקרא. הקוד במקום אחד (Hadabadra/Mikvaot, תיקייה shared), וכל תיקון מגיע לכולם. בכפתור השכבות שעל המפה פותחים את השכבות של התוספים האחרים באותו מקום.</p>
       ${state.online === false ? '' : `<p>${['הסבר על המפה המשותפת|https://github.com/Hadabadra/Mikvaot/blob/main/shared/map-core/SHARED-MAP.md', 'הקוד של המפה|https://github.com/Hadabadra/Mikvaot/tree/main/shared/map-core', 'כיוון תפילה בחנות|https://otzaria.org/plugins/6ac80057bd083fcc18562fa0', 'גבולות עירוב בחנות|https://otzaria.org/plugins/6ad93b5d2917198d73992a9d', 'עינים למקרא בחנות|https://otzaria.org/plugins/6a671db1dd175558ae6f20ac'].map(x => { const [a, u] = x.split('|'); return `<button class="mini" data-open="${u}">${a}</button>`; }).join(' ')}</p>`}
+      ${window.AchatPromo ? '<h3>המלצה</h3>' + AchatPromo.aboutHtml() + AchatPromo.settingsHtml() : ''}
       <h3>פרטיות</h3>
       <p>התוסף אינו שולח את המיקום שלכם לשום שרת. חיפוש כתובת עם מספר בית במפה נשלח ל-OpenStreetMap רק כשאתם מחפשים, ורק כשאוצריא מחוברת. המיקום משמש רק למיון לפי מרחק, ונשאר במכשיר. התוסף עובד בלי אינטרנט. דיווח דרך אוצריא או GitHub נשלח רק אם בחרתם לשלוח.</p>
       <p>דף התוסף: ${linkBtns(REPO)}</p>
       <p class="src">מקוואות ${VERSION} · מאת לזש"ק לרמב"ר ומבק"י · מיקום אוטומטי דרך הגשר "אחת שאלתי" (אם מותקן)</p>`;
+    if (window.AchatPromo) AchatPromo.bind($('#infoBody'));
     $('#infoScrim').hidden = false;
   }
   $('#btnInfo').addEventListener('click', info);
@@ -574,6 +576,8 @@
     setOnline(online);
     addEventListener('focus', recheckOnline); if (hasOtz) O.on('plugin.resumed', recheckOnline);
     $('#q').value = state.q || ''; render();
+    // המלצה על "אחת שאלתי" (רכיב משותף מ-KLI-MULON shared/promo): פופאפ בפתיחה מתפריט הכלים, לכל היותר פעם בשבוע
+    if (window.AchatPromo) { try { AchatPromo.init({ call, plugin: 'מקוואות', links: { gh: REPO + '/releases/latest', store: 'https://otzaria.org/plugins/6ad9c9c92917198d739939b7' } }); AchatPromo.maybeShow(); } catch (e) {} }
     if (rs && rs.scroll) $('#list').scrollTop = rs.scroll;
   }
   if (hasOtz) {
