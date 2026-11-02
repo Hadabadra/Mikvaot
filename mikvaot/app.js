@@ -396,7 +396,7 @@
       .map(i => ({ id: i.id, lat: i.lat, lon: i.lon, name: [TYPE[i.type], i.name || i.hood || i.address].filter(Boolean).join(' · '), sub: [i.address, i.phone].filter(Boolean).join(' · ') }));
     UI.mount($("#mapTab"), { tab: true, self: 'com.hadabadra.mikvaot', future: [], center: state.mapCenter || null, builtinStreets: true, online: state.online, points: pts, layerId: 'mikvaot', glyph: 'מ', layerName: 'מקוואות', selectedId: state.mapSel, me: state.pos ? [state.pos.lat, state.pos.lon] : null,
       call, openLink: openExternal, repo: REPO, forumUrl: 'https://otzaria.org/forum/post/45135', issueUrl: REPO + '/issues/new?title=' + encodeURIComponent('מפה: '),
-      pickLabel: 'הצגה ברשימה', onPick: id => { const it = DATA.items.find(x => x.id === id); if (it) { state.tab = 'list'; state.mapSel = null; state.q = ''; goCity(it.city); } } });
+      guide: [{ t: 'מקוואות במפה', d: 'הלשונית "מפה" מציגה את המקוואות של מה שנבחר בצד: עיר, מועדפים או כל הארץ. הסינון (נשים / גברים / כלים, נגיש) חל גם על המפה.' }], pickLabel: 'הצגה ברשימה', onPick: id => { const it = DATA.items.find(x => x.id === id); if (it) { state.tab = 'list'; state.mapSel = null; state.q = ''; goCity(it.city); } } });
   }
   // תוסף אחר (כיוון תפילה / גבולות עירוב) מבקש לפתוח את המפה באותו מקום
   if (window.MapUI && window.MapUI.onOpenMap) window.MapUI.onOpenMap(p => { $('#infoScrim').hidden = true; state.mapSel = null; state.mapCenter = p.lat != null ? [p.lat, p.lon] : null; state.tab = 'map'; mapKey = ''; showTab(); });
