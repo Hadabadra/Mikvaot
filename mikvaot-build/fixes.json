@@ -57,6 +57,45 @@
    "src": "https://github.com/Hadabadra/Mikvaot/issues/7",
    "srcName": "דיווח משתמש (issue #7)",
    "checked": "2026-10-31"
+  },
+  {
+   "type": "men",
+   "name": "מקווה פולנאה (גברים)",
+   "city": "בני ברק",
+   "address": "עוזיאל 52",
+   "acc": "unknown",
+   "src": "https://github.com/Hadabadra/Mikvaot/issues/8",
+   "srcName": "דיווח משתמש (issue #8) — לאמת בטלפון לפני ההגעה",
+   "checked": "2026-11-03",
+   "lat": 32.07572,
+   "lon": 34.82316,
+   "approx": true
+  },
+  {
+   "type": "men",
+   "name": "מקווה יביע אומר (גברים)",
+   "city": "בני ברק",
+   "address": "עוזיאל 42",
+   "acc": "unknown",
+   "src": "https://github.com/Hadabadra/Mikvaot/issues/8",
+   "srcName": "דיווח משתמש (issue #8) — לאמת בטלפון לפני ההגעה",
+   "checked": "2026-11-03",
+   "lat": 32.07572,
+   "lon": 34.82316,
+   "approx": true
+  },
+  {
+   "type": "men",
+   "name": "מקווה טאלנא (גברים)",
+   "city": "בני ברק",
+   "address": "רימון 32",
+   "acc": "unknown",
+   "src": "https://github.com/Hadabadra/Mikvaot/issues/8",
+   "srcName": "דיווח משתמש (issue #8) — לאמת בטלפון לפני ההגעה",
+   "checked": "2026-11-03",
+   "lat": 32.07193,
+   "lon": 34.83683,
+   "approx": true
   }
  ]
 }
