@@ -4,4 +4,5 @@
 set -e
 cd "$(dirname "$0")/.."
 for f in map-core/map-core.js map-core/map-ui.js streets/streets-cities.js basemap/world-basemap.js; do cp "shared/$f" "mikvaot/$(basename "$f")"; done
+mkdir -p mikvaot/shared/report && cp shared/report/crash-report.js mikvaot/shared/report/
 echo "סונכרן: map-core.js map-ui.js streets-cities.js world-basemap.js → mikvaot/"

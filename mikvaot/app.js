@@ -576,6 +576,8 @@
     setOnline(online);
     addEventListener('focus', recheckOnline); if (hasOtz) O.on('plugin.resumed', recheckOnline);
     $('#q').value = state.q || ''; render();
+    // דיווח תקלות אוטומטי (רכיב משותף shared/report): תקלה שלא טופלה ← הצעה לשלוח דיווח קריסה דרך מערכת הדיווחים של אוצריא
+    if (window.CrashReport) CrashReport.init({ call, plugin: 'מקוואות', version: VERSION });
     // המלצה על "אחת שאלתי" (רכיב משותף מ-KLI-MULON shared/promo): פופאפ בפתיחה מתפריט הכלים, לכל היותר פעם בשבוע
     if (window.AchatPromo) { try { AchatPromo.init({ call, plugin: 'מקוואות', links: { gh: REPO + '/releases/latest', store: 'https://otzaria.org/plugins/6ad9c9c92917198d739939b7' } }); AchatPromo.maybeShow(); } catch (e) {} }
     if (rs && rs.scroll) $('#list').scrollTop = rs.scroll;
