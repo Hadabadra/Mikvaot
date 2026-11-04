@@ -355,12 +355,12 @@ cities_out = {}
 for c in sorted({i["city"] for i in items}):
     a, b = CITIES.get(c, (None, None))
     cities_out[c] = {k: v for k, v in {"lat": a, "lon": b, "council": COUNCILS.get(c), "country": ABROAD_CITY.get(c)}.items() if v is not None}
+here = os.path.dirname(os.path.abspath(__file__))
 ABROAD_ORGS = json.load(open(os.path.join(here, "abroad_orgs.json"), encoding="utf-8"))
-data = {"version": max(CHECKED, "2026-10-27"), "orgs": ORGS + ABROAD_ORGS, "sources": [v["name"] for v in COUNCILS.values() if v] + list(SRC_NAMES.values()),
+data = {"version": max(CHECKED, "2026-11-04"), "orgs": ORGS + ABROAD_ORGS, "sources": [v["name"] for v in COUNCILS.values() if v] + list(SRC_NAMES.values()),
         "cities": cities_out, "items": items}
 
 # ── יומן שינויים ותכנון להצגה בתוסף ──────────────────────────────
-here = os.path.dirname(os.path.abspath(__file__))
 CL = []
 for blk in re.split(r"^## ", open(os.path.join(here, "..", "mikvaot-docs", "CHANGELOG.md"), encoding="utf-8").read(), flags=re.M)[1:]:
     head, *lines = blk.strip().splitlines()
@@ -374,6 +374,6 @@ with open(out, "w", encoding="utf-8") as f:
     f.write("window.MIKVAOT_CHANGELOG = " + json.dumps(CL, ensure_ascii=False) + ";\n")
     f.write("window.MIKVAOT_PLAN = " + json.dumps(PLAN, ensure_ascii=False) + ";\n")
 with open(os.path.join(here, "..", "mikvaot-data.json"), "w", encoding="utf-8") as f:
-    json.dump(data, f, ensure_ascii=False, indent=1)
+    json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
 from collections import Counter
 print(len(items), "items", dict(Counter(i["type"] for i in items)), dict(Counter(i["city"] for i in items)))
