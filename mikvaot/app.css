@@ -218,3 +218,13 @@ body.offline [data-open], body.offline [data-copy^="http"], body.offline .ext-on
 .abroad-orgs > .ao-toggle { cursor: pointer; width: 100%; background: none; border: 0; padding: 0; font: inherit; text-align: start; }
 .org-tabs .mini.on { background: var(--color-primary); color: var(--color-on-primary); }
 .btn:disabled { opacity: .5; cursor: default; }
+
+/* 1.8.0: תצוגה מקדימה בצד (בקשה ד׳) */
+.preview { width: 26em; flex-shrink: 0; overflow: auto; padding: 0.6em 0.8em; background: var(--color-surface-container-low); border-inline-start: 0.06em solid var(--color-outline-variant); font-size: 1.08em; }
+.preview .pv-head { display: flex; justify-content: flex-end; }
+.preview .card { cursor: default; }
+#list .card { cursor: pointer; }
+#list .card.sel { outline: 0.15em solid var(--color-primary); }
+@media (max-width: 52em) { .preview { position: fixed; inset: 0; width: auto; z-index: 30; } }
+@media print { body.print-one .shell > *:not(.body), body.print-one .rail, body.print-one .main-col, body.print-one .preview .btns, body.print-one .pv-head { display: none !important; }
+  body.print-one .preview { display: block !important; width: auto; border: 0; background: none; } }

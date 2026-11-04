@@ -1,7 +1,7 @@
 /* מקוואות — מדריך מעשי (מיקום, שעות, טלפון). אין בו הלכות; לשאלות — רב הקהילה ואחראית המקווה. */
 (function () {
   'use strict';
-  const VERSION = '1.7.0';
+  const VERSION = '1.8.0';
   const REPO = 'https://github.com/Hadabadra/Mikvaot';
   const O = window.Otzaria, hasOtz = !!(O && O.call);
   const $ = s => document.querySelector(s);
@@ -125,6 +125,7 @@
         ${state.online ? '<button class="mini" data-act="map">פתיחה במפה</button><button class="mini" data-act="waze">Waze</button>' : ''}
         ${it.lat != null ? '<button class="mini" data-act="mapview">במפה</button>' : ''}<button class="mini" data-act="copyAddr">העתקת כתובת</button>
         <button class="mini" data-act="remind">תזכורת / יומן</button>
+        ${isAbroad(it.city) && abroadOrgs(DATA.cities[it.city].country).length ? '<button class="mini" data-act="rabb">הרבנות באזור</button>' : ''}
         <button class="mini" data-act="report">דיווח על טעות</button>
         <button class="mini star" data-act="fav" aria-pressed="${fav}" title="מועדף">${fav ? '★' : '☆'}</button>
       </div>
@@ -149,13 +150,13 @@
       ${it.phone ? `<span class="phone">${esc(it.phone)}</span><button class="mini" data-copy="${esc(it.phone)}">העתק</button>` : ''}
       ${it.email ? `<span class="phone">${esc(it.email)}</span><button class="mini" data-copy="${esc(it.email)}">העתק</button>` : ''}
       ${it.url && state.online ? linkBtns(it.url) : ''}</div>`;
-  function abroadOrgsHTML(co) {
-    const L = abroadOrgs(co); if (!L.length) return '';
-    // 1.3.1: כפתור פתיחה/סגירה ב-JS במקום <details> — בחלון אוצריא הלשונית לא נפתחה (דיווח 27.10)
-    const open = !!co;
-    return `<div class="abroad-orgs${open ? ' open' : ''}"><button class="section-title ao-toggle" data-aotoggle aria-expanded="${open}">${open ? '▾' : '▸'} בתי דין ורבנויות${co ? ' · ' + esc(coNorm(co)) : ' בחו"ל'} · ${L.length}</button>
-      <div class="ao-body"${open ? '' : ' hidden'}><p class="src">טלפון ואימייל מהמקורות הרשמיים. לשאלות על מקווה — הרב המקומי.</p>${L.map(orgRow).join('')}</div></div>`;
+  // 1.8.0 (בקשה ג׳ 04.11): הרבנויות כבר לא חלק מרשימת המקוואות. כל מקווה בחו"ל מקושר לרשות הרבנית של הארץ שלו (כפתור "הרבנות באזור" בכרטיס),
+  // ובדף עיר יש כפתור קטן אחד. הרשימה המלאה נשארת בכפתור "ארגונים" שבסרגל העליון.
+  function rabbDialog(co) {
+    const L = abroadOrgs(co);
+    dialog('הרבנות באזור · ' + coNorm(co), `<p class="src">בתי דין ורבנויות ב${esc(coNorm(co))}, מתוך רשימת בתי הדין המוכרים. טלפון ואימייל מהמקורות הרשמיים. לשאלות על מקווה — הרב המקומי.</p>${L.map(orgRow).join('') || '<p>לא נמצאו.</p>'}`);
   }
+  const rabbBtn = co => abroadOrgs(co).length ? `<button class="btn text" data-rabb="${esc(co)}">הרבנות באזור · ${abroadOrgs(co).length}</button>` : '';
 
   // ── מסכים ──
   function homeView() {
@@ -168,7 +169,6 @@
       const countries = [...byC.keys()].sort((a, b) => byC.get(b).reduce((s, c) => s + byCity.get(c).length, 0) - byC.get(a).reduce((s, c) => s + byCity.get(c).length, 0));
       return `<div class="hero"><div class="grow"><h2>מקוואות בחו"ל</h2><p>${n} מקוואות ב-${cityNames.length} ערים ב-${countries.length} מדינות, מתוך מאגר ארגון טהרת המשפחה (הפרטים באנגלית כמו במקור).</p></div>
         <button class="btn tonal" id="heroLoc">המיקום שלי</button></div>
-        ${abroadOrgsHTML(null)}
         ${countries.map(k => `<div class="section-title">${esc(k)} · ${byC.get(k).reduce((s, c) => s + byCity.get(c).length, 0)}</div><div class="city-grid">${byC.get(k).map(cardC).join('')}</div>`).join('')}`;
     }
     return `<div class="hero"><div class="grow"><h2>מקוואות בארץ</h2>
@@ -181,7 +181,7 @@
     const all = byCity.get(c) || [], list = sortItems(all.filter(pass));
     let html = `<div class="hero"><div class="grow"><h2>${esc(c)}</h2><p>${all.length} מקוואות · ${countText(all)}${councilLine(c) ? '<br>' + councilLine(c) : ''}</p></div>
       <button class="btn ${state.favs.includes('city:' + c) ? 'tonal' : 'text'}" data-favcity="${esc(c)}">${state.favs.includes('city:' + c) ? '★ במועדפים' : '☆ הוספה למועדפים'}</button></div>`;
-    if (isAbroad(c)) html += abroadOrgsHTML(DATA.cities[c].country);
+    if (isAbroad(c)) html = html.replace('</div>\n      <button class="btn', '</div>' + rabbBtn(DATA.cities[c].country) + '\n      <button class="btn');
     if (state.pos) html += `<div class="section-title">ממוין לפי מרחק ממך</div>` + list.map(i => card(i)).join('');
     else for (const t of ORDER) { const g = list.filter(i => i.type === t); if (g.length) html += `<div class="section-title">${t === 'unknown' ? 'מקוואות שסוגם לא צוין במקור' : 'מקוואות ' + TYPE[t]} · ${g.length}</div>` + g.map(i => card(i)).join(''); }
     if (!list.length) html += `<div class="empty">אין מקוואות שמתאימים לסינון. נקו את הסינון למעלה.</div>`;
@@ -295,7 +295,11 @@
     if (e.target.id === 'heroLoc') return locate();
     const op = e.target.closest('[data-open]'); if (op) return openExternal(op.dataset.open);
     const cp = e.target.closest('[data-copy]'); if (cp) return copy(cp.dataset.copy, /^https?:/.test(cp.dataset.copy) ? 'הקישור הועתק' : 'הועתק');
-    const b = e.target.closest('.card [data-act]'); if (!b) return;
+    const rb = e.target.closest('[data-rabb]'); if (rb) return rabbDialog(rb.dataset.rabb);
+    const pv = e.target.closest('#preview [data-pv]'); if (pv) return previewAct(pv.dataset.pv);
+    const b = e.target.closest('.card [data-act]');
+    // 1.8.0 (בקשה ד׳): לחיצה על כרטיס (לא על כפתור) פותחת תצוגה מקדימה גדולה בצד
+    if (!b) { const c = e.target.closest('#list .card'); if (c && !e.target.closest('button, a, input, .phone')) openPreview(c.dataset.id); return; }
     const it = DATA.items.find(x => x.id === b.closest('.card').dataset.id); if (!it) return;
     const addr = `${it.address}, ${it.city}`;
     if (b.dataset.act === 'copyAddr') copy(addr, 'הכתובת הועתקה');
@@ -304,11 +308,21 @@
     else if (b.dataset.act === 'fav') { state.favs = state.favs.includes(it.id) ? state.favs.filter(x => x !== it.id) : [...state.favs, it.id]; save('favs', state.favs); render(true); }
     else if (b.dataset.act === 'mapview') { state.mapSel = it.id; state.tab = 'map'; showTab(); saveView(); }
     else if (b.dataset.act === 'report') reportChoice(it);
+    else if (b.dataset.act === 'rabb') rabbDialog(DATA.cities[it.city].country);
     else if (b.dataset.act === 'remind') remindDialog(it);
   });
   // בחירת ערוץ דיווח: דרך אוצריא (למפתחת) או Issue פתוח ב-GitHub עם פרטי המקווה מולאו מראש
-  const reportHead = it => it ? `טעות בפרטי מקווה: ${TYPE[it.type]} · ${it.city} · ${it.address} (${it.id})\nמה צריך לתקן: ` : 'מקווה חסר / עיר חסרה:\n' + missText;
-  const issueUrl = it => `${REPO}/issues/new?title=${encodeURIComponent(it ? `תיקון: ${it.city} · ${it.address}` : 'מקווה חסר')}&body=${encodeURIComponent(`[מקוואות ${VERSION}] ` + reportHead(it))}`;
+  // 1.8.0 (בקשה א׳): גם פנייה כללית (it === 'general') — שאלה, בקשה או הצעה, לא רק טעות במקווה
+  const reportHead = it => it === 'general' ? 'פנייה כללית:\n' + missText : it ? `טעות בפרטי מקווה: ${TYPE[it.type]} · ${it.city} · ${it.address} (${it.id})\nמה צריך לתקן: ` : 'מקווה חסר / עיר חסרה:\n' + missText;
+  const issueUrl = it => `${REPO}/issues/new?title=${encodeURIComponent(it === 'general' ? 'פנייה: ' + missText.split('\n')[0].slice(0, 60) : it ? `תיקון: ${it.city} · ${it.address}` : 'מקווה חסר')}&body=${encodeURIComponent(`[מקוואות ${VERSION}] ` + reportHead(it))}`;
+  function generalDialog() {
+    dialog('פנייה כללית', `<p>שאלה, בקשה, הצעה לשיפור או כל דבר אחר על התוסף. לטעות בפרטי מקווה — הכפתור "דיווח על טעות" בכרטיס המקווה.</p>
+      <label class="field">נושא<input id="gnSubj" maxlength="80" placeholder="למשל: הצעה לסינון לפי שעות"></label>
+      <label class="field">הפנייה<textarea id="gnBody" style="min-height:9em" placeholder="כתבו כאן"></textarea></label>
+      <div class="btns"><button class="btn" id="gnNext" disabled>המשך לשליחה</button></div>`);
+    const upd = () => { $('#gnNext').disabled = !$('#gnBody').value.trim(); }; $('#gnBody').oninput = upd;
+    $('#gnNext').onclick = () => { missText = [$('#gnSubj').value.trim(), $('#gnBody').value.trim()].filter(Boolean).join('\n'); reportChoice('general', true); };
+  }
   // 1.3.0 (#3): דיווח על מקווה חסר — עיר חובה ולפחות פרט אחד נוסף, כדי שלא יגיע דיווח ריק
   const MISS = [['mfCity', 'עיר'], ['mfAddr', 'כתובת'], ['mfPhone', 'טלפון'], ['mfHours', 'שעות'], ['mfNote', 'מקור / הערה']];
   let missText = '';
@@ -325,8 +339,8 @@
   }
   function reportChoice(it, filled) {
     if (!it && !filled) return missingForm();
-    const id = it ? esc(it.id) : '';
-    dialog('דיווח על טעות', `<p>${it ? esc(`${TYPE[it.type]} · ${it.city} · ${it.address}`) : 'מקווה או עיר שחסרים ברשימה'}</p>
+    const gen = it === 'general', id = gen ? 'general' : it ? esc(it.id) : '';
+    dialog(gen ? 'שליחת הפנייה' : 'דיווח על טעות', `<p>${gen ? esc(missText.split('\n')[0]) : it ? esc(`${TYPE[it.type]} · ${it.city} · ${it.address}`) : 'מקווה או עיר שחסרים ברשימה'}</p>
       <div class="btns"><button class="btn tonal" id="repApp" data-id="${id}">שליחה דרך אוצריא</button><button class="btn tonal" id="repGh" data-id="${id}">פתיחת דיווח ב-GitHub</button></div>
       <p class="src">דיווח ב-GitHub הוא פומבי וצריך חשבון GitHub; הקישור נפתח בדפדפן.</p>`);
   }
@@ -422,7 +436,7 @@
       <h3>עדכון נתונים</h3>
       <p>אפשר לטעון קובץ נתונים מעודכן (mikvaot-data.json) מדף ההורדות של התוסף.</p>
       <div class="btns"><button class="btn tonal" id="imp">טעינת קובץ נתונים</button>${localData ? '<button class="btn tonal" id="impReset">חזרה לנתונים המובנים</button>' : ''}
-      <button class="btn tonal" id="rep">דיווח על מקווה חסר</button><button class="btn tonal" id="showCl">יומן שינויים מלא</button><button class="btn tonal" id="showPlan">תכנון והמשך</button><button class="btn tonal" id="mapDev">מפה</button><button class="btn tonal" data-soon="בדיקת עדכון נתונים מהרשת">בדיקת עדכון נתונים (בקרוב)</button><button class="btn tonal" data-soon="הוספת מקווה משלי">הוספת מקווה משלי (בקרוב)</button></div>
+      <button class="btn tonal" id="rep">דיווח על מקווה חסר</button><button class="btn tonal" id="gen">פנייה כללית</button><button class="btn tonal" id="showCl">יומן שינויים מלא</button><button class="btn tonal" id="showPlan">תכנון והמשך</button><button class="btn tonal" id="mapDev">מפה</button><button class="btn tonal" data-soon="בדיקת עדכון נתונים מהרשת">בדיקת עדכון נתונים (בקרוב)</button><button class="btn tonal" data-soon="הוספת מקווה משלי">הוספת מקווה משלי (בקרוב)</button></div>
       <h3>המפה המשותפת</h3>
       <p>לשונית המפה משותפת לארבעה תוספים: כיוון תפילה, מקוואות, גבולות עירוב ועינים למקרא. הקוד במקום אחד (Hadabadra/Mikvaot, תיקייה shared), וכל תיקון מגיע לכולם. בכפתור השכבות שעל המפה פותחים את השכבות של התוספים האחרים באותו מקום.</p>
       ${state.online === false ? '' : `<p>${['הסבר על המפה המשותפת|https://github.com/Hadabadra/Mikvaot/blob/main/shared/map-core/SHARED-MAP.md', 'הקוד של המפה|https://github.com/Hadabadra/Mikvaot/tree/main/shared/map-core', 'כיוון תפילה בחנות|https://otzaria.org/plugins/6ac80057bd083fcc18562fa0', 'גבולות עירוב בחנות|https://otzaria.org/plugins/6ad93b5d2917198d73992a9d', 'עינים למקרא בחנות|https://otzaria.org/plugins/6a671db1dd175558ae6f20ac'].map(x => { const [a, u] = x.split('|'); return `<button class="mini" data-open="${u}">${a}</button>`; }).join(' ')}</p>`}
@@ -430,6 +444,7 @@
       <h3>פרטיות</h3>
       <p>התוסף אינו שולח את המיקום שלכם לשום שרת. חיפוש כתובת עם מספר בית במפה נשלח ל-OpenStreetMap רק כשאתם מחפשים, ורק כשאוצריא מחוברת. המיקום משמש רק למיון לפי מרחק, ונשאר במכשיר. התוסף עובד בלי אינטרנט. דיווח דרך אוצריא או GitHub נשלח רק אם בחרתם לשלוח.</p>
       <p>דף התוסף: ${linkBtns(REPO)}</p>
+      <p>שרשור הדיווחים בפורום אוצריא: ${linkBtns('https://otzaria.org/forum/post/45135')}</p>
       <p class="src">מקוואות ${VERSION} · מאת לזש"ק לרמב"ר ומבק"י · מיקום אוטומטי דרך הגשר "אחת שאלתי" (אם מותקן)</p>`;
     if (window.AchatPromo) AchatPromo.bind($('#infoBody'));
     $('#infoScrim').hidden = false;
@@ -447,9 +462,10 @@
     if (id === 'showCl') return changelog();
     if (id === 'showPlan') return planView();
     if (id === 'mapDev') return mapDev();
+    if (id === 'gen') return generalDialog();
     if (id === 'rep') reportChoice(null);
     else if (id === 'repApp' || id === 'repGh') {
-      const it = e.target.dataset.id ? DATA.items.find(x => x.id === e.target.dataset.id) : null;
+      const it = e.target.dataset.id === 'general' ? 'general' : e.target.dataset.id ? DATA.items.find(x => x.id === e.target.dataset.id) : null;
       if (id === 'repGh') return openExternal(issueUrl(it));
       $('#infoScrim').hidden = true; report(it);
     }
@@ -472,6 +488,25 @@
     call('ui.showSuccess', { message: `נטענו ${d.items.length} מקוואות (${d.version})` });
   }
 
+
+  // ── תצוגה מקדימה בצד (1.8.0, בקשה ד׳): כרטיס גדול עם הורדה והדפסה ──
+  let pvId = null;
+  const pvText = it => [`${TYPE[it.type] || 'מקווה'}: ${it.name || it.hood || it.address}`, `כתובת: ${it.address}, ${it.city}`, it.phone && 'טלפון: ' + it.phone, it.contact && 'אחראי/ת: ' + it.contact,
+    [it.hours, it.winter && 'חורף ' + it.winter, it.summer && 'קיץ ' + it.summer].filter(Boolean).join(' · ') && 'שעות: ' + [it.hours, it.winter && 'חורף ' + it.winter, it.summer && 'קיץ ' + it.summer].filter(Boolean).join(' · '),
+    ACC[it.acc] && 'נגישות: ' + ACC[it.acc], 'יש לאמת שעות בטלפון לפני ההגעה.', '', 'מתוך התוסף "מקוואות" לאוצריא', 'GitHub: ' + REPO + '/releases', 'חנות התוספים של אוצריא: https://otzaria.org/plugins/6ad9c9c92917198d739939b7'].filter(x => x !== false && x != null).join('\n');
+  function openPreview(id) {
+    const it = DATA.items.find(x => x.id === id); if (!it) return; pvId = id;
+    const el = $('#preview'); el.innerHTML = `<div class="pv-head"><button class="icon-btn" data-pv="close" aria-label="סגירה">✕</button></div>${card(it, true)}
+      <div class="btns"><button class="btn tonal" data-pv="dl">הורדה</button><button class="btn tonal" data-pv="print">הדפסה</button><button class="btn tonal" data-pv="copy">העתקה</button></div>`;
+    el.hidden = false; document.querySelectorAll('#list .card.sel').forEach(c => c.classList.remove('sel')); const c = document.querySelector(`#list .card[data-id="${CSS.escape(id)}"]`); if (c) c.classList.add('sel');
+  }
+  async function previewAct(a) {
+    const it = DATA.items.find(x => x.id === pvId); if (!it) return;
+    if (a === 'close') { $('#preview').hidden = true; pvId = null; document.querySelectorAll('#list .card.sel').forEach(c => c.classList.remove('sel')); return; }
+    if (a === 'copy') return copy(pvText(it), 'הפרטים הועתקו');
+    if (a === 'dl') { const x = document.createElement('a'); x.href = URL.createObjectURL(new Blob([pvText(it) + '\n'], { type: 'text/plain;charset=utf-8' })); x.download = `מקווה - ${it.city} - ${it.address}.txt`.replace(/[\\/:*?"<>|]/g, ''); document.body.appendChild(x); x.click(); x.remove(); return toast('הקובץ נשמר'); }
+    if (a === 'print') { document.body.classList.add('print-one'); $('#printHead').textContent = 'מקווה — ' + it.city; const r = hasOtz ? await call('ui.print', { jobName: 'מקווה ' + it.city, pageSize: 'a4', orientation: 'portrait', marginMm: 12, printBackgrounds: false }) : null; if (!r || !r.success) window.print(); setTimeout(() => document.body.classList.remove('print-one'), 800); }
+  }
 
   // ── חלון כללי ──
   function dialog(title, html) { $('#infoScrim').classList.remove('full'); $('#infoScrim').style.top = ''; $('#infoTitle').textContent = title; $('#infoBody').innerHTML = html; $('#infoScrim').hidden = false; $('#infoBody').scrollTop = 0; }
