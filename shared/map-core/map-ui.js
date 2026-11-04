@@ -20,7 +20,7 @@
   else root.MapUI = factory(root.MapCore);
 })(this, function (MC) {
   'use strict';
-  const VERSION = '2.2.0';
+  const VERSION = '2.2.1';
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const W = 400, ZMIN = 0.00004, ZMAX = 10;
   const JERUSALEM = [31.7767, 35.2345];
@@ -65,6 +65,7 @@
     search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.8-4.8"/>', close: '<path d="M6 6l12 12M18 6 6 18"/>',
     jer: '<path d="M4 20h16M6 20v-7l6-5 6 5v7"/><path d="M10 20v-4h4v4"/><path d="M12 8V4"/>', ext: '<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v6H4V6h6"/>',
     add: '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>', dl: '<path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><path d="M12 7.6v.2"/>',
     help: '<circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.5v.4"/><path d="M12 16.8v.2"/>',
     route: '<circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="6" r="2.2"/><path d="M8 18h6a3 3 0 0 0 0-6h-4a3 3 0 0 1 0-6h6"/>'
   };
@@ -163,6 +164,9 @@
 .mapui .mu-steps li b { flex: none; width: 1.6em; height: 1.6em; border-radius: 50%; display: grid; place-items: center; background: var(--color-primary-container, rgba(128,128,128,.18)); font-size: .85em; }
 .mapui .mu-addpop { position: absolute; top: .6em; inset-inline-end: 3.75em; z-index: 6; border-radius: var(--radius-md, 1em); padding: .45em; display: flex; flex-direction: column; gap: .3em; animation: mu-in .16s ease-out; }
 .mapui .mu-addpop button { justify-content: flex-start; }
+.mapui .mu-info { position: absolute; top: .6em; inset-inline-end: 3.75em; z-index: 7; width: min(24em, calc(100% - 5em)); max-height: calc(100% - 1.2em); overflow: auto; border-radius: var(--radius-md, 1em); padding: .6em .8em; font-size: .9em; animation: mu-in .16s ease-out; }
+.mapui .mu-info h4 { margin: .2em 0 .3em; padding-inline-end: 2em; }
+.mapui .mu-info .mu-x { position: absolute; top: .35em; inset-inline-end: .35em; width: 1.9em; height: 1.9em; }
 .mapui .mu-drawbar { top: 3.7em; bottom: auto; }
 .mu-lbtn { position: relative; display: inline-block; }
 .mu-lbtn > .mu-pop { position: absolute; top: calc(100% + .4em); inset-inline-end: 0; inset-inline-start: auto; width: min(21em, 90vw); }
@@ -262,6 +266,24 @@
     css();
     const pts = (o.points || []).filter(p => p.lat != null && p.lon != null);
     const extra = (o.layers || []).map(L => Object.assign({ on: true }, L));
+    // 2.2.1: שכבות שהמשתמש שרטט או טען מקובץ נשמרות ב-storage של התוסף ונטענות לבד בכל פתיחה (דיווח גבולות עירוב 04.11)
+    const UKEY = 'mapuiUserLayers';
+    const isUser = L => /^(file|draw)-/.test(L.id);
+    function saveUser() {
+      if (!o.call) return;
+      const keep = extra.filter(isUser).map(L => ({ id: L.id, name: L.name, sub: L.sub, glyph: L.glyph, points: L.points, lines: L.lines, on: S.show['x-' + L.id] !== false }));
+      try { o.call('storage.set', { key: UKEY, value: keep }); } catch (e) {}
+    }
+    async function restoreUser() {
+      if (!o.call) return;
+      try {
+        const r = await o.call('storage.get', { key: UKEY }); let d = r && r.success !== false ? (r.data !== undefined ? r.data : r) : null;
+        if (typeof d === 'string') try { d = JSON.parse(d); } catch (e) { d = null; }
+        if (!Array.isArray(d) || !d.length) return;
+        for (const L of d) if (L && L.id && !extra.some(x => x.id === L.id)) { extra.push(Object.assign({ on: true }, L, { points: L.points || [], lines: L.lines || [] })); S.show['x-' + L.id] = L.on !== false; }
+        refresh();
+      } catch (e) {}
+    }
     const NE = () => (typeof window !== 'undefined' && window.NE_DATA) || null;
     const S = { lat: 0, lon: 0, zoom: 1, rot: 0, area: null, areaName: '', sel: o.selectedId != null ? String(o.selectedId) : null, street: null,
       show: { pts: true, streets: true, syn: true, base: true, route: true, color: false }, from: null, route: null, mark: null, jer: false, pick: null };
@@ -298,7 +320,7 @@
           <div class="mu-grp mu-glass"><button type="button" class="mu-ib" data-mu="me" title="המיקום שלי" aria-label="המיקום שלי">${ic('me')}</button><button type="button" class="mu-ib" data-mu="fit" title="מרכוז" aria-label="מרכוז">${ic('fit')}</button><button type="button" class="mu-ib" data-mu="full" id="mu-fullb" title="מסך מלא" aria-label="מסך מלא" aria-pressed="false">${ic('full')}</button></div>
           ${o.jerusalem ? `<div class="mu-grp mu-glass"><button type="button" class="mu-ib" data-mu="jer" id="mu-jer" title="ירושלים" aria-label="ירושלים" aria-pressed="false">${ic('jer')}</button></div>` : ''}
           <div class="mu-grp mu-glass"><button type="button" class="mu-ib" data-mu="add" id="mu-addb" title="הוספת קובץ: רחובות או שכבה" aria-label="הוספת קובץ" aria-expanded="false">${ic('add')}</button></div>
-          <div class="mu-grp mu-glass"><button type="button" class="mu-ib" data-mu="guide" title="הדרכה שלב אחר שלב" aria-label="הדרכה">${ic('help')}</button></div>
+          <div class="mu-grp mu-glass"><button type="button" class="mu-ib" data-mu="guide" title="הדרכה שלב אחר שלב" aria-label="הדרכה">${ic('help')}</button><button type="button" class="mu-ib" data-mu="info" id="mu-infob" title="רחובות, נתונים ועזרה" aria-label="רחובות, נתונים ועזרה" aria-expanded="false">${ic('info')}</button></div>
           <div class="mu-grp mu-glass"><button type="button" class="mu-ib" data-mu="layers" id="mu-lb" title="שכבות" aria-label="שכבות" aria-expanded="false">${ic('layers')}</button></div>
         </div>
         <div class="mu-pop mu-glass" id="mu-pop" hidden role="dialog" aria-label="שכבות"></div>
@@ -307,10 +329,7 @@
         <div class="mu-card mu-glass" id="mu-sel" hidden></div>
         <div class="mu-toast mu-glass" id="mu-msg" hidden role="status"></div>
         <div class="mu-card mu-glass mu-drawbar" id="mu-draw" hidden></div>
-        <div class="mu-guide" id="mu-guide" hidden role="dialog" aria-modal="true" aria-label="הדרכה"></div>
-      </div>
-      <div class="mu-near" id="mu-near"></div>
-      <details class="mu-more"><summary>רחובות, נתונים ועזרה</summary>
+        <div class="mu-info mu-glass" id="mu-info" hidden role="dialog" aria-label="רחובות, נתונים ועזרה"><button type="button" class="mu-ib mu-x" data-mu="infox" title="סגירה" aria-label="סגירה">✕</button><h4>רחובות, נתונים ועזרה</h4>
         <div class="bar">${off || o.builtinStreets ? '' : '<button class="mu" data-mu="dl" id="mu-dl">הורדת רחובות לעיר</button>'}<button class="mu" data-mu="load">טעינת רחובות מקובץ</button><button class="mu" data-mu="loadgeo">טעינת שכבה מקובץ (GeoJSON)</button></div>
         ${o.builtinStreets ? `<p class="msg">הרחובות של ${Object.keys((typeof window !== 'undefined' && window.STREET_CITIES) || {}).length || 76} ערים מובנים בתוסף ונטענים לבד כשמתקרבים לעיר בזום, בלי אינטרנט. לעיר אחרת: טעינת קובץ רחובות.</p>` : off ? '<p class="msg">אוצריא במצב "ללא גישה לאינטרנט": אפשר לטעון קובץ רחובות שכבר שמור במחשב.</p>' : `<p class="msg">מורידים את קובץ העיר (נפתח בדפדפן), ואז "טעינת רחובות מקובץ". <button class="mu" data-mu="url">מקור חלופי 1</button> <button class="mu" data-mu="url2">מקור חלופי 2</button></p>`}
         <p class="msg">חיפוש כתובת עם מספר בית (למשל: <em>רבי עקיבא 12, בני ברק</em>): ${off ? 'במצב מנותק מוצג הרחוב.' : 'המיקום המדויק נמצא ברשת (OpenStreetMap); בלי רשת מוצג הרחוב.'} פינה: <em>הרצל פינת בן יהודה</em>.</p>
@@ -319,7 +338,11 @@
         ${off ? '' : `<div class="bar"><button class="mu" data-mu-open="${SHARED_DOC}">הסבר</button><button class="mu" data-mu-open="${SHARED_URL}">הקוד של המפה</button>${join}</div>`}
         ${future.length ? `<h4>בפיתוח</h4><div class="bar">${future.map(f => `<button class="mu" aria-disabled="true" data-mu="soon" title="בפיתוח: מחכה לעזרה">${esc(f)}</button>`).join('')}</div>` : ''}
         <p class="msg">© OpenStreetMap contributors · Natural Earth. המיקומים להתמצאות בלבד.</p>
-      </details>`;
+        </div>
+        <div class="mu-guide" id="mu-guide" hidden role="dialog" aria-modal="true" aria-label="הדרכה"></div>
+      </div>
+      <div class="mu-near" id="mu-near"></div>
+`;
     const $ = id => el.querySelector('#' + id);
     const view = $('mu-view');
 
@@ -460,6 +483,7 @@ ${svg ? `<figure>${svg}</figure>` : ''}
       return `<h5>שכבות בתוסף</h5>`
         + row('pts', o.glyph || '•', o.layerName || 'נקודות', pts.length + ' במפה', S.show.pts)
         + extra.map(L => row('x-' + L.id, L.glyph || '•', L.name || L.id, L.sub || '', S.show['x-' + L.id])).join('')
+        + (extra.some(isUser) ? `<div class="bar"><button class="mu" data-mu="userclear">מחיקת השכבות ששרטטתי / טענתי</button></div>` : '')
         + row('streets', '═', 'רחובות', S.area ? S.areaName || 'נטענו' : 'מתקרבים לעיר בזום', S.show.streets, !S.area)
         + row('syn', '✡', 'בתי כנסת', '', S.show.syn, !S.area)
         + (NE() ? row('base', '◍', 'מפת העולם', 'יבשות, ארצות, ערים ונהרות', S.show.base) : '')
@@ -471,7 +495,7 @@ ${svg ? `<figure>${svg}</figure>` : ''}
     const pop = $('mu-pop'), lb = $('mu-lb');
     const togglePop = show => { pop.hidden = show === undefined ? !pop.hidden : !show; if (!pop.hidden) pop.innerHTML = popHTML(); lb.setAttribute('aria-expanded', String(!pop.hidden)); lb.setAttribute('aria-pressed', String(!pop.hidden)); };
     wireOthers(pop, Object.assign({}, o, { online: !off }), () => [S.lat, S.lon]);
-    pop.addEventListener('change', e => { const c = e.target.closest('[data-mu-layer]'); if (c) { S.show[c.dataset.muLayer] = c.checked; if (c.dataset.muLayer === 'color') try { localStorage.setItem('mapui-color', c.checked ? '1' : '0'); } catch (er) {} draw(); } });
+    pop.addEventListener('change', e => { const c = e.target.closest('[data-mu-layer]'); if (c) { S.show[c.dataset.muLayer] = c.checked; if (/^x-(file|draw)-/.test(c.dataset.muLayer)) saveUser(); if (c.dataset.muLayer === 'color') try { localStorage.setItem('mapui-color', c.checked ? '1' : '0'); } catch (er) {} draw(); } });
 
     // ── קבצים ──
     async function pickJSON(title) {
@@ -492,13 +516,13 @@ ${svg ? `<figure>${svg}</figure>` : ''}
     async function loadGeo() {
       try {
         const j = await pickJSON('בחירת קובץ שכבה (GeoJSON: נקודות, קווים או פוליגונים)'); if (!j) return;
-        const L = MC.toLayer(j, 'file-' + (extra.length + 1), '◆');
+        const L = MC.toLayer(j, 'file-' + Date.now().toString(36), '◆');
         if (!L.points.length && !L.lines.length) return say('בקובץ אין נקודות או קווים');
         extra.push({ id: L.id, name: 'שכבה מקובץ ' + (extra.length + 1), sub: L.points.length + ' נקודות · ' + L.lines.length + ' קווים', glyph: '◆', points: L.points, lines: L.lines, on: true });
         S.show['x-' + L.id] = true;
         const all = [...L.points, ...L.lines.flatMap(l => l.coords.map(c => ({ lat: c[0], lon: c[1] })))];
         if (all.length) { const keep = pts.slice(); fit(all); void keep; }
-        say('השכבה נטענה לזמן הפתיחה של המסך.'); refresh(); if (!pop.hidden) pop.innerHTML = popHTML();
+        saveUser(); say('השכבה נטענה ונשמרה — תיטען לבד גם בפתיחה הבאה.'); refresh(); if (!pop.hidden) pop.innerHTML = popHTML();
       } catch (e) { say('הקובץ לא נקרא'); }
     }
 
@@ -609,6 +633,7 @@ ${svg ? `<figure>${svg}</figure>` : ''}
       else if (k === 'ArrowLeft') panBy(st, 0, S); else if (k === 'ArrowRight') panBy(-st, 0, S);
       else if (k === 'ArrowUp') panBy(0, st, S); else if (k === 'ArrowDown') panBy(0, -st, S);
       else if (k === 'Escape' && !$('mu-guide').hidden) guide(null);
+      else if (k === 'Escape' && !$('mu-info').hidden) $('mu-info').hidden = true;
       else if (k === 'Escape' && el.classList.contains('mu-full')) { el.classList.remove('mu-full'); $('mu-fullb').setAttribute('aria-pressed', 'false'); }
       else return;
       e.preventDefault(); draw();
@@ -674,10 +699,10 @@ ${more}
     function drawSave() {
       const L = S.draw, coords = L.pts.map(c => [+c[1].toFixed(6), +c[0].toFixed(6)]);
       const gj = { type: 'FeatureCollection', features: [{ type: 'Feature', properties: { name: 'שרטוט ' + (extra.length + 1), source: me.name }, geometry: L.closed ? { type: 'Polygon', coordinates: [[...coords, coords[0]]] } : { type: 'LineString', coordinates: coords } }] };
-      const lay = MC.toLayer(gj, 'draw-' + (extra.length + 1), '◆');
+      const lay = MC.toLayer(gj, 'draw-' + Date.now().toString(36), '◆');
       extra.push({ id: lay.id, name: 'שרטוט ' + (extra.length + 1), sub: L.closed ? 'שטח' : 'קו', glyph: '◆', points: [], lines: lay.lines, on: true }); S.show['x-' + lay.id] = true;
       try { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(gj, null, 1)], { type: 'application/geo+json' })); a.download = 'שרטוט - ' + me.name + '.geojson'; document.body.append(a); a.click(); a.remove(); } catch (e) {}
-      S.draw = null; drawBar(); refresh(); say('השרטוט נשמר כשכבה וכקובץ GeoJSON. אפשר לטעון אותו שוב בכפתור +.');
+      S.draw = null; drawBar(); saveUser(); refresh(); say('השרטוט נשמר כשכבה (תיטען לבד בפתיחה הבאה) וכקובץ GeoJSON.');
     }
 
     // ── לחיצות ──
@@ -739,6 +764,8 @@ ${more}
       else if (a === 'dend') { S.draw = null; drawBar(); draw(); }
       else if (a === 'steps') { S.showSteps = !S.showSteps; showSel(); }
       else if (a === 'routedl') routeFile();
+      else if (a === 'userclear') { for (let i = extra.length - 1; i >= 0; i--) if (isUser(extra[i])) { delete S.show['x-' + extra[i].id]; extra.splice(i, 1); } saveUser(); refresh(); if (!pop.hidden) pop.innerHTML = popHTML(); say('השכבות שלי נמחקו.'); }
+      else if (a === 'info' || a === 'infox') { const ip = $('mu-info'); ip.hidden = a === 'infox' ? true : !ip.hidden; $('mu-infob').setAttribute('aria-expanded', String(!ip.hidden)); }
       else if (a === 'add') { const ap = $('mu-add'); ap.hidden = !ap.hidden; b.setAttribute('aria-expanded', String(!ap.hidden)); }
       else if (a === 'load') { $('mu-add').hidden = true; loadFile(); }
       else if (a === 'loadgeo') { $('mu-add').hidden = true; loadGeo(); }
@@ -751,11 +778,13 @@ ${more}
     document.addEventListener('pointerdown', e => {
       if (!el.isConnected) return;
       if (!pop.hidden && !pop.contains(e.target) && !lb.contains(e.target)) togglePop(false);
+      const ip = $('mu-info'); if (ip && !ip.hidden && !ip.contains(e.target) && !$('mu-infob').contains(e.target)) { ip.hidden = true; $('mu-infob').setAttribute('aria-expanded', 'false'); }
       const ap = $('mu-add'); if (ap && !ap.hidden && !ap.contains(e.target) && !$('mu-addb').contains(e.target)) ap.hidden = true;
       const sf = $('mu-sf'); if (sf && !sf.contains(e.target)) $('mu-sug').hidden = true;
     });
     if (typeof ResizeObserver !== 'undefined') new ResizeObserver(() => draw()).observe(view);
     refresh();
+    restoreUser();
     return { state: S, refresh, select: selectPt, goTo };
   }
 
