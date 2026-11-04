@@ -20,7 +20,7 @@
   else root.MapUI = factory(root.MapCore);
 })(this, function (MC) {
   'use strict';
-  const VERSION = '2.2.1';
+  const VERSION = '3.0.0';
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const W = 400, ZMIN = 0.00004, ZMAX = 10;
   const JERUSALEM = [31.7767, 35.2345];
@@ -74,6 +74,7 @@
 
   const CSS = `
 :root { --mu-sea: #a9cdea; --mu-coast: #6b8fae; --mu-river: #4f8fcf; --mu-land-street: #f3efe0;
+  --mu-e-land: #e6d8b0; --mu-e-sea: #9fbcc8; --mu-e-coast: #7796a3; --mu-e-line: #a08d5f; --mu-e-river: #7796a3;
   --mu-land1: #e9e3b8; --mu-land2: #cfe3b0; --mu-land3: #f1cfa8; --mu-land4: #d9c9e6; --mu-land5: #f3dcc2; --mu-land6: #c6dfd2; }
 .mapui { --mu-r: var(--radius-lg, 1.1em); --mu-sh: 0 1px 2px rgba(0,0,0,.18), 0 4px 14px rgba(0,0,0,.12); }
 .mapui .mu-stage { position: relative; border-radius: var(--mu-r); overflow: hidden; background: var(--color-surface-container, rgba(128,128,128,.08)); }
@@ -89,6 +90,11 @@
 .mapui.mapui-tab > details.mu-more[open], .mapui.mu-full > details.mu-more[open] { max-height: 38%; overflow: auto; }
 .mapui.mu-full { position: fixed; inset: 0; z-index: 9000; background: var(--color-surface, #fff); padding: .6em; }
 .mapui .mu-glass { background: var(--color-surface, #fff); color: var(--color-on-surface, inherit); box-shadow: var(--mu-sh); border-radius: var(--radius-pill, 2em); }
+.mapui .mu-modes { position: absolute; top: 3.3em; inset-inline-start: .6em; display: flex; gap: .15em; padding: .2em; z-index: 3; }
+.mapui .mu-modes button { border: 0; background: transparent; color: inherit; font: inherit; font-size: .85em; padding: .3em .75em; border-radius: var(--radius-pill, 2em); cursor: pointer; transition: background .15s; }
+.mapui .mu-modes button[aria-pressed="true"] { background: var(--color-primary); color: var(--color-on-primary, #fff); }
+.mapui .mu-styles { display: flex; gap: .25em; flex-wrap: wrap; margin: .2em 0 .4em; }
+.mapui .mu-styles button[aria-pressed="true"] { background: var(--color-primary); color: var(--color-on-primary, #fff); }
 .mapui .mu-search { position: absolute; top: .6em; inset-inline: .6em 3.6em; display: flex; align-items: center; gap: .3em; padding: .15em .25em .15em .7em; z-index: 3; }
 .mapui .mu-search input { flex: 1; min-width: 0; font: inherit; border: 0; outline: 0; background: transparent; color: inherit; padding: .45em .2em; }
 .mapui .mu-sug { position: absolute; top: calc(100% + .35em); inset-inline: 0; max-height: 16em; overflow: auto; border-radius: var(--radius-md, .9em); padding: .3em; box-shadow: var(--mu-sh); background: var(--color-surface, #fff); }
@@ -149,6 +155,7 @@
 .mapui details.mu-more { margin-top: .6em; border-radius: var(--radius-md, .9em); background: var(--color-surface-container-low, rgba(128,128,128,.06)); padding: .35em .8em; }
 .mapui details.mu-more summary { cursor: pointer; padding: .3em 0; font-weight: 600; }
 .mapui h4 { margin: .8em 0 .2em; font-size: .95em; }
+.mapui [hidden] { display: none !important; }
 .mapui .mu-guide { position: absolute; inset: 0; z-index: 8; display: grid; place-items: center; background: rgba(0,0,0,.28); padding: .8em; }
 .mapui .mu-guide > div { width: min(30em, 100%); max-height: 100%; overflow: auto; border-radius: var(--radius-lg, 1.1em); padding: 1em 1.1em .9em; animation: mu-in .16s ease-out; position: relative; }
 .mapui .mu-guide h3 { margin: 0 0 .15em; font-size: 1.05em; padding-inline-end: 2em; }
@@ -261,6 +268,8 @@
     return null;
   }
 
+  const MODES = [['map', 'מפה'], ['near', 'סביבה קרובה'], ['streets', 'רחובות'], ['globe', 'כדור']];
+  const STYLES = [['eyes', 'צבעוני', 'יבשה חומה וים כחול, כמו עינים למקרא'], ['countries', 'ארצות בצבעים', 'כל ארץ בצבע משלה'], ['plain', 'חום-לבן', 'כמו כיוון תפילה']];
   function mount(el, o) {
     if (!MC) { el.innerHTML = '<p>רכיב המפה לא נטען.</p>'; return; }
     css();
@@ -287,7 +296,10 @@
     const NE = () => (typeof window !== 'undefined' && window.NE_DATA) || null;
     const S = { lat: 0, lon: 0, zoom: 1, rot: 0, area: null, areaName: '', sel: o.selectedId != null ? String(o.selectedId) : null, street: null,
       show: { pts: true, streets: true, syn: true, base: true, route: true, color: false }, from: null, route: null, mark: null, jer: false, pick: null };
-    try { const c = localStorage.getItem('mapui-color'); S.show.color = c == null ? !!o.color : c === '1'; } catch (e) { S.show.color = !!o.color; }
+    // 3.0: סגנון מפה (צבעוני כמו עינים למקרא / ארצות בצבעים / חום-לבן) ומצב תצוגה (מפה / סביבה / רחובות / כדור)
+    S.style = o.style || 'eyes'; S.mode = o.mode || 'map'; S.gz = 1;
+    try { const c = localStorage.getItem('mapui-style'); if (c && STYLES.some(x => x[0] === c)) S.style = c; } catch (e) {}
+    S.show.color = S.style !== 'plain';
     extra.forEach(L => { S.show['x-' + L.id] = L.on !== false; });
     const byId = new Map(pts.map(p => [String(p.id), p]));
     const ptsLayer = () => MC.toLayer({ type: 'FeatureCollection', features: pts.map(p => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [p.lon, p.lat] }, properties: { id: p.id, name: p.name } })) }, o.layerId || 'pts', o.glyph || '•');
@@ -314,6 +326,7 @@
         <form class="mu-search mu-glass" id="mu-sf" role="search" autocomplete="off">${ic('search', ' style="width:1.1em;height:1.1em;opacity:.7;flex:none"')}
           <input type="search" id="mu-q" placeholder="חיפוש: מקום, עיר, רחוב, פינה או כתובת עם מספר בית" aria-label="חיפוש" enterkeyhint="search">
           <div class="mu-sug" id="mu-sug" hidden role="listbox"></div></form>
+        <div class="mu-modes mu-glass" id="mu-modes" role="group" aria-label="מצב תצוגה">${MODES.map(([k, t]) => `<button type="button" data-mu-mode="${k}" aria-pressed="false">${t}</button>`).join('')}</div>
         <div class="mu-ctl">
           <div class="mu-grp mu-glass"><button type="button" class="mu-ib" data-mu="in" title="זום פנימה" aria-label="זום פנימה">${ic('plus')}</button><button type="button" class="mu-ib" data-mu="out" title="זום החוצה" aria-label="זום החוצה">${ic('minus')}</button></div>
           <div class="mu-grp mu-glass"><button type="button" class="mu-ib" data-mu="rotl" title="סיבוב שמאלה" aria-label="סיבוב שמאלה">${ic('rotl')}</button><button type="button" class="mu-ib" data-mu="north" id="mu-north" title="צפון למעלה" aria-label="צפון למעלה">${compass(0)}</button><button type="button" class="mu-ib" data-mu="rotr" title="סיבוב ימינה" aria-label="סיבוב ימינה">${ic('rotr')}</button></div>
@@ -381,7 +394,9 @@
     }
     function drawNow() {
       setTimeout(updDl, 0); sizeH();
-      const v = MC.createView({ lat: S.lat, lon: S.lon, zoom: S.zoom, rot: S.rot, width: W, height: H });
+      const glb = S.mode === 'globe';
+      const v = MC.createView(glb ? { proj: 'globe', gz: S.gz, lat: S.lat, lon: S.lon, rot: S.rot, width: W, height: H } : { lat: S.lat, lon: S.lon, zoom: S.zoom, rot: S.rot, width: W, height: H });
+      modeBar();
       const layers = [];
       if (S.route && S.show.route) layers.push({ id: 'route', lines: [{ coords: S.route.coords, label: 'מסלול הליכה', style: 'route' }], points: [] });
       if (S.jer && o.me) layers.push({ id: 'jer', lines: [{ coords: [o.me, JERUSALEM], label: 'הכיוון לירושלים', style: 'route' }], points: [{ lat: JERUSALEM[0], lon: JERUSALEM[1], label: 'ירושלים', id: '__jer' }], glyph: 'י' });
@@ -389,9 +404,9 @@
       if (S.draw && S.draw.pts.length) layers.push({ id: 'draw', glyph: '•', points: S.draw.pts.map((c, i) => ({ lat: c[0], lon: c[1], id: '__d' + i, label: '' })), lines: S.draw.pts.length > 1 ? [{ coords: S.draw.closed ? [...S.draw.pts, S.draw.pts[0]] : S.draw.pts, closed: S.draw.closed, label: 'שרטוט' }] : [] });
       if (S.mark) layers.push({ id: 'mark', glyph: '★', points: [{ lat: S.mark.lat, lon: S.mark.lon, label: S.mark.label, id: '__mark' }], lines: [] });
       if (S.show.pts) layers.push(ptsLayer());
-      const base = S.show.base && NE() && (!S.area || S.zoom < 0.35) ? NE() : null;
-      view.innerHTML = MC.renderSVG({ area: S.area, view: v, layers, streets: S.show.streets, syn: S.show.syn, me: o.me, hl: S.sel, selected: S.street, color: S.show.color,
-        labels: S.zoom >= 2, outline: !S.area && !base, base, chrome: false });
+      const base = NE() && (glb || (S.show.base && (!S.area || S.zoom < 0.35))) ? NE() : null;
+      view.innerHTML = MC.renderSVG({ area: S.area, view: v, layers, streets: S.show.streets, syn: S.show.syn, me: o.me, hl: S.sel, selected: S.street, color: S.style !== 'plain', style: S.style,
+        labels: !glb && S.zoom >= 2, outline: !S.area && !base, base, chrome: false });
       view._v = v;
       $('mu-north').innerHTML = compass(S.rot);
       // סרגל קנה מידה: אורך עגול שמתאים ל-~70 פיקסלים
@@ -474,8 +489,8 @@ ${svg ? `<figure>${svg}</figure>` : ''}
       $('mu-near').innerHTML = `<div class="msg"><strong>${esc(o.nearbyLabel || 'קרוב לכתובת')}</strong></div><div class="bar">` + L.map(([p, d]) => `<button class="mu" data-mu-sel="${esc(p.id)}">${esc(p.name)} · ${MC.widthLabel(d)}</button>`).join('') + '</div>';
     }
     function refresh() { draw(); showSel(); updDl(); }
-    function selectPt(id) { S.pick = null; S.sel = String(id); const p = selPt(); if (p) { S.lat = p.lat; S.lon = p.lon; S.zoom = Math.max(S.zoom, 3); } S.street = null; refresh(); }
-    function goTo(lat, lon, zoom, label) { S.lat = lat; S.lon = lon; S.zoom = zoom; S.sel = null; S.street = null; S.mark = label ? { lat, lon, label } : null; S.from = [lat, lon]; S.fromLabel = label || ''; S.route = null; S.pick = null; refresh(); nearList([lat, lon]); }
+    function selectPt(id) { if (S.mode === 'globe') S.mode = 'map'; S.pick = null; S.sel = String(id); const p = selPt(); if (p) { S.lat = p.lat; S.lon = p.lon; S.zoom = Math.max(S.zoom, 3); } S.street = null; refresh(); }
+    function goTo(lat, lon, zoom, label) { if (S.mode === 'globe') S.mode = 'map'; S.lat = lat; S.lon = lon; S.zoom = zoom; S.sel = null; S.street = null; S.mark = label ? { lat, lon, label } : null; S.from = [lat, lon]; S.fromLabel = label || ''; S.route = null; S.pick = null; refresh(); nearList([lat, lon]); }
 
     // ── שכבות ──
     function popHTML() {
@@ -487,7 +502,7 @@ ${svg ? `<figure>${svg}</figure>` : ''}
         + row('streets', '═', 'רחובות', S.area ? S.areaName || 'נטענו' : 'מתקרבים לעיר בזום', S.show.streets, !S.area)
         + row('syn', '✡', 'בתי כנסת', '', S.show.syn, !S.area)
         + (NE() ? row('base', '◍', 'מפת העולם', 'יבשות, ארצות, ערים ונהרות', S.show.base) : '')
-        + row('color', '🎨', 'מפה צבעונית', 'ים כחול וכל ארץ בצבע משלה', S.show.color)
+        + `<h5 style="margin-top:.6em">סגנון המפה</h5><div class="mu-styles">${STYLES.map(([k, t, d]) => `<button class="mu" data-mu-style="${k}" title="${esc(d)}" aria-pressed="${S.style === k}">${esc(t)}</button>`).join('')}</div>`
         + (S.route ? row('route', '↝', 'מסלול הליכה', MC.widthLabel(S.route.m), S.show.route) : '')
         + `<h5 style="margin-top:.7em">שכבות מתוספים אחרים</h5>${otherRows(o.self)}`
         + `<p class="msg">השכבה של כל תוסף נפתחת בו, באותו מקום במפה.</p>`;
@@ -495,6 +510,16 @@ ${svg ? `<figure>${svg}</figure>` : ''}
     const pop = $('mu-pop'), lb = $('mu-lb');
     const togglePop = show => { pop.hidden = show === undefined ? !pop.hidden : !show; if (!pop.hidden) pop.innerHTML = popHTML(); lb.setAttribute('aria-expanded', String(!pop.hidden)); lb.setAttribute('aria-pressed', String(!pop.hidden)); };
     wireOthers(pop, Object.assign({}, o, { online: !off }), () => [S.lat, S.lon]);
+    pop.addEventListener('click', e => { const b = e.target.closest('[data-mu-style]'); if (!b) return; S.style = b.dataset.muStyle; S.show.color = S.style !== 'plain'; try { localStorage.setItem('mapui-style', S.style); } catch (er) {} pop.innerHTML = popHTML(); draw(); });
+    function modeBar() { const mb = $('mu-modes'); if (mb) mb.querySelectorAll('[data-mu-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.muMode === S.mode))); }
+    function setMode(m) {
+      const c = o.me || [S.lat, S.lon];
+      if (m === 'globe') { S.gz = 1; S.lat = Math.max(-60, Math.min(60, S.lat)); }
+      else if (m === 'streets') { if (S.mode === 'globe' || S.zoom < 1) { S.lat = c[0]; S.lon = c[1]; } S.zoom = Math.max(S.zoom, 3); }
+      else if (m === 'near') { S.zoom = 0.03; }
+      else { S.zoom = 0.0004; }
+      S.mode = m; draw();
+    }
     pop.addEventListener('change', e => { const c = e.target.closest('[data-mu-layer]'); if (c) { S.show[c.dataset.muLayer] = c.checked; if (/^x-(file|draw)-/.test(c.dataset.muLayer)) saveUser(); if (c.dataset.muLayer === 'color') try { localStorage.setItem('mapui-color', c.checked ? '1' : '0'); } catch (er) {} draw(); } });
 
     // ── קבצים ──
@@ -606,7 +631,10 @@ ${svg ? `<figure>${svg}</figure>` : ''}
     // ── גרירה, צביטה, גלגלת ומקלדת ──
     const ptrs = new Map(); let drag = null, pinch = null;
     const svgK = () => { const svg = view.querySelector('svg'); return svg ? svg.getBoundingClientRect().width / W : 1; };
-    const panBy = (dx, dy, from) => { const v = MC.createView({ lat: from.lat, lon: from.lon, zoom: S.zoom, rot: S.rot, width: W, height: H }); const ll = MC.unproject(v, W / 2 - dx, H / 2 - dy); S.lat = ll[0]; S.lon = ll[1]; };
+    const panBy = (dx, dy, from) => {
+      if (S.mode === 'globe') { const k = 90 / (Math.min(W, H) * .46 * S.gz); S.lon = ((from.lon - dx * k + 540) % 360) - 180; S.lat = Math.max(-85, Math.min(85, from.lat + dy * k)); return; }
+      const v = MC.createView({ lat: from.lat, lon: from.lon, zoom: S.zoom, rot: S.rot, width: W, height: H }); const ll = MC.unproject(v, W / 2 - dx, H / 2 - dy); S.lat = ll[0]; S.lon = ll[1]; };
+    const zoomBy = f => { if (S.mode === 'globe') { S.gz = Math.max(.5, Math.min(40, S.gz * f)); if (S.gz >= 40) { S.mode = 'map'; S.zoom = 0.002; } } else { S.zoom = Math.max(ZMIN, Math.min(ZMAX, S.zoom * f)); if (S.zoom < 0.00012 && f < 1) { S.mode = 'globe'; S.gz = 1.6; } } draw(); };
     view.addEventListener('pointerdown', e => {
       ptrs.set(e.pointerId, [e.clientX, e.clientY]); try { view.setPointerCapture(e.pointerId); } catch (err) {}
       if (ptrs.size === 1) drag = { x: e.clientX, y: e.clientY, lat: S.lat, lon: S.lon, moved: false };
@@ -622,7 +650,7 @@ ${svg ? `<figure>${svg}</figure>` : ''}
     });
     const end = e => { ptrs.delete(e.pointerId); if (ptrs.size < 2) pinch = null; if (drag) { const was = drag; setTimeout(() => { if (drag === was) drag = null; }, 0); } };
     ['pointerup', 'pointercancel', 'pointerleave'].forEach(t => view.addEventListener(t, end));
-    view.addEventListener('wheel', e => { e.preventDefault(); S.zoom = Math.max(ZMIN, Math.min(ZMAX, S.zoom * (e.deltaY < 0 ? 1.25 : 0.8))); draw(); }, { passive: false });
+    view.addEventListener('wheel', e => { e.preventDefault(); zoomBy(e.deltaY < 0 ? 1.25 : 0.8); }, { passive: false });
     view.addEventListener('dblclick', e => { e.preventDefault(); S.zoom = Math.min(ZMAX, S.zoom * 2); draw(); });
     view.addEventListener('keydown', e => {
       const st = 40, k = e.key;
@@ -712,12 +740,12 @@ ${more}
       if (g && !(drag && drag.moved)) { if (g.dataset.id && g.dataset.id.indexOf('__') !== 0) return selectPt(g.dataset.id); return; }
       const stp = t.closest && t.closest('[data-mu-step]');
       if (stp && S.route) { const st = S.route.steps[+stp.dataset.muStep]; if (st && st.at) { S.lat = st.at[0]; S.lon = st.at[1]; S.zoom = Math.max(S.zoom, 3); S.mark = { lat: st.at[0], lon: st.at[1], label: st.text.split(' · ')[0] }; draw(); } return; }
-      if (S.draw && t.closest && t.closest('#mu-view') && !(drag && drag.moved) && view._v) {   // 2.2: שרטוט
+      if (S.mode !== 'globe' && S.draw && t.closest && t.closest('#mu-view') && !(drag && drag.moved) && view._v) {   // 2.2: שרטוט
         const svg = view.querySelector('svg'), r = svg.getBoundingClientRect();
         S.draw.pts.push(MC.unproject(view._v, (e.clientX - r.left) * W / r.width, (e.clientY - r.top) * H / r.height)); drawBar(); draw(); return;
       }
       // 2.1: לחיצה על רחוב בוחרת אותו (כמו בכיוון תפילה)
-      if (t.closest && t.closest('#mu-view') && !(drag && drag.moved) && S.area && S.show.streets && view._v) {
+      if (S.mode !== 'globe' && t.closest && t.closest('#mu-view') && !(drag && drag.moved) && S.area && S.show.streets && view._v) {
         const svg = view.querySelector('svg'), r = svg.getBoundingClientRect(), v = view._v;
         const ll = MC.unproject(v, (e.clientX - r.left) * W / r.width, (e.clientY - r.top) * H / r.height);
         const w = MC.nearestWay(S.area, ll, 14 / (v.scale * r.width / W));
@@ -725,10 +753,11 @@ ${more}
       }
       const open = t.closest && t.closest('[data-mu-open]'); if (open) { if (o.openLink) o.openLink(open.dataset.muOpen); return; }
       const sp = t.closest && t.closest('[data-mu-sel]'); if (sp) return selectPt(sp.dataset.muSel);
+      const md = t.closest && t.closest('[data-mu-mode]'); if (md) return setMode(md.dataset.muMode);
       const b = t.closest && t.closest('[data-mu]'); if (!b) return;
       const a = b.dataset.mu;
-      if (a === 'in') { S.zoom = Math.min(ZMAX, S.zoom * 1.5); draw(); }
-      else if (a === 'out') { S.zoom = Math.max(ZMIN, S.zoom / 1.5); draw(); }
+      if (a === 'in') zoomBy(1.5);
+      else if (a === 'out') zoomBy(1 / 1.5);
       else if (a === 'rotl') { S.rot = (S.rot + 345) % 360; draw(); }
       else if (a === 'rotr') { S.rot = (S.rot + 15) % 360; draw(); }
       else if (a === 'north') { S.rot = 0; draw(); }
