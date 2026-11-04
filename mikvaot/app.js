@@ -1,7 +1,7 @@
 /* מקוואות — מדריך מעשי (מיקום, שעות, טלפון). אין בו הלכות; לשאלות — רב הקהילה ואחראית המקווה. */
 (function () {
   'use strict';
-  const VERSION = '1.8.0';
+  const VERSION = '1.9.0';
   const REPO = 'https://github.com/Hadabadra/Mikvaot';
   const O = window.Otzaria, hasOtz = !!(O && O.call);
   const $ = s => document.querySelector(s);
@@ -586,7 +586,7 @@
   function exportText() {
     const list = currentList();
     let last = null, out = [`מקוואות — ${$('#crumb').textContent}${state.type ? ' · ' + TYPE[state.type] : ''}`, `(מתוך תוסף "מקוואות" לאוצריא · ${DATA.version.split('-').reverse().join('.')} · יש לאמת שעות בטלפון)`, ''];
-    const tail = ['', '—', 'להורדת התוסף "מקוואות" לאוצריא:', '• GitHub: ' + REPO + '/releases', '• חנות התוספים של אוצריא: כלים ← תוספים ← חנות, חיפוש "מקוואות"'];
+    const tail = ['', '—', 'להורדת התוסף "מקוואות" לאוצריא:', '• GitHub: ' + REPO + '/releases', '• חנות התוספים של אוצריא: https://otzaria.org/plugins/6ad9c9c92917198d739939b7'];
     for (const it of list) {
       if (it.city !== last) { out.push('', '■ ' + it.city); last = it.city; }
       out.push(`• ${TYPE[it.type] || 'מקווה'}: ${[it.name, it.hood].filter(Boolean).join(' · ') || it.address} — ${it.address}`);
@@ -667,6 +667,13 @@
   if (hasOtz) {
     O.on('plugin.boot', start);
     O.on('theme.changed', applyTheme);
+    // 1.9.0 (אוצריא 0.9.98.3): כפתור בשדות החיפוש של אוצריא (מופיע רק כשיש טקסט) — מעביר את הטקסט לחיפוש בתוסף
+    O.on('search.fieldAction.invoked', p => {
+      if (!p || p.actionId !== 'find-mikveh') return;
+      const t = String(p.selectionEnd > p.selectionStart ? p.text.slice(p.selectionStart, p.selectionEnd) : p.text || '').trim();
+      try { O.call('search.endFieldSession', { sessionId: p.sessionId }); } catch (e) {}
+      if (!t) return; state.view = 'home'; state.tab = 'list'; $('#q').value = t; state.q = t; showTab(); render(); call('plugin.openSelf');
+    });
     O.on('calendar.city_changed', () => { lastDay = null; dayTimes(); });
   } else start(null);
 })();

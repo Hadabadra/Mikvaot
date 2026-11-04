@@ -1,13 +1,13 @@
 {
   "id": "com.hadabadra.mikvaot",
   "name": "מקוואות",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "מדריך מקוואות נשים, גברים וכלים בארץ ובחו\"ל: כתובת, טלפון, שעות ונגישות, לפי עיר או מיקום. כולל מועצות דתיות, תזכורת ויומן.",
   "author": "לזש\"ק לרמב\"ר ומבק\"י",
   "schemaVersion": 1,
   "sdkVersion": "1.x",
   "stability": "beta",
-  "minAppVersion": "0.9.98",
+  "minAppVersion": "0.9.98.3",
   "entrypoint": "index.html",
   "permissions": [
     "app.open_url",
@@ -23,7 +23,9 @@
     "notifications.system",
     "published_data.write",
     "plugin.open_other",
-    "network.access"
+    "network.access",
+    "app.startup_contributions",
+    "search.field_actions"
   ],
   "network": {
     "enabled": true,
@@ -39,6 +41,21 @@
       "order": 216,
       "defaultPinned": false,
       "iconName": "drop_24_regular"
+    },
+    "startup": {
+      "searchFieldActions": [
+        {
+          "id": "find-mikveh",
+          "title": "חיפוש מקווה לפי העיר או הרחוב שבשדה",
+          "icon": "drop_24_regular",
+          "activeIcon": "drop_24_filled",
+          "fields": [
+            "library",
+            "fullText"
+          ],
+          "visibleWhen": "nonEmptyText"
+        }
+      ]
     }
   },
   "homepage": "https://github.com/Hadabadra/Mikvaot",
