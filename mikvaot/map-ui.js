@@ -179,7 +179,7 @@
 .mapui .mu-info { position: absolute; top: .6em; inset-inline-end: 3.75em; z-index: 7; width: min(24em, calc(100% - 5em)); max-height: calc(100% - 1.2em); overflow: auto; border-radius: var(--radius-md, 1em); padding: .6em .8em; font-size: .9em; animation: mu-in .16s ease-out; }
 .mapui .mu-info h4 { margin: .2em 0 .3em; padding-inline-end: 2em; }
 .mapui .mu-info .mu-x { position: absolute; top: .35em; inset-inline-end: .35em; width: 1.9em; height: 1.9em; }
-.mapui .mu-drawbar { top: .6em; bottom: auto; inset-inline: auto; inset-inline-start: 50%; transform: translateX(50%); z-index: 6; display: flex; align-items: center; gap: .15em; flex-wrap: wrap; justify-content: center; border-radius: var(--radius-pill, 2em); padding: .25em .4em; max-width: calc(100% - 8em); max-height: none; overflow: visible; }
+.mapui .mu-drawbar { position: absolute; top: auto; bottom: 2.9em; inset-inline: auto; inset-inline-start: 50%; transform: translateX(50%); z-index: 6; display: flex; align-items: center; gap: .15em; flex-wrap: wrap; justify-content: center; border-radius: var(--radius-pill, 2em); padding: .25em .4em; max-width: calc(100% - 8em); max-height: none; overflow: visible; }
 [dir="ltr"] .mapui .mu-drawbar, .mapui[dir="ltr"] .mu-drawbar { transform: translateX(-50%); }
 .mapui .mu-drawbar .mu-ib { width: 2.1em; height: 2.1em; border-radius: 50%; }
 .mapui .mu-drawbar .mu-ib:disabled { opacity: .35; cursor: default; }
@@ -287,6 +287,9 @@
   function mount(el, o) {
     if (!MC) { el.innerHTML = '<p>רכיב המפה לא נטען.</p>'; return; }
     css();
+    // 3.1: טעינה חוזרת לאותו אלמנט מנתקת את המאזינים של הטעינה הקודמת (אחרת כל לחיצה טופלה פעמיים — למשל מסך מלא שנפתח ונסגר)
+    if (el.__muAC) try { el.__muAC.abort(); } catch (e) {}
+    const AC = el.__muAC = typeof AbortController !== 'undefined' ? new AbortController() : null, LO = AC ? { signal: AC.signal } : undefined;
     const pts = (o.points || []).filter(p => p.lat != null && p.lon != null);
     const extra = (o.layers || []).map(L => Object.assign({ on: true }, L));
     // 2.2.1: שכבות שהמשתמש שרטט או טען מקובץ נשמרות ב-storage של התוסף ונטענות לבד בכל פתיחה (דיווח גבולות עירוב 04.11)
@@ -328,7 +331,7 @@
       S.lat = lat; S.lon = lon; S.zoom = Math.max(ZMIN, Math.min(4, 300 / (far * 1.25)));
     }
     const selPt = () => (S.sel != null ? byId.get(S.sel) : null);
-    if (selPt()) { S.lat = selPt().lat; S.lon = selPt().lon; S.zoom = 3; } else if (o.center && o.center[0] != null) { S.lat = o.center[0]; S.lon = o.center[1]; S.zoom = 2; } else fit();
+    if (selPt()) { S.lat = selPt().lat; S.lon = selPt().lon; S.zoom = 3; } else if (o.center && o.center[0] != null) { S.lat = o.center[0]; S.lon = o.center[1]; S.zoom = o.zoom || 2; } else fit();
 
     const future = o.future || [];
     const join = off ? '' : [o.repo ? `<button class="mu" data-mu-open="${esc(o.repo + '/issues/new')}">הצטרפות</button>` : '', o.issueUrl ? `<button class="mu" data-mu-open="${esc(o.issueUrl)}">הבקשה בגיטהאב</button>` : '', o.forumUrl ? `<button class="mu" data-mu-open="${esc(o.forumUrl)}">השרשור בפורום</button>` : ''].join(' ');
@@ -753,7 +756,7 @@ ${more}
       if ((e.ctrlKey || e.metaKey) && (e.key === 'z' || e.key === 'Z' || e.key === 'ז')) { e.preventDefault(); S.draw.pts.pop(); drawBar(); draw(); }
       else if (e.key === 'Enter') { e.preventDefault(); drawSave(); }
       else if (e.key === 'Escape') { e.preventDefault(); S.draw = null; drawBar(); draw(); }
-    });
+    }, LO);
     function drawSave() {
       const L = S.draw; if (!L || L.pts.length < 2) return;
       const coords = L.pts.map(c => [+c[1].toFixed(6), +c[0].toFixed(6)]), HEX = ['', '#c62828', '#1565c0', '#2e7d32', '#ef6c00', '#6a1b9a'];
@@ -838,14 +841,14 @@ ${more}
       else if (a === 'route') { const p = selPt(); if (p) makeRoute([p.lat, p.lon], S.sel, p.name); }
       else if (a === 'pick') { const p = selPt(); if (p && o.onPick) o.onPick(p.id); }
       else if (a === 'soon') say('בפיתוח: הפעולה הזו עדיין לא קיימת. מחכה לעזרה.');
-    });
+    }, LO);
     document.addEventListener('pointerdown', e => {
       if (!el.isConnected) return;
       if (!pop.hidden && !pop.contains(e.target) && !lb.contains(e.target)) togglePop(false);
       const ip = $('mu-info'); if (ip && !ip.hidden && !ip.contains(e.target) && !$('mu-infob').contains(e.target)) { ip.hidden = true; $('mu-infob').setAttribute('aria-expanded', 'false'); }
       const ap = $('mu-add'); if (ap && !ap.hidden && !ap.contains(e.target) && !$('mu-addb').contains(e.target)) ap.hidden = true;
       const sf = $('mu-sf'); if (sf && !sf.contains(e.target)) $('mu-sug').hidden = true;
-    });
+    }, LO);
     if (typeof ResizeObserver !== 'undefined') new ResizeObserver(() => draw()).observe(view);
     refresh();
     restoreUser();
