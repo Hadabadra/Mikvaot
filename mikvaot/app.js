@@ -103,10 +103,26 @@
     return w.every(x => hay.includes(x));
   }
 
+  // 1.9.0 (בקשה ב׳): אייקונים מונוכרום בסגנון אוצריא / הגשר (Fluent, קו דק) — כל אייקון מתאים לפעולה שלו
+  const IC = {
+    pin: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11zM12 12.3a2.3 2.3 0 1 0 0-4.6 2.3 2.3 0 0 0 0 4.6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    ext: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5H5V6h5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    nav: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 20 4l-7.5 16-2-6.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    copy: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8h11v12H8zM5 15V5a1 1 0 0 1 1-1h9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    bell: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20.5h4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    gov: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5 12 4l9 5.5M4.5 9.5h15M6 12v6M10 12v6M14 12v6M18 12v6M3 20h18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    flag: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4M5 4h12l-2 4 2 4H5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    star: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l2.4 5 5.4.6-4 3.7 1.1 5.3L12 16l-4.9 2.6 1.1-5.3-4-3.7L9.6 9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    phone: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5l2.6.4 1.3 4-1.9 1.5a11 11 0 0 0 6 6l1.5-1.9 4 1.3.4 2.6c-.2 1.5-1.6 2.6-3.1 2.6A15.6 15.6 0 0 1 4 6.6C4 5.1 5.1 3.7 6.6 3.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    dl: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    print: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5M7 17H5V9h14v8h-2M7 14h10v6H7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    close: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    starFill: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l2.4 5 5.4.6-4 3.7 1.1 5.3L12 16l-4.9 2.6 1.1-5.3-4-3.7L9.6 9z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>'
+  };
   // ── כרטיס מקווה ──
   function phoneRow(k, p) {
     if (!p) return '';
-    return `<div class="row"><span class="k">${k}</span><span class="phone">${esc(p)}</span><button class="mini" data-copy="${esc(p)}" title="העתקת המספר">העתק</button></div>`;
+    return `<div class="row"><span class="k">${k}</span><span class="phone">${esc(p)}</span><button class="mini" data-copy="${esc(p)}" title="העתקת המספר">${IC.copy}העתק</button></div>`;
   }
   function card(it, withCity) {
     const fav = state.favs.includes(it.id);
@@ -122,12 +138,13 @@
       ${hours ? `<div class="row"><span class="k">שעות</span><span${it.lang === 'en' ? ' dir="ltr" lang="en"' : ''}>${esc(hours)}</span></div>` : '<div class="row"><span class="k">שעות</span><span class="lang">לא פורסמו — יש לברר בטלפון</span></div>'}
       ${ACC[it.acc] ? `<div class="row"><span class="k">נגישות</span><span>${ACC[it.acc]}</span></div>` : ''}
       <div class="card-foot">
-        ${state.online ? '<button class="mini" data-act="map">פתיחה במפה</button><button class="mini" data-act="waze">Waze</button>' : ''}
-        ${it.lat != null ? '<button class="mini" data-act="mapview">במפה</button>' : ''}<button class="mini" data-act="copyAddr">העתקת כתובת</button>
-        <button class="mini" data-act="remind">תזכורת / יומן</button>
-        ${isAbroad(it.city) && abroadOrgs(DATA.cities[it.city].country).length ? '<button class="mini" data-act="rabb">הרבנות באזור</button>' : ''}
-        <button class="mini" data-act="report">דיווח על טעות</button>
-        <button class="mini star" data-act="fav" aria-pressed="${fav}" title="מועדף">${fav ? '★' : '☆'}</button>
+        ${it.lat != null ? `<button class="mini" data-act="mapview" title="מציג את המקווה בלשונית המפה של התוסף (בלי אינטרנט)">${IC.pin}במפת התוסף</button>` : ''}
+        ${state.online ? `<button class="mini" data-act="map" title="פותח את Google Maps בדפדפן — אתר חיצוני">${IC.ext}Google Maps</button><button class="mini" data-act="waze" title="פותח ניווט ב-Waze בדפדפן — אתר חיצוני">${IC.nav}ניווט Waze</button>` : ''}
+        <button class="mini" data-act="copyAddr">${IC.copy}העתקת כתובת</button>
+        <button class="mini" data-act="remind">${IC.bell}תזכורת / יומן</button>
+        ${isAbroad(it.city) && abroadOrgs(DATA.cities[it.city].country).length ? `<button class="mini" data-act="rabb">${IC.gov}הרבנות באזור</button>` : ''}
+        <button class="mini" data-act="report">${IC.flag}דיווח על טעות</button>
+        <button class="mini star" data-act="fav" aria-pressed="${fav}" title="${fav ? 'הסרה מהמועדפים' : 'הוספה למועדפים'}" aria-label="מועדף">${fav ? IC.starFill : IC.star}</button>
       </div>
       <div class="src">מקור: ${esc(src)} · נבדק ${esc((it.checked || '').split('-').reverse().join('.'))}${it.lang === 'en' ? ' · הפרטים במקור באנגלית' : ''}</div>
     </article>`;
@@ -180,7 +197,7 @@
   function cityView(c) {
     const all = byCity.get(c) || [], list = sortItems(all.filter(pass));
     let html = `<div class="hero"><div class="grow"><h2>${esc(c)}</h2><p>${all.length} מקוואות · ${countText(all)}${councilLine(c) ? '<br>' + councilLine(c) : ''}</p></div>
-      <button class="btn ${state.favs.includes('city:' + c) ? 'tonal' : 'text'}" data-favcity="${esc(c)}">${state.favs.includes('city:' + c) ? '★ במועדפים' : '☆ הוספה למועדפים'}</button></div>`;
+      <button class="btn ${state.favs.includes('city:' + c) ? 'tonal' : 'text'}" data-favcity="${esc(c)}">${state.favs.includes('city:' + c) ? IC.starFill + ' במועדפים' : IC.star + ' הוספה למועדפים'}</button></div>`;
     if (isAbroad(c)) html = html.replace('</div>\n      <button class="btn', '</div>' + rabbBtn(DATA.cities[c].country) + '\n      <button class="btn');
     if (state.pos) html += `<div class="section-title">ממוין לפי מרחק ממך</div>` + list.map(i => card(i)).join('');
     else for (const t of ORDER) { const g = list.filter(i => i.type === t); if (g.length) html += `<div class="section-title">${t === 'unknown' ? 'מקוואות שסוגם לא צוין במקור' : 'מקוואות ' + TYPE[t]} · ${g.length}</div>` + g.map(i => card(i)).join(''); }
@@ -198,7 +215,7 @@
   function favView() {
     const cities = state.favs.filter(f => f.startsWith('city:')).map(f => f.slice(5)).filter(c => byCity.has(c));
     const list = DATA.items.filter(it => state.favs.includes(it.id) && pass(it));
-    if (!cities.length && !list.length) return `<div class="empty">אין עדיין מועדפים. לחצו ☆ בכרטיס מקווה או בדף עיר.</div>`;
+    if (!cities.length && !list.length) return `<div class="empty">אין עדיין מועדפים. לחצו על הכוכב בכרטיס מקווה או בדף עיר.</div>`;
     return `<div class="hero"><div class="grow"><h2>מועדפים</h2></div></div>
       ${cities.length ? `<div class="section-title">ערים</div><div class="city-grid">${cities.map(c => `<button class="city-card" data-city="${esc(c)}"><strong>${esc(c)}</strong><span>${byCity.get(c).length} מקוואות</span></button>`).join('')}</div>` : ''}
       ${list.length ? '<div class="section-title">מקוואות</div>' + sortItems(list).map(i => card(i, true)).join('') : ''}`;
@@ -225,7 +242,7 @@
     else if (state.view === 'favs') { main.innerHTML = favView(); $('#crumb').textContent = 'מועדפים'; }
     else { state.view = 'home'; main.innerHTML = homeView(); $('#crumb').textContent = 'כל הערים'; }
     $('#printHead').textContent = 'מקוואות — ' + $('#crumb').textContent + (state.type ? ' · ' + TYPE[state.type] : '');
-    $('#printFoot').textContent = `מתוך תוסף "מקוואות" לאוצריא · יש לאמת שעות בטלפון · GitHub: ${REPO}/releases · חנות התוספים של אוצריא: כלים ← תוספים ← חנות, חיפוש "מקוואות"`;
+    $('#printFoot').innerHTML = printFootHTML();
     document.querySelectorAll('#types .chip').forEach(b => b.setAttribute('aria-selected', String(b.dataset.type === state.type)));
     $('#accOnly').checked = state.acc; $('#hoursOnly').checked = state.withHours;
     $('#btnFav').setAttribute('aria-pressed', String(state.view === 'favs'));
@@ -369,6 +386,7 @@
   });
   $('#btnLoc').addEventListener('click', locate);
   $('#btnPrint').addEventListener('click', async () => {
+    await preparePrint([...document.querySelectorAll('#list .card[data-id]')].map(c => DATA.items.find(x => x.id === c.dataset.id)).filter(Boolean));
     if (!hasOtz) return window.print();
     const r = await call('ui.print', { jobName: $('#printHead').textContent, pageSize: 'a4', orientation: 'portrait', marginMm: 12, printBackgrounds: false });
     if (!r.success) window.print();
@@ -496,8 +514,8 @@
     ACC[it.acc] && 'נגישות: ' + ACC[it.acc], 'יש לאמת שעות בטלפון לפני ההגעה.', '', 'מתוך התוסף "מקוואות" לאוצריא', 'GitHub: ' + REPO + '/releases', 'חנות התוספים של אוצריא: https://otzaria.org/plugins/6ad9c9c92917198d739939b7'].filter(x => x !== false && x != null).join('\n');
   function openPreview(id) {
     const it = DATA.items.find(x => x.id === id); if (!it) return; pvId = id;
-    const el = $('#preview'); el.innerHTML = `<div class="pv-head"><button class="icon-btn" data-pv="close" aria-label="סגירה">✕</button></div>${card(it, true)}
-      <div class="btns"><button class="btn tonal" data-pv="dl">הורדה</button><button class="btn tonal" data-pv="print">הדפסה</button><button class="btn tonal" data-pv="copy">העתקה</button></div>`;
+    const el = $('#preview'); el.innerHTML = `<div class="pv-head"><button class="icon-btn" data-pv="close" aria-label="סגירה">${IC.close}</button></div>${card(it, true)}
+      <div class="btns"><button class="btn tonal" data-pv="dl">${IC.dl}הורדה</button><button class="btn tonal" data-pv="print">${IC.print}הדפסה</button><button class="btn tonal" data-pv="copy">${IC.copy}העתקה</button></div>`;
     el.hidden = false; document.querySelectorAll('#list .card.sel').forEach(c => c.classList.remove('sel')); const c = document.querySelector(`#list .card[data-id="${CSS.escape(id)}"]`); if (c) c.classList.add('sel');
   }
   async function previewAct(a) {
@@ -505,7 +523,36 @@
     if (a === 'close') { $('#preview').hidden = true; pvId = null; document.querySelectorAll('#list .card.sel').forEach(c => c.classList.remove('sel')); return; }
     if (a === 'copy') return copy(pvText(it), 'הפרטים הועתקו');
     if (a === 'dl') { const x = document.createElement('a'); x.href = URL.createObjectURL(new Blob([pvText(it) + '\n'], { type: 'text/plain;charset=utf-8' })); x.download = `מקווה - ${it.city} - ${it.address}.txt`.replace(/[\\/:*?"<>|]/g, ''); document.body.appendChild(x); x.click(); x.remove(); return toast('הקובץ נשמר'); }
-    if (a === 'print') { document.body.classList.add('print-one'); $('#printHead').textContent = 'מקווה — ' + it.city; const r = hasOtz ? await call('ui.print', { jobName: 'מקווה ' + it.city, pageSize: 'a4', orientation: 'portrait', marginMm: 12, printBackgrounds: false }) : null; if (!r || !r.success) window.print(); setTimeout(() => document.body.classList.remove('print-one'), 800); }
+    if (a === 'print') { await preparePrint([it]); document.body.classList.add('print-one'); $('#printHead').textContent = 'מקווה — ' + it.city; const r = hasOtz ? await call('ui.print', { jobName: 'מקווה ' + it.city, pageSize: 'a4', orientation: 'portrait', marginMm: 12, printBackgrounds: false }) : null; if (!r || !r.success) window.print(); setTimeout(() => document.body.classList.remove('print-one'), 800); }
+  }
+
+  // ── 1.9.0 (בקשה 9): הדפסה ברורה — כותרת למעלה, מפת האזור, ושורת מקור עם קישורים לחיצים (חנות + GitHub) ──
+  const STORE = 'https://otzaria.org/plugins/6ad9c9c92917198d739939b7';
+  const printFootHTML = () => `<b>מתוך התוסף "מקוואות" לאוצריא</b> · מדריך מעשי בלבד, יש לאמת שעות בטלפון לפני ההגעה.<br>
+    הורדת התוסף: <a href="${STORE}">חנות התוספים של אוצריא</a> (${STORE.replace('https://', '')}) · <a href="${REPO}/releases/latest">GitHub</a> (${REPO.replace('https://', '')}/releases)`;
+  function loadStreets(slug) {
+    return new Promise(res => {
+      if ((window.STREETS || {})[slug]) return res(true);
+      const sc = document.createElement('script'); sc.src = 'streets/' + slug + '.js'; sc.onload = () => res(true); sc.onerror = () => res(false); document.head.appendChild(sc); setTimeout(() => res(false), 4000);
+    });
+  }
+  async function printMapSVG(items) {
+    const MC = window.MapCore, pts = items.filter(i => i.lat != null && i.lon != null).slice(0, 300); if (!MC || !pts.length) return '';
+    const la = pts.map(p => p.lat), lo = pts.map(p => p.lon), c = [(Math.min(...la) + Math.max(...la)) / 2, (Math.min(...lo) + Math.max(...lo)) / 2];
+    const W = 400, H = 260, v1 = MC.createView({ lat: c[0], lon: c[1], zoom: 1, rot: 0, width: W, height: H });
+    const span = Math.max(MC.distM([Math.min(...la), c[1]], [Math.max(...la), c[1]]) / H, MC.distM([c[0], Math.min(...lo)], [c[0], Math.max(...lo)]) / W, 600 / W);
+    const zoom = Math.max(0.0005, Math.min(3, .8 / (span * v1.scale)));
+    const v = MC.createView({ lat: c[0], lon: c[1], zoom, rot: 0, width: W, height: H });
+    let area = null; const sc = window.STREET_CITIES || {};
+    const near = Object.entries(sc).map(([n, x]) => [n, x, MC.distM(c, [x.lat, x.lon])]).sort((a, b) => a[2] - b[2])[0];
+    if (near && near[2] < 15000 && zoom >= .05 && await loadStreets(near[1].slug)) { try { area = MC.decodeArea(MC.compactOverpass(window.STREETS[near[1].slug])); } catch (e) {} }
+    const layer = { id: 'm', glyph: 'מ', points: pts.map(p => ({ lat: p.lat, lon: p.lon, id: p.id, label: pts.length < 15 ? (p.hood || p.address || '').slice(0, 22) : '' })), lines: [] };
+    return MC.renderSVG({ area, view: v, layers: [layer], streets: true, syn: false, base: window.NE_DATA || null, color: true, style: 'eyes', labels: zoom >= 2, outline: !area && !window.NE_DATA, chrome: true });
+  }
+  async function preparePrint(items) {
+    $('#printFoot').innerHTML = printFootHTML();
+    let svg = ''; try { svg = await printMapSVG(items); } catch (e) {}
+    $('#printMap').innerHTML = svg ? `<div class="pm-cap">מפת האזור — ${items.length === 1 ? 'מיקום המקווה' : items.length + ' המקוואות ברשימה'} (בקירוב, מתוך מפת התוסף)</div>${svg}` : '';
   }
 
   // ── חלון כללי ──
