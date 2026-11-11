@@ -96,6 +96,16 @@
    "lat": 32.07193,
    "lon": 34.83683,
    "approx": true
+  },
+  {
+   "type": "men",
+   "name": "מקווה גברים קרלין — מאחורי בית הכנסת באיאן",
+   "city": "מודיעין עילית",
+   "hood": "חפציבה",
+   "address": "הבעל שם טוב 1",
+   "src": "https://github.com/Hadabadra/Mikvaot/issues/14",
+   "srcName": "דיווח משתמש (issue #14)",
+   "checked": "2026-11-11"
   }
  ]
 }
