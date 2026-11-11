@@ -1,7 +1,7 @@
 /* מקוואות — מדריך מעשי (מיקום, שעות, טלפון). אין בו הלכות; לשאלות — רב הקהילה ואחראית המקווה. */
 (function () {
   'use strict';
-  const VERSION = '1.9.0';
+  const VERSION = '2.0.0';
   const REPO = 'https://github.com/Hadabadra/Mikvaot';
   const O = window.Otzaria, hasOtz = !!(O && O.call);
   const $ = s => document.querySelector(s);
@@ -459,12 +459,14 @@
       <p>לשונית המפה משותפת לארבעה תוספים: כיוון תפילה, מקוואות, גבולות עירוב ועינים למקרא. הקוד במקום אחד (Hadabadra/Mikvaot, תיקייה shared), וכל תיקון מגיע לכולם. בכפתור השכבות שעל המפה פותחים את השכבות של התוספים האחרים באותו מקום.</p>
       ${state.online === false ? '' : `<p>${['הסבר על המפה המשותפת|https://github.com/Hadabadra/Mikvaot/blob/main/shared/map-core/SHARED-MAP.md', 'הקוד של המפה|https://github.com/Hadabadra/Mikvaot/tree/main/shared/map-core', 'כיוון תפילה בחנות|https://otzaria.org/plugins/6ac80057bd083fcc18562fa0', 'גבולות עירוב בחנות|https://otzaria.org/plugins/6ad93b5d2917198d73992a9d', 'עינים למקרא בחנות|https://otzaria.org/plugins/6a671db1dd175558ae6f20ac'].map(x => { const [a, u] = x.split('|'); return `<button class="mini" data-open="${u}">${a}</button>`; }).join(' ')}</p>`}
       ${window.AchatPromo ? '<h3>המלצה</h3>' + AchatPromo.aboutHtml() + AchatPromo.settingsHtml() : ''}
+      ${window.CrashReport ? '<h3>דיווח תקלות</h3><label class="ap-set"><span>הצעת דיווח קריסה<small>כשמשהו נתקע — הודעה קטנה, פעם אחת בכל הפעלה, שמציעה לשלוח דיווח דרך אוצריא (רק באישורכם)</small></span><input type="checkbox" id="cr-sw" checked></label>' : ''}
       <h3>פרטיות</h3>
       <p>התוסף אינו שולח את המיקום שלכם לשום שרת. חיפוש כתובת עם מספר בית במפה נשלח ל-OpenStreetMap רק כשאתם מחפשים, ורק כשאוצריא מחוברת. המיקום משמש רק למיון לפי מרחק, ונשאר במכשיר. התוסף עובד בלי אינטרנט. דיווח דרך אוצריא או GitHub נשלח רק אם בחרתם לשלוח.</p>
       <p>דף התוסף: ${linkBtns(REPO)}</p>
       <p>שרשור הדיווחים בפורום אוצריא: ${linkBtns('https://otzaria.org/forum/post/45135')}</p>
       <p class="src">מקוואות ${VERSION} · מאת לזש"ק לרמב"ר ומבק"י · מיקום אוטומטי דרך הגשר "אחת שאלתי" (אם מותקן)</p>`;
     if (window.AchatPromo) AchatPromo.bind($('#infoBody'));
+    { const crs = $('#cr-sw'); if (crs && window.CrashReport) { CrashReport.ready().then(on => { crs.checked = on; }); crs.onchange = () => CrashReport.setEnabled(crs.checked); } }
     $('#infoScrim').hidden = false;
   }
   $('#btnInfo').addEventListener('click', info);

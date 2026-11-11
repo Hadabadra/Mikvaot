@@ -9,7 +9,8 @@
 - לא דורש הרשאה. הדיווח מגיע לאתר אוצריא ← למייל המפתחת ← הסקריפט של Google Apps Script פותח issue בגיטהאב עם התווית "דיווח-משתמש".
 - `feedback.hasReporterEmail` — לבדוק אם צריך לבקש כתובת.
 
-## הרכיב `crash-report.js`
+## הרכיב `crash-report.js` (גרסה 1.1.0, 11.11.2026 — הועתק מ-Hadabadra/Prayer-pointA ענף כיוון-תפילה)
+- 1.1.0: הצעה אחת בלבד בכל הפעלה; `setEnabled(bool)` / `isEnabled()` / `ready()` (Promise) למתג "הצעת דיווח קריסה" בהגדרות/אודות של כל תוסף.
 - `CrashReport.init({ call, plugin, version })` — תופס `error` ו-`unhandledrejection`, מציג הודעה קטנה "אירעה תקלה" עם "שליחת דיווח למפתח" / "לא עכשיו" / "לא להציע שוב" (נשמר ב-storage במפתח `crashReportOff`).
 - הדיווח כולל: שם התוסף וגרסתו, ההודעה, המחסנית (עד 1,800 תווים), גרסת אוצריא (`app.getInfo`). נתיבי משתמש (`C:\Users\<שם>`) מוסתרים.
 - `CrashReport.report(msg, stack)` — דיווח ידני על שגיאה שהתוסף תפס בעצמו.
