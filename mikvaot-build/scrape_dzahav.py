@@ -43,7 +43,7 @@ while todo:
         seen.add(cid.group(1)); new += 1
         co = re.search(r'data-coordinates="([\d.]+),([\d.]+)"', c)
         name = re.search(r'<h3[^>]*>(.*?)</h3>', c, re.S)
-        addr = re.search(r'id="result_item_navigate".*?<span>(.*?)</span>', c, re.S)
+        addr = re.search(r'id="result_item_navigate".*?<span>(.*?)</span>', c, re.S) or re.search(r'data-address="([^"]+)"', c)  # 11.2026: המבנה השתנה
         tel = re.search(r'href="tel:([\d-]+)"', c)
         out.append({"id": cid.group(1), "name": clean(name.group(1)) if name else "",
                     "address": clean(addr.group(1)) if addr else "", "phone": tel.group(1) if tel else "",
@@ -64,6 +64,9 @@ for n, it in enumerate(out, 1):
     m = re.search(r'data-clossing-hours="([^"]*)"', s)
     if m and m.group(1).strip(","):
         it["hoursRaw"] = m.group(1)  # ראשון..שבת, "730-1930" לכל יום, ריק = סגור/לא ידוע
+    if not it.get("address"):  # 11.2026: הכתובת כבר לא בדף התוצאות — לוקחים מדף העסק
+        a = re.search(r'data-address="([^"]+)"', s)
+        if a: it["address"] = html.unescape(a.group(1)).strip()
     w = re.search(r'<a href="(https?://[^"]+)"[^>]*data-statistics-label=click-infoblock-businesswebsitelink', s)
     if w: it["website"] = w.group(1)
     time.sleep(0.7)
