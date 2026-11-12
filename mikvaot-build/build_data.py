@@ -355,6 +355,10 @@ cities_out = {}
 for c in sorted({i["city"] for i in items}):
     a, b = CITIES.get(c, (None, None))
     cities_out[c] = {k: v for k, v in {"lat": a, "lon": b, "council": COUNCILS.get(c), "country": ABROAD_CITY.get(c)}.items() if v is not None}
+# 2.1.0: ערים מתוך fixes.json ("cities": נקודה ומועצה/מחלקת דת מאתר רשמי)
+if os.path.exists(fx_path):
+    for c, v in json.load(open(fx_path, encoding="utf-8")).get("cities", {}).items():
+        if c in cities_out: cities_out[c].update(v)
 here = os.path.dirname(os.path.abspath(__file__))
 ABROAD_ORGS = json.load(open(os.path.join(here, "abroad_orgs.json"), encoding="utf-8"))
 data = {"version": max(CHECKED, "2026-11-04"), "orgs": ORGS + ABROAD_ORGS, "sources": [v["name"] for v in COUNCILS.values() if v] + list(SRC_NAMES.values()),
