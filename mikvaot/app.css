@@ -250,3 +250,4 @@ body.offline [data-open], body.offline [data-copy^="http"], body.offline .ext-on
 .mf > span { color: var(--color-on-surface-variant); font-size: .88em; }
 .mf input, .mf select { font: inherit; padding: .45em .6em; border: 1px solid var(--color-outline-variant); border-radius: .5em; background: var(--color-surface); color: var(--color-on-surface); }
 .badge.mine { background: var(--color-tertiary-container); color: var(--color-on-tertiary-container); }
+.hal-list { display: flex; flex-wrap: wrap; gap: .4em; margin: .3em 0 .8em; }

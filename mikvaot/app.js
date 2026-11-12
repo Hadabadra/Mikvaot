@@ -349,6 +349,31 @@
     else if (b.dataset.act === 'rabb') rabbDialog(DATA.cities[it.city].country);
     else if (b.dataset.act === 'remind') remindDialog(it);
   });
+  const srcNorm = t => (t || '').replace(/[^\u05d0-\u05eaA-Za-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+  async function openSrc(q, ref) {
+    if (!hasOtz) { toast(q + ' ' + ref); return; }
+    for (const qq of q.split('|')) {
+      const l = await call('library.findBooks', { query: qq, limit: 30 });
+      const w = srcNorm(qq).split(' ');
+      const m = (l.success ? l.data || [] : []).filter(x => { const t = ' ' + srcNorm(x.title) + ' '; return w.every(y => t.includes(' ' + y + ' ')); })
+        .sort((a, b) => srcNorm(a.title).length - srcNorm(b.title).length)[0];
+      if (m) { const r = await call('reader.openBookAtRef', { bookId: m.bookId, ref, highlight: true }); if (r.success && r.data !== false) return; }
+    }
+    const r = await call('reader.openSearchTab', { query: q.split('|')[0] + ' ' + ref });
+    if (!r.success) toast('לא נמצא בספרייה: ' + q + ' ' + ref);
+  }
+  // 2.1.0: הלכות טבילה וטבילת כלים — מקורות בלבד, נפתחים בספריית אוצריא. התוסף אינו פוסק הלכה.
+  const HAL = [
+    ['טבילת כלים', [['שולחן ערוך יורה דעה, סימן קכ', 'שולחן ערוך יורה דעה', 'קכ'], ['קיצור שולחן ערוך, סימן לז', 'קיצור שולחן ערוך', 'לז']]],
+    ['טבילה', [['שולחן ערוך יורה דעה, סימן קצח', 'שולחן ערוך יורה דעה', 'קצח'], ['שולחן ערוך יורה דעה, סימן קצט', 'שולחן ערוך יורה דעה', 'קצט'],
+      ['שולחן ערוך יורה דעה, סימן ר', 'שולחן ערוך יורה דעה', 'ר'], ['שולחן ערוך יורה דעה, סימן רא', 'שולחן ערוך יורה דעה', 'רא'], ['שולחן ערוך יורה דעה, סימן רב', 'שולחן ערוך יורה דעה', 'רב'],
+      ['קיצור שולחן ערוך — חיפוש "טבילה" בספרייה', 'קיצור שולחן ערוך', '', 'search']]]
+  ];
+  function halDialog() {
+    dialog('הלכות — מקורות', `<p>מקורות ההלכות נפתחים כאן בספריית אוצריא. התוסף אינו פוסק הלכה: לכל שאלה למעשה — לרב, ובמקווה — לאחראית המקווה.</p>
+      ${HAL.map(([t, l]) => `<h3>${esc(t)}</h3><div class="hal-list">${l.map(([n, q, r, k], i) => `<button class="btn tonal" data-hal="${esc(q)}" data-ref="${esc(r)}"${k ? ' data-kind="search"' : ''}>${esc(n)}</button>`).join('')}</div>`).join('')}
+      <p class="lang">יורחב אחרי קבלת חומר מורחב יותר.</p><div class="btns"><button class="btn tonal" id="backInfo">סגירה</button></div>`);
+  }
   // ── 2.1.0: הוספת מקווה משלי ──
   function mineDialog(it, city) {
     it = it || { type: 'women', city: city || state.city || '' };
@@ -517,12 +542,14 @@
     $('#infoScrim').hidden = false;
   }
   $('#btnInfo').addEventListener('click', info);
+  $('#btnHal').addEventListener('click', halDialog);
   $('#viewTabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (!b) return; state.tab = b.dataset.tab; if (state.tab === 'list') state.mapSel = null; showTab(); saveView(); });
   $('#infoClose').addEventListener('click', () => $('#infoScrim').hidden = true);
   $('#infoScrim').addEventListener('click', async e => {
     if (e.target === e.currentTarget) return e.currentTarget.hidden = true;
     const soon = e.target.closest && e.target.closest('[data-soon]'); if (soon) return featureDev(soon.dataset.soon);
     const id = e.target.id;
+    { const h = e.target.closest('[data-hal]'); if (h) { if (h.dataset.kind === 'search') { const r = await call('reader.openSearchTab', { query: 'קיצור שולחן ערוך טבילה' }); if (!r.success) toast('לא ניתן לפתוח חיפוש בספרייה'); return; } return openSrc(h.dataset.hal, h.dataset.ref); } }
     if (id === 'expCopy') return copy($('#expText').value, 'הרשימה הועתקה').then(() => toast('הרשימה הועתקה'));
     if (id === 'expPrint') { $('#infoScrim').hidden = true; return $('#btnPrint').click(); }
     if (id === 'rmSave') return saveReminder(e.target.dataset.id);
