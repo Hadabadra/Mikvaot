@@ -20,12 +20,11 @@ def get(url):
 # כל המקוואות בעולם — מתוך מפת האתר (ישראל + חו"ל)
 sm = get(BASE + "/sitemap-mikvahs.xml")
 links = sorted(set(u.replace(BASE, "") for u in re.findall(r"<loc>([^<]+/mikvaos/\d+/[^<]+)</loc>", sm)))
-out = []
-for n, u in enumerate(links, 1):
+def one(u):
     try:
         s = get(BASE + u)
     except Exception as e:
-        print("skip", u, e); continue
+        print("skip", u, e); return None
     biz = None
     for m in re.finditer(r'<script[^>]*ld\+json[^>]*>(.*?)</script>', s, re.S):
         try:
@@ -35,21 +34,25 @@ for n, u in enumerate(links, 1):
         if isinstance(j, dict) and j.get("@type") == "LocalBusiness":
             biz = j
     if not biz:
-        continue
+        return None
     a, g = biz.get("address") or {}, biz.get("geo") or {}
     desc = html.unescape(biz.get("description") or "")
     sched = desc.split("Schedule:", 1)[1].strip() if "Schedule:" in desc else ""
     # סוג המקווה מהעמוד (Women/Men/Keilim) — לפי טקסט הדף
     low = (biz.get("name", "") + " " + re.sub(r"<[^>]+>", " ", s[:200000])).lower()
-    out.append({
+    return {
         "url": BASE + u, "name": html.unescape(biz.get("name", "")), "street": a.get("streetAddress", ""),
         "city": a.get("addressLocality", ""), "region": a.get("addressRegion", ""),
         "country": a.get("addressCountry", "") or u.split("/")[3], "seg": u.split("/")[3], "postal": a.get("postalCode", ""), "lat": g.get("latitude"), "lon": g.get("longitude"),
         "phone": biz.get("telephone", ""), "schedule": sched.rstrip(" ."),
         "hint_men": bool(re.search(r"\bmen'?s mikvah\b|\bmens\b|\bmen only\b", low)),
         "hint_keilim": "keilim" in low or "kelim" in low,
-    })
-    print(n, len(links), out[-1]["city"], out[-1]["name"])
-    time.sleep(0.4)
+    }
+
+# 12.11.2026: הורדה במקביל (4 חיבורים) — סדר הפלט נשמר לפי מפת האתר
+from concurrent.futures import ThreadPoolExecutor
+with ThreadPoolExecutor(int(os.environ.get("WORKERS", "4"))) as ex:
+    res = list(ex.map(one, links))
+out = [r for r in res if r]
 json.dump(out, open(os.path.join(here, "raw", "mikvah_org.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print(len(out), "saved")

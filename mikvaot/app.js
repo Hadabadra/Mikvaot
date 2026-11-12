@@ -1,7 +1,7 @@
 /* מקוואות — מדריך מעשי (מיקום, שעות, טלפון). אין בו הלכות; לשאלות — רב הקהילה ואחראית המקווה. */
 (function () {
   'use strict';
-  const VERSION = '2.0.0';
+  const VERSION = '2.1.0';
   const REPO = 'https://github.com/Hadabadra/Mikvaot';
   const O = window.Otzaria, hasOtz = !!(O && O.call);
   const $ = s => document.querySelector(s);
@@ -12,7 +12,7 @@
   const ORDER = ['women', 'men', 'kelim', 'unknown'];
   const ACC = { partial: 'נגישות חלקית', basic: 'נגישות בסיסית', full: 'נגישות מלאה', 'full-lift': 'נגישות מלאה כולל מנוף' };
   // view: home | city | favs ; q = חיפוש חופשי
-  const state = { view: 'home', city: '', type: '', acc: false, withHours: false, q: '', favs: [], recent: [], online: false, pos: null, rail: true, region: 'il', tab: 'list', mapSel: null };
+  const state = { view: 'home', city: '', type: '', acc: false, withHours: false, q: '', favs: [], recent: [], online: false, pos: null, rail: true, region: 'il', tab: 'list', mapSel: null, mine: [] };
 
   // ── עזרים ──
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -67,6 +67,8 @@
   // ── נתונים לפי עיר ──
   let byCity = new Map(), cityNames = [];
   function index() {
+    // 2.1.0: "מקווה משלי" — רשומות אישיות (storage 'mine') מצטרפות לרשימה; נשמרות רק במחשב הזה
+    DATA.items = DATA.items.filter(i => !i.mine).concat(state.mine || []);
     byCity = new Map();
     DATA.items.forEach(it => { if (!byCity.has(it.city)) byCity.set(it.city, []); byCity.get(it.city).push(it); });
     regionCities();
@@ -133,9 +135,10 @@
     const src = [it.srcName, ...(it.also || [])].filter(Boolean).join(', ');
     return `<article class="card${it.closed ? ' closed' : ''}" data-id="${esc(it.id)}">
       <div class="card-head"><div class="card-title">${hl(title)}<small>${hl(sub)}${d != null ? ' · ' + kmText(d) + ' ממך' : ''}</small></div>
-        <span class="badge ${it.type}">${TYPE[it.type] || 'מקווה'}</span>${it.closed ? '<span class="badge warn">סגור לפי המקור</span>' : ''}</div>
+        <span class="badge ${it.type}">${TYPE[it.type] || 'מקווה'}</span>${it.mine ? '<span class="badge mine">שלי</span>' : ''}${it.closed ? '<span class="badge warn">סגור לפי המקור</span>' : ''}</div>
       ${phoneRow('טלפון', it.phone)}${phoneRow('אחראי/ת', it.contact)}
       ${hours ? `<div class="row"><span class="k">שעות</span><span${it.lang === 'en' ? ' dir="ltr" lang="en"' : ''}>${esc(hours)}</span></div>` : '<div class="row"><span class="k">שעות</span><span class="lang">לא פורסמו — יש לברר בטלפון</span></div>'}
+      ${it.note ? `<div class="row"><span class="k">הערה</span><span>${esc(it.note)}</span></div>` : ''}
       ${ACC[it.acc] ? `<div class="row"><span class="k">נגישות</span><span>${ACC[it.acc]}</span></div>` : ''}
       <div class="card-foot">
         ${it.lat != null ? `<button class="mini" data-act="mapview" title="מציג את המקווה בלשונית המפה של התוסף (בלי אינטרנט)">${IC.pin}במפת התוסף</button>` : ''}
@@ -143,7 +146,7 @@
         <button class="mini" data-act="copyAddr">${IC.copy}העתקת כתובת</button>
         <button class="mini" data-act="remind">${IC.bell}תזכורת / יומן</button>
         ${isAbroad(it.city) && abroadOrgs(DATA.cities[it.city].country).length ? `<button class="mini" data-act="rabb">${IC.gov}הרבנות באזור</button>` : ''}
-        <button class="mini" data-act="report">${IC.flag}דיווח על טעות</button>
+        ${it.mine ? `<button class="mini" data-act="mineEdit">עריכה</button><button class="mini" data-act="mineDel">מחיקה</button><button class="mini" data-act="mineSend" title="שליחת הפרטים למפתחת כדי שיתווספו לכולם">שליחה לכולם</button>` : `<button class="mini" data-act="report">${IC.flag}דיווח על טעות</button>`}
         <button class="mini star" data-act="fav" aria-pressed="${fav}" title="${fav ? 'הסרה מהמועדפים' : 'הוספה למועדפים'}" aria-label="מועדף">${fav ? IC.starFill : IC.star}</button>
       </div>
       <div class="src">מקור: ${esc(src)} · נבדק ${esc((it.checked || '').split('-').reverse().join('.'))}${it.lang === 'en' ? ' · הפרטים במקור באנגלית' : ''}</div>
@@ -198,6 +201,7 @@
     const all = byCity.get(c) || [], list = sortItems(all.filter(pass));
     let html = `<div class="hero"><div class="grow"><h2>${esc(c)}</h2><p>${all.length} מקוואות · ${countText(all)}${councilLine(c) ? '<br>' + councilLine(c) : ''}</p></div>
       <button class="btn ${state.favs.includes('city:' + c) ? 'tonal' : 'text'}" data-favcity="${esc(c)}">${state.favs.includes('city:' + c) ? IC.starFill + ' במועדפים' : IC.star + ' הוספה למועדפים'}</button></div>`;
+    html = html.replace('</div>\n      <button class="btn', `</div><button class="btn text" data-mineadd="${esc(c)}">+ מקווה משלי</button>\n      <button class="btn`);
     if (isAbroad(c)) html = html.replace('</div>\n      <button class="btn', '</div>' + rabbBtn(DATA.cities[c].country) + '\n      <button class="btn');
     if (state.pos) html += `<div class="section-title">ממוין לפי מרחק ממך</div>` + list.map(i => card(i)).join('');
     else for (const t of ORDER) { const g = list.filter(i => i.type === t); if (g.length) html += `<div class="section-title">${t === 'unknown' ? 'מקוואות שסוגם לא צוין במקור' : 'מקוואות ' + TYPE[t]} · ${g.length}</div>` + g.map(i => card(i)).join(''); }
@@ -207,7 +211,7 @@
   function searchView() {
     const cities = [...byCity.keys()].filter(c => words().every(w => norm(c + ' ' + ((DATA.cities[c] || {}).country || '')).includes(w)));
     const list = sortItems(DATA.items.filter(it => pass(it) && matchQ(it))).slice(0, 300);
-    if (!cities.length && !list.length) return `<div class="empty">לא נמצא "${esc(state.q)}". אפשר לחפש עיר, שכונה, רחוב או שם מקווה.<br>מקווה חסר? "אודות" ← "דיווח על מקווה חסר".</div>`;
+    if (!cities.length && !list.length) return `<div class="empty">לא נמצא "${esc(state.q)}". אפשר לחפש עיר, שכונה, רחוב או שם מקווה.<br>מקווה חסר? <button class="mini" data-mineadd="">הוספת מקווה משלי</button> או "אודות" ← "דיווח על מקווה חסר".</div>`;
     return `<div class="hero"><div class="grow"><h2>תוצאות עבור "${esc(state.q.trim())}"</h2><p>${cities.length} ערים · ${list.length} מקוואות</p></div></div>
       ${cities.length ? `<div class="section-title">ערים</div><div class="city-grid">${cities.map(c => `<button class="city-card" data-city="${esc(c)}"><strong>${hl(c)}</strong><span>${byCity.get(c).length} מקוואות</span></button>`).join('')}</div>` : ''}
       ${list.length ? '<div class="section-title">מקוואות</div>' + list.map(i => card(i, true)).join('') : ''}`;
@@ -284,14 +288,27 @@
     bar.hidden = !part.length;
   }
 
-  // ── מיקום: גשר "אחת שאלתי" ──
+  // 2.1.0: כשאין גשר "אחת שאלתי" — העיר שנבחרה בלוח השנה של אוצריא (הגדרות ← לוח שנה)
+  async function calendarCityPos() {
+    try {
+      const s = await call('settings.get', { key: 'key-selected-city' });
+      const name = s && s.success && typeof s.data === 'string' ? s.data : '';
+      if (!name) return null;
+      const r = await call('calendar.getCities');
+      const c = (r && r.success && Array.isArray(r.data) ? r.data : []).find(x => x.name === name);
+      return c && c.lat != null ? { name, lat: +c.lat, lon: +(c.lng != null ? c.lng : c.lon) } : null;
+    } catch (e) { return null; }
+  }
+  // ── מיקום: גשר "אחת שאלתי" ← העיר בלוח השנה ← המכשיר ──
   async function locate() {
     const B = window.MIKVE_BRIDGE;
     toast('מאתר מיקום…');
     let pos = null;
     try { if (B && await B.available()) { const l = await B.location(); if (l && l.latitude != null) pos = { lat: l.latitude, lon: l.longitude }; else if (l && l.lat != null) pos = { lat: l.lat, lon: l.lon ?? l.lng }; } } catch (e) {}
+    let how = '';
+    if (!pos) { const cc = await calendarCityPos(); if (cc) { pos = { lat: cc.lat, lon: cc.lon }; how = cc.name; } }
     if (!pos && navigator.geolocation) pos = await new Promise(res => navigator.geolocation.getCurrentPosition(p => res({ lat: p.coords.latitude, lon: p.coords.longitude }), () => res(null), { timeout: 8000 }));
-    if (!pos) { toast('לא התקבל מיקום. התקינו את הגשר "אחת שאלתי" או בחרו עיר מהרשימה.'); return; }
+    if (!pos) { toast('לא התקבל מיקום. התקינו את הגשר "אחת שאלתי", בחרו עיר בלוח השנה של אוצריא, או בחרו עיר מהרשימה.'); return; }
     state.pos = pos;
     // המקווה הקרוב ביותר קובע את העיר
     let best = null, bd = 1e9;
@@ -299,7 +316,7 @@
     for (const [c, v] of Object.entries(DATA.cities)) if (v.lat) { const d = dist(pos.lat, pos.lon, v.lat, v.lon); if (d < bd) { bd = d; best = c; } }
     if (!best) return;
     goCity(best);
-    toast(bd > 25 ? `הקרוב ביותר במאגר: ${best} (כ-${Math.round(bd)} ק"מ)` : `נפתחה ${best} — ממוין לפי מרחק ממך`);
+    toast((how ? `לפי העיר בלוח השנה של אוצריא (${how}) — ` : '') + (bd > 25 ? `הקרוב ביותר במאגר: ${best} (כ-${Math.round(bd)} ק"מ)` : `נפתחה ${best} — ממוין לפי מרחק ממך`));
   }
 
   // ── לחיצות ──
@@ -307,6 +324,7 @@
     const aot = e.target.closest('[data-aotoggle]');
     if (aot) { const w = aot.parentElement, body = w.querySelector('.ao-body'), o = body.hidden; body.hidden = !o; w.classList.toggle('open', o); aot.setAttribute('aria-expanded', o); aot.textContent = (o ? '▾' : '▸') + aot.textContent.slice(1); return; }
     const cityBtn = e.target.closest('[data-city]'); if (cityBtn) return goCity(cityBtn.dataset.city);
+    const ma = e.target.closest('[data-mineadd]'); if (ma) return mineDialog(null, ma.dataset.mineadd);
     const fc = e.target.closest('[data-favcity]');
     if (fc) { const k = 'city:' + fc.dataset.favcity; state.favs = state.favs.includes(k) ? state.favs.filter(x => x !== k) : [...state.favs, k]; save('favs', state.favs); return render(true); }
     if (e.target.id === 'heroLoc') return locate();
@@ -325,9 +343,73 @@
     else if (b.dataset.act === 'fav') { state.favs = state.favs.includes(it.id) ? state.favs.filter(x => x !== it.id) : [...state.favs, it.id]; save('favs', state.favs); render(true); }
     else if (b.dataset.act === 'mapview') { state.mapSel = it.id; state.tab = 'map'; showTab(); saveView(); }
     else if (b.dataset.act === 'report') reportChoice(it);
+    else if (b.dataset.act === 'mineEdit') mineDialog(it);
+    else if (b.dataset.act === 'mineDel') mineDelete(it);
+    else if (b.dataset.act === 'mineSend') reportChoice(it);
     else if (b.dataset.act === 'rabb') rabbDialog(DATA.cities[it.city].country);
     else if (b.dataset.act === 'remind') remindDialog(it);
   });
+  const srcNorm = t => (t || '').replace(/[^\u05d0-\u05eaA-Za-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+  async function openSrc(q, ref) {
+    if (!hasOtz) { toast(q + ' ' + ref); return; }
+    for (const qq of q.split('|')) {
+      const l = await call('library.findBooks', { query: qq, limit: 30 });
+      const w = srcNorm(qq).split(' ');
+      const m = (l.success ? l.data || [] : []).filter(x => { const t = ' ' + srcNorm(x.title) + ' '; return w.every(y => t.includes(' ' + y + ' ')); })
+        .sort((a, b) => srcNorm(a.title).length - srcNorm(b.title).length)[0];
+      if (m) { const r = await call('reader.openBookAtRef', { bookId: m.bookId, ref, highlight: true }); if (r.success && r.data !== false) return; }
+    }
+    const r = await call('reader.openSearchTab', { query: q.split('|')[0] + ' ' + ref });
+    if (!r.success) toast('לא נמצא בספרייה: ' + q + ' ' + ref);
+  }
+  // 2.1.0: הלכות טבילה וטבילת כלים — מקורות בלבד, נפתחים בספריית אוצריא. התוסף אינו פוסק הלכה.
+  const HAL = [
+    ['טבילת כלים', [['שולחן ערוך יורה דעה, סימן קכ', 'שולחן ערוך יורה דעה', 'קכ'], ['קיצור שולחן ערוך, סימן לז', 'קיצור שולחן ערוך', 'לז']]],
+    ['טבילה', [['שולחן ערוך יורה דעה, סימן קצח', 'שולחן ערוך יורה דעה', 'קצח'], ['שולחן ערוך יורה דעה, סימן קצט', 'שולחן ערוך יורה דעה', 'קצט'],
+      ['שולחן ערוך יורה דעה, סימן ר', 'שולחן ערוך יורה דעה', 'ר'], ['שולחן ערוך יורה דעה, סימן רא', 'שולחן ערוך יורה דעה', 'רא'], ['שולחן ערוך יורה דעה, סימן רב', 'שולחן ערוך יורה דעה', 'רב'],
+      ['קיצור שולחן ערוך — חיפוש "טבילה" בספרייה', 'קיצור שולחן ערוך', '', 'search']]]
+  ];
+  function halDialog() {
+    dialog('הלכות — מקורות', `<p>מקורות ההלכות נפתחים כאן בספריית אוצריא. התוסף אינו פוסק הלכה: לכל שאלה למעשה — לרב, ובמקווה — לאחראית המקווה.</p>
+      ${HAL.map(([t, l]) => `<h3>${esc(t)}</h3><div class="hal-list">${l.map(([n, q, r, k], i) => `<button class="btn tonal" data-hal="${esc(q)}" data-ref="${esc(r)}"${k ? ' data-kind="search"' : ''}>${esc(n)}</button>`).join('')}</div>`).join('')}
+      <p class="lang">יורחב אחרי קבלת חומר מורחב יותר.</p><div class="btns"><button class="btn tonal" id="backInfo">סגירה</button></div>`);
+  }
+  // 2.1.0: שמירת הייצוא כקובץ טקסט ("שמירה בשם" של אוצריא, fs.beginBinaryWrite)
+  async function saveText(text, name) {
+    const blob = new Blob([text + '\n'], { type: 'text/plain;charset=utf-8' });
+    if (!hasOtz) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name + '.txt'; a.click(); return; }
+    const b = await call('fs.beginBinaryWrite', { purpose: 'user-file', expectedSize: blob.size });
+    if (!b.success) return toast('לא ניתן לשמור קובץ בגרסת אוצריא הזו — אפשר להעתיק');
+    try { const put = await fetch(b.data.uploadUrl, { method: 'PUT', headers: { 'Content-Type': 'text/plain' }, body: blob }); if (!put.ok) throw 0; } catch (e) { return toast('השמירה נכשלה'); }
+    const r = await call('fs.commitUserFileWrite', { writeToken: b.data.writeToken, suggestedName: name, extension: 'txt', title: 'שמירת רשימת המקוואות' });
+    if (r.success && r.data && !r.data.cancelled) toast('נשמר: ' + (r.data.name || name + '.txt'));
+  }
+  // ── 2.1.0: הוספת מקווה משלי ──
+  function mineDialog(it, city) {
+    it = it || { type: 'women', city: city || state.city || '' };
+    const cities = [...new Set(Object.keys(DATA.cities).concat([...byCity.keys()]))].sort((a, b) => a.localeCompare(b, 'he'));
+    const f = (k, l, ph) => `<label class="mf"><span>${l}</span><input id="mi-${k}" value="${esc(it[k] || '')}" placeholder="${esc(ph || '')}"${k === 'city' ? ' list="mi-cities"' : ''}></label>`;
+    dialog(it.mine ? 'עריכת מקווה משלי' : 'הוספת מקווה משלי', `<p class="lang">רשומה אישית: נשמרת רק במחשב הזה ומופיעה ברשימה, בחיפוש, במועדפים ובמפה (אם הוזנו נקודות ציון). אפשר לשלוח אותה למפתחת כדי שתתווסף לכולם.</p>
+      <div class="mform"><label class="mf"><span>סוג</span><select id="mi-type">${ORDER.map(t => `<option value="${t}"${it.type === t ? ' selected' : ''}>${t === 'unknown' ? 'לא ידוע' : TYPE[t]}</option>`).join('')}</select></label>
+      ${f('city', 'עיר *', 'למשל: בני ברק')}${f('name', 'שם המקווה', '')}${f('hood', 'שכונה', '')}${f('address', 'כתובת *', 'רחוב ומספר')}${f('phone', 'טלפון', '')}${f('hours', 'שעות', 'למשל: א׳–ה׳ 19:00–23:00')}${f('note', 'הערה', '')}
+      <label class="mf"><span>נקודות ציון</span><input id="mi-ll" value="${it.lat != null ? it.lat + ', ' + it.lon : ''}" placeholder="31.78, 35.21 (אפשר להדביק מ-Google Maps)"></label></div>
+      <datalist id="mi-cities">${cities.map(c => `<option value="${esc(c)}">`).join('')}</datalist>
+      <div class="btns"><button class="btn" id="miSave">שמירה</button><button class="btn tonal" id="backInfo">ביטול</button></div>`);
+    $('#miSave').onclick = async () => {
+      const v = k => ($('#mi-' + k).value || '').trim();
+      if (!v('city') || !v('address')) return toast('חובה למלא עיר וכתובת');
+      const o = { type: $('#mi-type').value, city: v('city'), name: v('name'), hood: v('hood'), address: v('address'), phone: v('phone'), hours: v('hours'), note: v('note'),
+        mine: true, id: it.id || 'mine:' + Date.now(), srcName: 'הוספה שלי (נשמר רק במחשב הזה)', checked: new Date().toISOString().slice(0, 10) };
+      const ll = v('ll').match(/(-?\d+(?:\.\d+)?)\s*[, ]\s*(-?\d+(?:\.\d+)?)/); if (ll) { o.lat = +ll[1]; o.lon = +ll[2]; }
+      Object.keys(o).forEach(k => o[k] === '' && delete o[k]);
+      state.mine = (state.mine || []).filter(x => x.id !== o.id).concat([o]);
+      await save('mine', state.mine); index(); $('#infoScrim').hidden = true; goCity(o.city); toast('המקווה נשמר במחשב הזה');
+    };
+  }
+  async function mineDelete(it) {
+    state.mine = (state.mine || []).filter(x => x.id !== it.id); state.favs = state.favs.filter(x => x !== it.id);
+    await save('mine', state.mine); save('favs', state.favs); index(); render(true); toast('המקווה האישי נמחק');
+  }
   // בחירת ערוץ דיווח: דרך אוצריא (למפתחת) או Issue פתוח ב-GitHub עם פרטי המקווה מולאו מראש
   // 1.8.0 (בקשה א׳): גם פנייה כללית (it === 'general') — שאלה, בקשה או הצעה, לא רק טעות במקווה
   const reportHead = it => it === 'general' ? 'פנייה כללית:\n' + missText : it ? `טעות בפרטי מקווה: ${TYPE[it.type]} · ${it.city} · ${it.address} (${it.id})\nמה צריך לתקן: ` : 'מקווה חסר / עיר חסרה:\n' + missText;
@@ -454,12 +536,13 @@
       <h3>עדכון נתונים</h3>
       <p>אפשר לטעון קובץ נתונים מעודכן (mikvaot-data.json) מדף ההורדות של התוסף.</p>
       <div class="btns"><button class="btn tonal" id="imp">טעינת קובץ נתונים</button>${localData ? '<button class="btn tonal" id="impReset">חזרה לנתונים המובנים</button>' : ''}
-      <button class="btn tonal" id="rep">דיווח על מקווה חסר</button><button class="btn tonal" id="gen">פנייה כללית</button><button class="btn tonal" id="showCl">יומן שינויים מלא</button><button class="btn tonal" id="showPlan">תכנון והמשך</button><button class="btn tonal" id="mapDev">מפה</button><button class="btn tonal" data-soon="בדיקת עדכון נתונים מהרשת">בדיקת עדכון נתונים (בקרוב)</button><button class="btn tonal" data-soon="הוספת מקווה משלי">הוספת מקווה משלי (בקרוב)</button></div>
+      <button class="btn tonal" id="mineAdd">הוספת מקווה משלי</button><button class="btn tonal" id="rep">דיווח על מקווה חסר</button><button class="btn tonal" id="gen">פנייה כללית</button><button class="btn tonal" id="showCl">יומן שינויים מלא</button><button class="btn tonal" id="showPlan">תכנון והמשך</button><button class="btn tonal" id="mapDev">מפה</button><button class="btn tonal" data-soon="בדיקת עדכון נתונים מהרשת">בדיקת עדכון נתונים (בקרוב)</button><button class="btn tonal" data-soon="הוספת מקווה משלי">הוספת מקווה משלי (בקרוב)</button></div>
       <h3>המפה המשותפת</h3>
       <p>לשונית המפה משותפת לארבעה תוספים: כיוון תפילה, מקוואות, גבולות עירוב ועינים למקרא. הקוד במקום אחד (Hadabadra/Mikvaot, תיקייה shared), וכל תיקון מגיע לכולם. בכפתור השכבות שעל המפה פותחים את השכבות של התוספים האחרים באותו מקום.</p>
       ${state.online === false ? '' : `<p>${['הסבר על המפה המשותפת|https://github.com/Hadabadra/Mikvaot/blob/main/shared/map-core/SHARED-MAP.md', 'הקוד של המפה|https://github.com/Hadabadra/Mikvaot/tree/main/shared/map-core', 'כיוון תפילה בחנות|https://otzaria.org/plugins/6ac80057bd083fcc18562fa0', 'גבולות עירוב בחנות|https://otzaria.org/plugins/6ad93b5d2917198d73992a9d', 'עינים למקרא בחנות|https://otzaria.org/plugins/6a671db1dd175558ae6f20ac'].map(x => { const [a, u] = x.split('|'); return `<button class="mini" data-open="${u}">${a}</button>`; }).join(' ')}</p>`}
       ${window.AchatPromo ? '<h3>המלצה</h3>' + AchatPromo.aboutHtml() + AchatPromo.settingsHtml() : ''}
       ${window.CrashReport ? '<h3>דיווח תקלות</h3><label class="ap-set"><span>הצעת דיווח קריסה<small>כשמשהו נתקע — הודעה קטנה, פעם אחת בכל הפעלה, שמציעה לשלוח דיווח דרך אוצריא (רק באישורכם)</small></span><input type="checkbox" id="cr-sw" checked></label>' : ''}
+      <h3>סרגל הקורא</h3><label class="ap-set"><span>כפתור "מקוואות" בסרגל הקורא<small>פותח את התוסף מתוך ספר פתוח</small></span><input type="checkbox" id="hideTb"${state.hideTb ? '' : ' checked'}></label>
       <h3>פרטיות</h3>
       <p>התוסף אינו שולח את המיקום שלכם לשום שרת. חיפוש כתובת עם מספר בית במפה נשלח ל-OpenStreetMap רק כשאתם מחפשים, ורק כשאוצריא מחוברת. המיקום משמש רק למיון לפי מרחק, ונשאר במכשיר. התוסף עובד בלי אינטרנט. דיווח דרך אוצריא או GitHub נשלח רק אם בחרתם לשלוח.</p>
       <p>דף התוסף: ${linkBtns(REPO)}</p>
@@ -470,12 +553,16 @@
     $('#infoScrim').hidden = false;
   }
   $('#btnInfo').addEventListener('click', info);
+  $('#btnHal').addEventListener('click', halDialog);
   $('#viewTabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (!b) return; state.tab = b.dataset.tab; if (state.tab === 'list') state.mapSel = null; showTab(); saveView(); });
   $('#infoClose').addEventListener('click', () => $('#infoScrim').hidden = true);
   $('#infoScrim').addEventListener('click', async e => {
     if (e.target === e.currentTarget) return e.currentTarget.hidden = true;
     const soon = e.target.closest && e.target.closest('[data-soon]'); if (soon) return featureDev(soon.dataset.soon);
     const id = e.target.id;
+    { const h = e.target.closest('[data-hal]'); if (h) { if (h.dataset.kind === 'search') { const r = await call('reader.openSearchTab', { query: 'קיצור שולחן ערוך טבילה' }); if (!r.success) toast('לא ניתן לפתוח חיפוש בספרייה'); return; } return openSrc(h.dataset.hal, h.dataset.ref); } }
+    if (id === 'expSave') return saveText($('#expText').value, 'מקוואות');
+    if (id === 'hideTb') { const on = e.target.checked; state.hideTb = !on; await save('hideToolbar', !on); toast(on ? 'הכפתור יופיע בסרגל הקורא' : 'הכפתור הוסתר מסרגל הקורא'); return; }
     if (id === 'expCopy') return copy($('#expText').value, 'הרשימה הועתקה').then(() => toast('הרשימה הועתקה'));
     if (id === 'expPrint') { $('#infoScrim').hidden = true; return $('#btnPrint').click(); }
     if (id === 'rmSave') return saveReminder(e.target.dataset.id);
@@ -483,6 +570,7 @@
     if (id === 'showPlan') return planView();
     if (id === 'mapDev') return mapDev();
     if (id === 'gen') return generalDialog();
+    if (id === 'mineAdd') return mineDialog(null, state.city);
     if (id === 'rep') reportChoice(null);
     else if (id === 'repApp' || id === 'repGh') {
       const it = e.target.dataset.id === 'general' ? 'general' : e.target.dataset.id ? DATA.items.find(x => x.id === e.target.dataset.id) : null;
@@ -597,7 +685,7 @@
       if (h) out.push('  שעות: ' + h);
     }
     dialog('ייצוא להעתקה', `<p>${list.length} מקוואות מהתצוגה הנוכחית. אפשר לערוך לפני ההעתקה.</p><textarea id="expText">${esc(out.concat(tail).join('\n'))}</textarea>
-      <div class="btns"><button class="btn" id="expCopy">העתקת הכל</button><button class="btn tonal" id="expPrint">הדפסה</button></div>`);
+      <div class="btns"><button class="btn" id="expCopy">העתקת הכל</button><button class="btn tonal" id="expSave">שמירה כקובץ</button><button class="btn tonal" id="expPrint">הדפסה</button></div>`);
   }
 
   // ── תזכורת והוספה ללוח השנה של אוצריא ──
@@ -652,6 +740,8 @@
     // 1.3.2: נתונים שמורים באותו תאריך כמו המובנים הסתירו את החדשים (בתי דין בחו"ל ועוד) — עכשיו גוברים רק אם חדשים יותר
     else if (d.success && d.data) call('storage.remove', { key: 'data' });
     index();
+    { const m = await call('storage.get', { key: 'mine' }); if (m.success && Array.isArray(m.data)) { state.mine = m.data.filter(x => x && x.mine && x.city && x.address); index(); } }
+    { const h = await call('storage.get', { key: 'hideToolbar' }); state.hideTb = !!(h.success && h.data === true); }
     for (const k of ['favs', 'recent']) { const r = await call('storage.get', { key: k }); if (r.success && Array.isArray(r.data)) state[k] = r.data; }
     const v = await call('storage.get', { key: 'view' }); if (v.success && v.data && typeof v.data === 'object') Object.assign(state, v.data);
     const rs = payload.restore && payload.restore.state; if (rs) Object.assign(state, rs);
