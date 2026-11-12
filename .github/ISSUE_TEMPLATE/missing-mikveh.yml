@@ -1,0 +1,23 @@
+name: מקווה חסר או טעות בפרטים
+description: דיווח על מקווה שלא מופיע בתוסף, או על כתובת/טלפון/שעות שגויים
+title: "מקווה: "
+labels: ["דיווח-משתמש"]
+body:
+  - type: input
+    id: city
+    attributes: { label: עיר, placeholder: "למשל: בני ברק" }
+    validations: { required: true }
+  - type: dropdown
+    id: type
+    attributes: { label: סוג, options: [נשים, גברים, כלים, לא ידוע] }
+  - type: input
+    id: address
+    attributes: { label: כתובת, placeholder: "רחוב ומספר" }
+    validations: { required: true }
+  - type: textarea
+    id: details
+    attributes: { label: מה להוסיף או לתקן, description: "טלפון, שעות, שם, אחראית — מה שידוע" }
+    validations: { required: true }
+  - type: input
+    id: source
+    attributes: { label: מקור, description: "אתר המועצה הדתית/העירייה, מודעה, או ידיעה אישית" }

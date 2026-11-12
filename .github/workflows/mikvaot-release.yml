@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Validate data (tools/validate_data.py)
+        run: python3 tools/validate_data.py
       - name: Check package matches source
         run: |
           v="$(node -p "require('./mikvaot/manifest.json').version")"

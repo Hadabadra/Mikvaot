@@ -374,6 +374,16 @@
       ${HAL.map(([t, l]) => `<h3>${esc(t)}</h3><div class="hal-list">${l.map(([n, q, r, k], i) => `<button class="btn tonal" data-hal="${esc(q)}" data-ref="${esc(r)}"${k ? ' data-kind="search"' : ''}>${esc(n)}</button>`).join('')}</div>`).join('')}
       <p class="lang">יורחב אחרי קבלת חומר מורחב יותר.</p><div class="btns"><button class="btn tonal" id="backInfo">סגירה</button></div>`);
   }
+  // 2.1.0: שמירת הייצוא כקובץ טקסט ("שמירה בשם" של אוצריא, fs.beginBinaryWrite)
+  async function saveText(text, name) {
+    const blob = new Blob([text + '\n'], { type: 'text/plain;charset=utf-8' });
+    if (!hasOtz) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name + '.txt'; a.click(); return; }
+    const b = await call('fs.beginBinaryWrite', { purpose: 'user-file', expectedSize: blob.size });
+    if (!b.success) return toast('לא ניתן לשמור קובץ בגרסת אוצריא הזו — אפשר להעתיק');
+    try { const put = await fetch(b.data.uploadUrl, { method: 'PUT', headers: { 'Content-Type': 'text/plain' }, body: blob }); if (!put.ok) throw 0; } catch (e) { return toast('השמירה נכשלה'); }
+    const r = await call('fs.commitUserFileWrite', { writeToken: b.data.writeToken, suggestedName: name, extension: 'txt', title: 'שמירת רשימת המקוואות' });
+    if (r.success && r.data && !r.data.cancelled) toast('נשמר: ' + (r.data.name || name + '.txt'));
+  }
   // ── 2.1.0: הוספת מקווה משלי ──
   function mineDialog(it, city) {
     it = it || { type: 'women', city: city || state.city || '' };
@@ -532,6 +542,7 @@
       ${state.online === false ? '' : `<p>${['הסבר על המפה המשותפת|https://github.com/Hadabadra/Mikvaot/blob/main/shared/map-core/SHARED-MAP.md', 'הקוד של המפה|https://github.com/Hadabadra/Mikvaot/tree/main/shared/map-core', 'כיוון תפילה בחנות|https://otzaria.org/plugins/6ac80057bd083fcc18562fa0', 'גבולות עירוב בחנות|https://otzaria.org/plugins/6ad93b5d2917198d73992a9d', 'עינים למקרא בחנות|https://otzaria.org/plugins/6a671db1dd175558ae6f20ac'].map(x => { const [a, u] = x.split('|'); return `<button class="mini" data-open="${u}">${a}</button>`; }).join(' ')}</p>`}
       ${window.AchatPromo ? '<h3>המלצה</h3>' + AchatPromo.aboutHtml() + AchatPromo.settingsHtml() : ''}
       ${window.CrashReport ? '<h3>דיווח תקלות</h3><label class="ap-set"><span>הצעת דיווח קריסה<small>כשמשהו נתקע — הודעה קטנה, פעם אחת בכל הפעלה, שמציעה לשלוח דיווח דרך אוצריא (רק באישורכם)</small></span><input type="checkbox" id="cr-sw" checked></label>' : ''}
+      <h3>סרגל הקורא</h3><label class="ap-set"><span>כפתור "מקוואות" בסרגל הקורא<small>פותח את התוסף מתוך ספר פתוח</small></span><input type="checkbox" id="hideTb"${state.hideTb ? '' : ' checked'}></label>
       <h3>פרטיות</h3>
       <p>התוסף אינו שולח את המיקום שלכם לשום שרת. חיפוש כתובת עם מספר בית במפה נשלח ל-OpenStreetMap רק כשאתם מחפשים, ורק כשאוצריא מחוברת. המיקום משמש רק למיון לפי מרחק, ונשאר במכשיר. התוסף עובד בלי אינטרנט. דיווח דרך אוצריא או GitHub נשלח רק אם בחרתם לשלוח.</p>
       <p>דף התוסף: ${linkBtns(REPO)}</p>
@@ -550,6 +561,8 @@
     const soon = e.target.closest && e.target.closest('[data-soon]'); if (soon) return featureDev(soon.dataset.soon);
     const id = e.target.id;
     { const h = e.target.closest('[data-hal]'); if (h) { if (h.dataset.kind === 'search') { const r = await call('reader.openSearchTab', { query: 'קיצור שולחן ערוך טבילה' }); if (!r.success) toast('לא ניתן לפתוח חיפוש בספרייה'); return; } return openSrc(h.dataset.hal, h.dataset.ref); } }
+    if (id === 'expSave') return saveText($('#expText').value, 'מקוואות');
+    if (id === 'hideTb') { const on = e.target.checked; state.hideTb = !on; await save('hideToolbar', !on); toast(on ? 'הכפתור יופיע בסרגל הקורא' : 'הכפתור הוסתר מסרגל הקורא'); return; }
     if (id === 'expCopy') return copy($('#expText').value, 'הרשימה הועתקה').then(() => toast('הרשימה הועתקה'));
     if (id === 'expPrint') { $('#infoScrim').hidden = true; return $('#btnPrint').click(); }
     if (id === 'rmSave') return saveReminder(e.target.dataset.id);
@@ -672,7 +685,7 @@
       if (h) out.push('  שעות: ' + h);
     }
     dialog('ייצוא להעתקה', `<p>${list.length} מקוואות מהתצוגה הנוכחית. אפשר לערוך לפני ההעתקה.</p><textarea id="expText">${esc(out.concat(tail).join('\n'))}</textarea>
-      <div class="btns"><button class="btn" id="expCopy">העתקת הכל</button><button class="btn tonal" id="expPrint">הדפסה</button></div>`);
+      <div class="btns"><button class="btn" id="expCopy">העתקת הכל</button><button class="btn tonal" id="expSave">שמירה כקובץ</button><button class="btn tonal" id="expPrint">הדפסה</button></div>`);
   }
 
   // ── תזכורת והוספה ללוח השנה של אוצריא ──
@@ -728,6 +741,7 @@
     else if (d.success && d.data) call('storage.remove', { key: 'data' });
     index();
     { const m = await call('storage.get', { key: 'mine' }); if (m.success && Array.isArray(m.data)) { state.mine = m.data.filter(x => x && x.mine && x.city && x.address); index(); } }
+    { const h = await call('storage.get', { key: 'hideToolbar' }); state.hideTb = !!(h.success && h.data === true); }
     for (const k of ['favs', 'recent']) { const r = await call('storage.get', { key: k }); if (r.success && Array.isArray(r.data)) state[k] = r.data; }
     const v = await call('storage.get', { key: 'view' }); if (v.success && v.data && typeof v.data === 'object') Object.assign(state, v.data);
     const rs = payload.restore && payload.restore.state; if (rs) Object.assign(state, rs);
