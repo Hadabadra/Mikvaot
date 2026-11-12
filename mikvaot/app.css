@@ -239,3 +239,8 @@ body.offline [data-open], body.offline [data-copy^="http"], body.offline .ext-on
 @media (max-width: 52em) { .preview { position: fixed; inset: 0; width: auto; z-index: 30; } }
 @media print { body.print-one .shell > *:not(.body), body.print-one .rail, body.print-one .main-col, body.print-one .preview .btns, body.print-one .pv-head { display: none !important; }
   body.print-one .preview { display: block !important; width: auto; border: 0; background: none; } }
+
+/* 2.1.0: כפתורי הסרגל — סמל + תווית קצרה, ברור יותר */
+.icon-btn:has(> .lbl) { width: auto; min-width: 3.3em; height: auto; padding: .3em .45em .25em; grid-template-rows: auto auto; gap: .12em; border-radius: .7em; }
+.icon-btn > .lbl { font-size: .66em; line-height: 1.1; white-space: nowrap; font-weight: 500; }
+@media (max-width: 44em) { .icon-btn > .lbl { display: none; } .icon-btn:has(> .lbl) { min-width: 2.5em; padding: .55em; } }

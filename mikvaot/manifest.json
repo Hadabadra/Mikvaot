@@ -25,7 +25,8 @@
     "plugin.open_other",
     "network.access",
     "app.startup_contributions",
-    "search.field_actions"
+    "search.field_actions",
+    "settings.read"
   ],
   "network": {
     "enabled": true,

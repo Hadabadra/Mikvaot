@@ -284,14 +284,27 @@
     bar.hidden = !part.length;
   }
 
-  // ── מיקום: גשר "אחת שאלתי" ──
+  // 2.1.0: כשאין גשר "אחת שאלתי" — העיר שנבחרה בלוח השנה של אוצריא (הגדרות ← לוח שנה)
+  async function calendarCityPos() {
+    try {
+      const s = await call('settings.get', { key: 'key-selected-city' });
+      const name = s && s.success && typeof s.data === 'string' ? s.data : '';
+      if (!name) return null;
+      const r = await call('calendar.getCities');
+      const c = (r && r.success && Array.isArray(r.data) ? r.data : []).find(x => x.name === name);
+      return c && c.lat != null ? { name, lat: +c.lat, lon: +(c.lng != null ? c.lng : c.lon) } : null;
+    } catch (e) { return null; }
+  }
+  // ── מיקום: גשר "אחת שאלתי" ← העיר בלוח השנה ← המכשיר ──
   async function locate() {
     const B = window.MIKVE_BRIDGE;
     toast('מאתר מיקום…');
     let pos = null;
     try { if (B && await B.available()) { const l = await B.location(); if (l && l.latitude != null) pos = { lat: l.latitude, lon: l.longitude }; else if (l && l.lat != null) pos = { lat: l.lat, lon: l.lon ?? l.lng }; } } catch (e) {}
+    let how = '';
+    if (!pos) { const cc = await calendarCityPos(); if (cc) { pos = { lat: cc.lat, lon: cc.lon }; how = cc.name; } }
     if (!pos && navigator.geolocation) pos = await new Promise(res => navigator.geolocation.getCurrentPosition(p => res({ lat: p.coords.latitude, lon: p.coords.longitude }), () => res(null), { timeout: 8000 }));
-    if (!pos) { toast('לא התקבל מיקום. התקינו את הגשר "אחת שאלתי" או בחרו עיר מהרשימה.'); return; }
+    if (!pos) { toast('לא התקבל מיקום. התקינו את הגשר "אחת שאלתי", בחרו עיר בלוח השנה של אוצריא, או בחרו עיר מהרשימה.'); return; }
     state.pos = pos;
     // המקווה הקרוב ביותר קובע את העיר
     let best = null, bd = 1e9;
@@ -299,7 +312,7 @@
     for (const [c, v] of Object.entries(DATA.cities)) if (v.lat) { const d = dist(pos.lat, pos.lon, v.lat, v.lon); if (d < bd) { bd = d; best = c; } }
     if (!best) return;
     goCity(best);
-    toast(bd > 25 ? `הקרוב ביותר במאגר: ${best} (כ-${Math.round(bd)} ק"מ)` : `נפתחה ${best} — ממוין לפי מרחק ממך`);
+    toast((how ? `לפי העיר בלוח השנה של אוצריא (${how}) — ` : '') + (bd > 25 ? `הקרוב ביותר במאגר: ${best} (כ-${Math.round(bd)} ק"מ)` : `נפתחה ${best} — ממוין לפי מרחק ממך`));
   }
 
   // ── לחיצות ──
