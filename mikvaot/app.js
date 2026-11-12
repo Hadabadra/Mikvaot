@@ -12,7 +12,7 @@
   const ORDER = ['women', 'men', 'kelim', 'unknown'];
   const ACC = { partial: 'נגישות חלקית', basic: 'נגישות בסיסית', full: 'נגישות מלאה', 'full-lift': 'נגישות מלאה כולל מנוף' };
   // view: home | city | favs ; q = חיפוש חופשי
-  const state = { view: 'home', city: '', type: '', acc: false, withHours: false, q: '', favs: [], recent: [], online: false, pos: null, rail: true, region: 'il', tab: 'list', mapSel: null };
+  const state = { view: 'home', city: '', type: '', acc: false, withHours: false, q: '', favs: [], recent: [], online: false, pos: null, rail: true, region: 'il', tab: 'list', mapSel: null, mine: [] };
 
   // ── עזרים ──
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -67,6 +67,8 @@
   // ── נתונים לפי עיר ──
   let byCity = new Map(), cityNames = [];
   function index() {
+    // 2.1.0: "מקווה משלי" — רשומות אישיות (storage 'mine') מצטרפות לרשימה; נשמרות רק במחשב הזה
+    DATA.items = DATA.items.filter(i => !i.mine).concat(state.mine || []);
     byCity = new Map();
     DATA.items.forEach(it => { if (!byCity.has(it.city)) byCity.set(it.city, []); byCity.get(it.city).push(it); });
     regionCities();
@@ -133,9 +135,10 @@
     const src = [it.srcName, ...(it.also || [])].filter(Boolean).join(', ');
     return `<article class="card${it.closed ? ' closed' : ''}" data-id="${esc(it.id)}">
       <div class="card-head"><div class="card-title">${hl(title)}<small>${hl(sub)}${d != null ? ' · ' + kmText(d) + ' ממך' : ''}</small></div>
-        <span class="badge ${it.type}">${TYPE[it.type] || 'מקווה'}</span>${it.closed ? '<span class="badge warn">סגור לפי המקור</span>' : ''}</div>
+        <span class="badge ${it.type}">${TYPE[it.type] || 'מקווה'}</span>${it.mine ? '<span class="badge mine">שלי</span>' : ''}${it.closed ? '<span class="badge warn">סגור לפי המקור</span>' : ''}</div>
       ${phoneRow('טלפון', it.phone)}${phoneRow('אחראי/ת', it.contact)}
       ${hours ? `<div class="row"><span class="k">שעות</span><span${it.lang === 'en' ? ' dir="ltr" lang="en"' : ''}>${esc(hours)}</span></div>` : '<div class="row"><span class="k">שעות</span><span class="lang">לא פורסמו — יש לברר בטלפון</span></div>'}
+      ${it.note ? `<div class="row"><span class="k">הערה</span><span>${esc(it.note)}</span></div>` : ''}
       ${ACC[it.acc] ? `<div class="row"><span class="k">נגישות</span><span>${ACC[it.acc]}</span></div>` : ''}
       <div class="card-foot">
         ${it.lat != null ? `<button class="mini" data-act="mapview" title="מציג את המקווה בלשונית המפה של התוסף (בלי אינטרנט)">${IC.pin}במפת התוסף</button>` : ''}
@@ -143,7 +146,7 @@
         <button class="mini" data-act="copyAddr">${IC.copy}העתקת כתובת</button>
         <button class="mini" data-act="remind">${IC.bell}תזכורת / יומן</button>
         ${isAbroad(it.city) && abroadOrgs(DATA.cities[it.city].country).length ? `<button class="mini" data-act="rabb">${IC.gov}הרבנות באזור</button>` : ''}
-        <button class="mini" data-act="report">${IC.flag}דיווח על טעות</button>
+        ${it.mine ? `<button class="mini" data-act="mineEdit">עריכה</button><button class="mini" data-act="mineDel">מחיקה</button><button class="mini" data-act="mineSend" title="שליחת הפרטים למפתחת כדי שיתווספו לכולם">שליחה לכולם</button>` : `<button class="mini" data-act="report">${IC.flag}דיווח על טעות</button>`}
         <button class="mini star" data-act="fav" aria-pressed="${fav}" title="${fav ? 'הסרה מהמועדפים' : 'הוספה למועדפים'}" aria-label="מועדף">${fav ? IC.starFill : IC.star}</button>
       </div>
       <div class="src">מקור: ${esc(src)} · נבדק ${esc((it.checked || '').split('-').reverse().join('.'))}${it.lang === 'en' ? ' · הפרטים במקור באנגלית' : ''}</div>
@@ -198,6 +201,7 @@
     const all = byCity.get(c) || [], list = sortItems(all.filter(pass));
     let html = `<div class="hero"><div class="grow"><h2>${esc(c)}</h2><p>${all.length} מקוואות · ${countText(all)}${councilLine(c) ? '<br>' + councilLine(c) : ''}</p></div>
       <button class="btn ${state.favs.includes('city:' + c) ? 'tonal' : 'text'}" data-favcity="${esc(c)}">${state.favs.includes('city:' + c) ? IC.starFill + ' במועדפים' : IC.star + ' הוספה למועדפים'}</button></div>`;
+    html = html.replace('</div>\n      <button class="btn', `</div><button class="btn text" data-mineadd="${esc(c)}">+ מקווה משלי</button>\n      <button class="btn`);
     if (isAbroad(c)) html = html.replace('</div>\n      <button class="btn', '</div>' + rabbBtn(DATA.cities[c].country) + '\n      <button class="btn');
     if (state.pos) html += `<div class="section-title">ממוין לפי מרחק ממך</div>` + list.map(i => card(i)).join('');
     else for (const t of ORDER) { const g = list.filter(i => i.type === t); if (g.length) html += `<div class="section-title">${t === 'unknown' ? 'מקוואות שסוגם לא צוין במקור' : 'מקוואות ' + TYPE[t]} · ${g.length}</div>` + g.map(i => card(i)).join(''); }
@@ -207,7 +211,7 @@
   function searchView() {
     const cities = [...byCity.keys()].filter(c => words().every(w => norm(c + ' ' + ((DATA.cities[c] || {}).country || '')).includes(w)));
     const list = sortItems(DATA.items.filter(it => pass(it) && matchQ(it))).slice(0, 300);
-    if (!cities.length && !list.length) return `<div class="empty">לא נמצא "${esc(state.q)}". אפשר לחפש עיר, שכונה, רחוב או שם מקווה.<br>מקווה חסר? "אודות" ← "דיווח על מקווה חסר".</div>`;
+    if (!cities.length && !list.length) return `<div class="empty">לא נמצא "${esc(state.q)}". אפשר לחפש עיר, שכונה, רחוב או שם מקווה.<br>מקווה חסר? <button class="mini" data-mineadd="">הוספת מקווה משלי</button> או "אודות" ← "דיווח על מקווה חסר".</div>`;
     return `<div class="hero"><div class="grow"><h2>תוצאות עבור "${esc(state.q.trim())}"</h2><p>${cities.length} ערים · ${list.length} מקוואות</p></div></div>
       ${cities.length ? `<div class="section-title">ערים</div><div class="city-grid">${cities.map(c => `<button class="city-card" data-city="${esc(c)}"><strong>${hl(c)}</strong><span>${byCity.get(c).length} מקוואות</span></button>`).join('')}</div>` : ''}
       ${list.length ? '<div class="section-title">מקוואות</div>' + list.map(i => card(i, true)).join('') : ''}`;
@@ -320,6 +324,7 @@
     const aot = e.target.closest('[data-aotoggle]');
     if (aot) { const w = aot.parentElement, body = w.querySelector('.ao-body'), o = body.hidden; body.hidden = !o; w.classList.toggle('open', o); aot.setAttribute('aria-expanded', o); aot.textContent = (o ? '▾' : '▸') + aot.textContent.slice(1); return; }
     const cityBtn = e.target.closest('[data-city]'); if (cityBtn) return goCity(cityBtn.dataset.city);
+    const ma = e.target.closest('[data-mineadd]'); if (ma) return mineDialog(null, ma.dataset.mineadd);
     const fc = e.target.closest('[data-favcity]');
     if (fc) { const k = 'city:' + fc.dataset.favcity; state.favs = state.favs.includes(k) ? state.favs.filter(x => x !== k) : [...state.favs, k]; save('favs', state.favs); return render(true); }
     if (e.target.id === 'heroLoc') return locate();
@@ -338,9 +343,38 @@
     else if (b.dataset.act === 'fav') { state.favs = state.favs.includes(it.id) ? state.favs.filter(x => x !== it.id) : [...state.favs, it.id]; save('favs', state.favs); render(true); }
     else if (b.dataset.act === 'mapview') { state.mapSel = it.id; state.tab = 'map'; showTab(); saveView(); }
     else if (b.dataset.act === 'report') reportChoice(it);
+    else if (b.dataset.act === 'mineEdit') mineDialog(it);
+    else if (b.dataset.act === 'mineDel') mineDelete(it);
+    else if (b.dataset.act === 'mineSend') reportChoice(it);
     else if (b.dataset.act === 'rabb') rabbDialog(DATA.cities[it.city].country);
     else if (b.dataset.act === 'remind') remindDialog(it);
   });
+  // ── 2.1.0: הוספת מקווה משלי ──
+  function mineDialog(it, city) {
+    it = it || { type: 'women', city: city || state.city || '' };
+    const cities = [...new Set(Object.keys(DATA.cities).concat([...byCity.keys()]))].sort((a, b) => a.localeCompare(b, 'he'));
+    const f = (k, l, ph) => `<label class="mf"><span>${l}</span><input id="mi-${k}" value="${esc(it[k] || '')}" placeholder="${esc(ph || '')}"${k === 'city' ? ' list="mi-cities"' : ''}></label>`;
+    dialog(it.mine ? 'עריכת מקווה משלי' : 'הוספת מקווה משלי', `<p class="lang">רשומה אישית: נשמרת רק במחשב הזה ומופיעה ברשימה, בחיפוש, במועדפים ובמפה (אם הוזנו נקודות ציון). אפשר לשלוח אותה למפתחת כדי שתתווסף לכולם.</p>
+      <div class="mform"><label class="mf"><span>סוג</span><select id="mi-type">${ORDER.map(t => `<option value="${t}"${it.type === t ? ' selected' : ''}>${t === 'unknown' ? 'לא ידוע' : TYPE[t]}</option>`).join('')}</select></label>
+      ${f('city', 'עיר *', 'למשל: בני ברק')}${f('name', 'שם המקווה', '')}${f('hood', 'שכונה', '')}${f('address', 'כתובת *', 'רחוב ומספר')}${f('phone', 'טלפון', '')}${f('hours', 'שעות', 'למשל: א׳–ה׳ 19:00–23:00')}${f('note', 'הערה', '')}
+      <label class="mf"><span>נקודות ציון</span><input id="mi-ll" value="${it.lat != null ? it.lat + ', ' + it.lon : ''}" placeholder="31.78, 35.21 (אפשר להדביק מ-Google Maps)"></label></div>
+      <datalist id="mi-cities">${cities.map(c => `<option value="${esc(c)}">`).join('')}</datalist>
+      <div class="btns"><button class="btn" id="miSave">שמירה</button><button class="btn tonal" id="backInfo">ביטול</button></div>`);
+    $('#miSave').onclick = async () => {
+      const v = k => ($('#mi-' + k).value || '').trim();
+      if (!v('city') || !v('address')) return toast('חובה למלא עיר וכתובת');
+      const o = { type: $('#mi-type').value, city: v('city'), name: v('name'), hood: v('hood'), address: v('address'), phone: v('phone'), hours: v('hours'), note: v('note'),
+        mine: true, id: it.id || 'mine:' + Date.now(), srcName: 'הוספה שלי (נשמר רק במחשב הזה)', checked: new Date().toISOString().slice(0, 10) };
+      const ll = v('ll').match(/(-?\d+(?:\.\d+)?)\s*[, ]\s*(-?\d+(?:\.\d+)?)/); if (ll) { o.lat = +ll[1]; o.lon = +ll[2]; }
+      Object.keys(o).forEach(k => o[k] === '' && delete o[k]);
+      state.mine = (state.mine || []).filter(x => x.id !== o.id).concat([o]);
+      await save('mine', state.mine); index(); $('#infoScrim').hidden = true; goCity(o.city); toast('המקווה נשמר במחשב הזה');
+    };
+  }
+  async function mineDelete(it) {
+    state.mine = (state.mine || []).filter(x => x.id !== it.id); state.favs = state.favs.filter(x => x !== it.id);
+    await save('mine', state.mine); save('favs', state.favs); index(); render(true); toast('המקווה האישי נמחק');
+  }
   // בחירת ערוץ דיווח: דרך אוצריא (למפתחת) או Issue פתוח ב-GitHub עם פרטי המקווה מולאו מראש
   // 1.8.0 (בקשה א׳): גם פנייה כללית (it === 'general') — שאלה, בקשה או הצעה, לא רק טעות במקווה
   const reportHead = it => it === 'general' ? 'פנייה כללית:\n' + missText : it ? `טעות בפרטי מקווה: ${TYPE[it.type]} · ${it.city} · ${it.address} (${it.id})\nמה צריך לתקן: ` : 'מקווה חסר / עיר חסרה:\n' + missText;
@@ -467,7 +501,7 @@
       <h3>עדכון נתונים</h3>
       <p>אפשר לטעון קובץ נתונים מעודכן (mikvaot-data.json) מדף ההורדות של התוסף.</p>
       <div class="btns"><button class="btn tonal" id="imp">טעינת קובץ נתונים</button>${localData ? '<button class="btn tonal" id="impReset">חזרה לנתונים המובנים</button>' : ''}
-      <button class="btn tonal" id="rep">דיווח על מקווה חסר</button><button class="btn tonal" id="gen">פנייה כללית</button><button class="btn tonal" id="showCl">יומן שינויים מלא</button><button class="btn tonal" id="showPlan">תכנון והמשך</button><button class="btn tonal" id="mapDev">מפה</button><button class="btn tonal" data-soon="בדיקת עדכון נתונים מהרשת">בדיקת עדכון נתונים (בקרוב)</button><button class="btn tonal" data-soon="הוספת מקווה משלי">הוספת מקווה משלי (בקרוב)</button></div>
+      <button class="btn tonal" id="mineAdd">הוספת מקווה משלי</button><button class="btn tonal" id="rep">דיווח על מקווה חסר</button><button class="btn tonal" id="gen">פנייה כללית</button><button class="btn tonal" id="showCl">יומן שינויים מלא</button><button class="btn tonal" id="showPlan">תכנון והמשך</button><button class="btn tonal" id="mapDev">מפה</button><button class="btn tonal" data-soon="בדיקת עדכון נתונים מהרשת">בדיקת עדכון נתונים (בקרוב)</button><button class="btn tonal" data-soon="הוספת מקווה משלי">הוספת מקווה משלי (בקרוב)</button></div>
       <h3>המפה המשותפת</h3>
       <p>לשונית המפה משותפת לארבעה תוספים: כיוון תפילה, מקוואות, גבולות עירוב ועינים למקרא. הקוד במקום אחד (Hadabadra/Mikvaot, תיקייה shared), וכל תיקון מגיע לכולם. בכפתור השכבות שעל המפה פותחים את השכבות של התוספים האחרים באותו מקום.</p>
       ${state.online === false ? '' : `<p>${['הסבר על המפה המשותפת|https://github.com/Hadabadra/Mikvaot/blob/main/shared/map-core/SHARED-MAP.md', 'הקוד של המפה|https://github.com/Hadabadra/Mikvaot/tree/main/shared/map-core', 'כיוון תפילה בחנות|https://otzaria.org/plugins/6ac80057bd083fcc18562fa0', 'גבולות עירוב בחנות|https://otzaria.org/plugins/6ad93b5d2917198d73992a9d', 'עינים למקרא בחנות|https://otzaria.org/plugins/6a671db1dd175558ae6f20ac'].map(x => { const [a, u] = x.split('|'); return `<button class="mini" data-open="${u}">${a}</button>`; }).join(' ')}</p>`}
@@ -496,6 +530,7 @@
     if (id === 'showPlan') return planView();
     if (id === 'mapDev') return mapDev();
     if (id === 'gen') return generalDialog();
+    if (id === 'mineAdd') return mineDialog(null, state.city);
     if (id === 'rep') reportChoice(null);
     else if (id === 'repApp' || id === 'repGh') {
       const it = e.target.dataset.id === 'general' ? 'general' : e.target.dataset.id ? DATA.items.find(x => x.id === e.target.dataset.id) : null;
@@ -665,6 +700,7 @@
     // 1.3.2: נתונים שמורים באותו תאריך כמו המובנים הסתירו את החדשים (בתי דין בחו"ל ועוד) — עכשיו גוברים רק אם חדשים יותר
     else if (d.success && d.data) call('storage.remove', { key: 'data' });
     index();
+    { const m = await call('storage.get', { key: 'mine' }); if (m.success && Array.isArray(m.data)) { state.mine = m.data.filter(x => x && x.mine && x.city && x.address); index(); } }
     for (const k of ['favs', 'recent']) { const r = await call('storage.get', { key: k }); if (r.success && Array.isArray(r.data)) state[k] = r.data; }
     const v = await call('storage.get', { key: 'view' }); if (v.success && v.data && typeof v.data === 'object') Object.assign(state, v.data);
     const rs = payload.restore && payload.restore.state; if (rs) Object.assign(state, rs);

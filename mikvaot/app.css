@@ -244,3 +244,9 @@ body.offline [data-open], body.offline [data-copy^="http"], body.offline .ext-on
 .icon-btn:has(> .lbl) { width: auto; min-width: 3.3em; height: auto; padding: .3em .45em .25em; grid-template-rows: auto auto; gap: .12em; border-radius: .7em; }
 .icon-btn > .lbl { font-size: .66em; line-height: 1.1; white-space: nowrap; font-weight: 500; }
 @media (max-width: 44em) { .icon-btn > .lbl { display: none; } .icon-btn:has(> .lbl) { min-width: 2.5em; padding: .55em; } }
+/* 2.1.0: טופס "מקווה משלי" */
+.mform { display: grid; grid-template-columns: repeat(auto-fill, minmax(14em, 1fr)); gap: .55em .8em; margin: .6em 0; }
+.mf { display: flex; flex-direction: column; gap: .2em; font-size: .92em; }
+.mf > span { color: var(--color-on-surface-variant); font-size: .88em; }
+.mf input, .mf select { font: inherit; padding: .45em .6em; border: 1px solid var(--color-outline-variant); border-radius: .5em; background: var(--color-surface); color: var(--color-on-surface); }
+.badge.mine { background: var(--color-tertiary-container); color: var(--color-on-tertiary-container); }
