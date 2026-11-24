@@ -109,6 +109,21 @@
     for (const o of Object.values(t.objects || {})) for (const g of (o.type === 'GeometryCollection' ? o.geometries : [o])) { const gg = geom(g); if (gg) out.push({ type: 'Feature', properties: g.properties || {}, geometry: gg }); }
     return fc(out);
   }
+  /** JSON כלשהו (ייצוא של אפליקציה): כל אובייקט עם קו רוחב ואורך — נקודה */
+  function jsonPoints(j) {
+    const out = [], LA = /^(lat|latitude|y|רוחב)$/i, LO = /^(lon|lng|long|longitude|x|אורך)$/i, seen = new Set();
+    (function walk(o, depth) {
+      if (!o || typeof o !== 'object' || depth > 12 || seen.has(o)) return; seen.add(o);
+      if (Array.isArray(o)) { if (o.length === 2 && typeof o[0] === 'number' && typeof o[1] === 'number' && Math.abs(o[0]) <= 180 && Math.abs(o[1]) <= 90) return; o.forEach(x => walk(x, depth + 1)); return; }
+      const ks = Object.keys(o), la = ks.find(k => LA.test(k)), lo = ks.find(k => LO.test(k));
+      if (la && lo && isFinite(+o[la]) && isFinite(+o[lo]) && Math.abs(+o[la]) <= 90 && Math.abs(+o[lo]) <= 180) {
+        out.push({ type: 'Feature', properties: { name: o.name || o.title || o.label || o.Name || o['שם'] || '' }, geometry: { type: 'Point', coordinates: [+o[lo], +o[la]] } });
+      }
+      ks.forEach(k => walk(o[k], depth + 1));
+    })(j, 0);
+    if (!out.length) throw new Error('הקובץ הוא JSON, אבל אין בו GeoJSON ולא נמצאו בו נקודות עם קו רוחב ואורך');
+    return fc(out);
+  }
   function vectorFromText(text, ext) {
     const t = text.replace(/^\uFEFF/, '').trim();
     if (ext === 'gpx' || /^<\?xml[\s\S]{0,300}<gpx/.test(t) || /^<gpx/.test(t)) return parseGPX(t);
@@ -116,8 +131,8 @@
     if (t[0] === '{' || t[0] === '[') {
       const j = JSON.parse(t);
       if (j.type === 'Topology') return topoToGeo(j);
-      if (Array.isArray(j)) return fc(j.filter(x => x && x.lat != null).map(x => ({ type: 'Feature', properties: { name: x.name || x.title || '' }, geometry: { type: 'Point', coordinates: [+(x.lon != null ? x.lon : x.lng), +x.lat] } })));
-      return j;
+      if (j && /^(FeatureCollection|Feature|Point|MultiPoint|LineString|MultiLineString|Polygon|MultiPolygon|GeometryCollection)$/.test(j.type)) return j;
+      return jsonPoints(j);
     }
     return parseCSV(t);
   }
@@ -445,5 +460,5 @@
   /** מיקום מפות Windows (לזיהוי בלבד — הקבצים מוצפנים) */
   const WINDOWS_MAPS = ['C:\\ProgramData\\Maps', '%LOCALAPPDATA%\\Packages\\Microsoft.WindowsMaps_8wekyb3d8bbwe\\LocalState'];
 
-  return { VERSION: '1.0.0', EXTS, pick, reopen, openUrl, tilesSVG, vectorFromText, parseKML, parseGPX, parseCSV, topoToGeo, zxyToId, WINDOWS_MAPS, windowsHint };
+  return { VERSION: '1.1.0', EXTS, pick, reopen, openUrl, tilesSVG, vectorFromText, parseKML, parseGPX, parseCSV, topoToGeo, zxyToId, WINDOWS_MAPS, windowsHint };
 });
