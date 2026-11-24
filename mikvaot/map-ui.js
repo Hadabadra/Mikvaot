@@ -22,7 +22,7 @@
   else root.MapUI = factory(root.MapCore);
 })(this, function (MC) {
   'use strict';
-  const VERSION = '3.2.0';
+  const VERSION = '3.3.0';
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const W = 400, ZMIN = 0.00004, ZMAX = 10;
   const JERUSALEM = [31.7767, 35.2345];
@@ -571,7 +571,7 @@ ${svg ? `<figure>${svg}</figure>` : ''}
       try {
         const j = await pickJSON('בחירת קובץ שכבה (GeoJSON: נקודות, קווים או פוליגונים)'); if (!j) return;
         const L = MC.toLayer(j, 'file-' + Date.now().toString(36), '◆');
-        if (!L.points.length && !L.lines.length) return say('בקובץ אין נקודות או קווים');
+        if (!L.points.length && !L.lines.length) return say('בקובץ "' + (res.name || '') + '" לא נמצאו נקודות, קווים או שטחים');
         extra.push({ id: L.id, name: 'שכבה מקובץ ' + (extra.length + 1), sub: L.points.length + ' נקודות · ' + L.lines.length + ' קווים', glyph: '◆', points: L.points, lines: L.lines, on: true });
         S.show['x-' + L.id] = true;
         const all = [...L.points, ...L.lines.flatMap(l => l.coords.map(c => ({ lat: c[0], lon: c[1] })))];
@@ -598,7 +598,7 @@ ${svg ? `<figure>${svg}</figure>` : ''}
           say(`מפת הרקע נטענה (${res.source.format}, זום ${res.source.minzoom}–${res.source.maxzoom}) ותיטען לבד גם בפתיחה הבאה.`);
         } else {
           const L = MC.toLayer(res.geojson, 'file-' + Date.now().toString(36), '◆');
-          if (!L.points.length && !L.lines.length) return say('בקובץ אין נקודות או קווים');
+          if (!L.points.length && !L.lines.length) return say('בקובץ "' + (res.name || '') + '" לא נמצאו נקודות, קווים או שטחים');
           extra.push({ id: L.id, name: res.name || 'שכבה מקובץ', sub: L.points.length + ' נקודות · ' + L.lines.length + ' קווים', glyph: '◆', points: L.points, lines: L.lines, on: true });
           S.show['x-' + L.id] = true;
           const all = [...L.points, ...L.lines.flatMap(l => l.coords.map(c => ({ lat: c[0], lon: c[1] })))];
@@ -819,6 +819,8 @@ ${more}
     // ── לחיצות ──
     el.addEventListener('click', e => {
       const t = e.target;
+      const cl = t.closest && t.closest('#mu-view g[data-cluster]');
+      if (cl && !(drag && drag.moved)) { const c = cl.dataset.cluster.split(',').map(Number); S.mode = 'map'; S.lat = c[0]; S.lon = c[1]; S.zoom = Math.min(ZMAX, S.zoom * 2.5); refresh(); return; }
       const g = t.closest && t.closest('#mu-view g[data-id]');
       if (g && !(drag && drag.moved)) { if (g.dataset.id && g.dataset.id.indexOf('__') !== 0) return selectPt(g.dataset.id); return; }
       const stp = t.closest && t.closest('[data-mu-step]');
