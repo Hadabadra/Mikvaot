@@ -60,7 +60,11 @@
     var r = await call("app.openUrl", { url: u });
     if (!r || r.success === false) call("ui.showMessage", { message: "לא ניתן לפתוח את הקישור. הוא הועתק — אפשר להדביק בדפדפן." }), copy(u);
   }
-  function copy(t) { try { navigator.clipboard.writeText(t); } catch (e) { var x = document.createElement("textarea"); x.value = t; document.body.appendChild(x); x.select(); try { document.execCommand("copy"); } catch (e2) {} x.remove(); } }
+  function copy(t) {
+    /* writeText מחזיר הבטחה שנדחית ב-WebView בלי הרשאת לוח (#29) — try/catch לבד לא תופס */
+    var fb = function () { var x = document.createElement("textarea"); x.value = t; document.body.appendChild(x); x.select(); try { document.execCommand("copy"); } catch (e2) {} x.remove(); };
+    try { var p = navigator.clipboard && navigator.clipboard.writeText(t); if (p && p.catch) p.catch(fb); else if (!p) fb(); } catch (e) { fb(); }
+  }
 
   /* 1.1.0: קובץ HTML קטן עם קישורים לחיצים והסבר מסודר, להעברה למחשב מחובר (fileText נשאר לתאימות) */
   function fileText() {
